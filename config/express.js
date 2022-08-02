@@ -2,9 +2,13 @@ const express = require("express");
 import testRouter from "../src/app/TestInit/TestRouter";
 import scheduleRouter from "../src/app/Schedule/scheduleRouter";
 const { swaggerUi, specs } = require("../modules/swagger");
+const bodyParser = require("body-parser");
 
 module.exports = function () {
   const app = express();
+
+  // json
+  app.use(bodyParser.json());
 
   app.get("/", function (req, res) {
     res.send("Hi");
