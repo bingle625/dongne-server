@@ -56,9 +56,109 @@ async function updateScheduleStatus(connection, scheduleIdx) {
   return updateScheduleStatusRow;
 }
 
+/**
+ * 스케줄 수정
+ * date, init_time, end_time, introduction, place, schedulename
+ */
+
+async function updateScheduleDate(connection, editDateParams) {
+  const updateScheduleDateQuery = `
+  UPDATE GroupSchedule
+  SET date =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateScheduleDateRow] = await connection.query(
+    updateScheduleDateQuery,
+    editDateParams
+  );
+  return updateScheduleDateRow;
+}
+
+async function updateScheduleInitTime(connection, editInitTimeParams) {
+  const updateScheduleInitTimeQuery = `
+  UPDATE GroupSchedule
+  SET init_time =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateScheduleInitTimeRow] = await connection.query(
+    updateScheduleInitTimeQuery,
+    editInitTimeParams
+  );
+
+  return updateScheduleInitTimeRow;
+}
+
+async function updateScheduleEndTime(connection, editEndTimeParams) {
+  const updateScheduleEndTimeQuery = `
+  UPDATE GroupSchedule
+  SET end_time =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateScheduleEndTimeRow] = await connection.query(
+    updateScheduleEndTimeQuery,
+    editEndTimeParams
+  );
+
+  return updateScheduleEndTimeRow;
+}
+
+async function updateScheduleIntro(connection, editIntroParams) {
+  const updateScheduleIntroQuery = `
+  UPDATE GroupSchedule
+  SET introduction =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateScheduleIntroRow] = await connection.query(
+    updateScheduleIntroQuery,
+    editIntroParams
+  );
+
+  return updateScheduleIntroRow;
+}
+
+async function updateSchedulePlace(connection, editPlaceParams) {
+  const updateSchedulePlaceQuery = `
+  UPDATE GroupSchedule
+  SET place =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateSchedulePlaceRow] = await connection.query(
+    updateSchedulePlaceQuery,
+    editPlaceParams
+  );
+
+  return updateSchedulePlaceRow;
+}
+
+async function updateScheduleName(connection, editNameParams) {
+  const updateScheduleNameQuery = `
+  UPDATE GroupSchedule
+  SET scheduleName =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateScheduleNameRow] = await connection.query(
+    updateScheduleNameQuery,
+    editNameParams
+  );
+
+  return updateScheduleNameRow;
+}
+
 module.exports = {
   selectSchedule,
   selectScheduleInfo,
   selectScheduleStatus,
   updateScheduleStatus,
+  updateScheduleDate,
+  updateScheduleInitTime,
+  updateScheduleEndTime,
+  updateScheduleIntro,
+  updateSchedulePlace,
+  updateScheduleName,
 };

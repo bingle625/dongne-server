@@ -49,6 +49,21 @@ exports.getScheduleInfo = async function (req, res) {
  * API Name : 스케줄 수정 API
  * [PATCH] /schedule/:scheduleIdx
  */
+exports.patchSchedule = async function (req, res) {
+  // path variable
+  const scheduleIdx = req.params.scheduleIdx;
+  // body : date, init_time, end_time, introduction, place, scheduleName
+  const editScheduleParams = req.body;
+
+  //validation
+
+  const editScheduleResponse = await scheduleService.editSchedule(
+    scheduleIdx,
+    editScheduleParams
+  );
+
+  return res.send(editScheduleResponse);
+};
 
 /**
  * API No. 5.5
