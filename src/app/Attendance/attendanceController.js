@@ -10,6 +10,14 @@ const attendanceProvider = require("./attendanceProvider");
 exports.getAttendance = async function (req, res) {
   // Path Variable : scheduleIdx
   const scheduleIdx = req.params.scheduleIdx;
+
+  // validation
+  if (!scheduleIdx) {
+    return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
+  } else if (scheduleIdx <= 0) {
+    return res.end(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
+  }
+
   const attendListResult = await attendanceProvider.retrieveAttendList(
     scheduleIdx
   );
@@ -24,6 +32,14 @@ exports.getAttendance = async function (req, res) {
 exports.getAbsence = async function (req, res) {
   // Path Variable : scheduleIdx
   const scheduleIdx = req.params.scheduleIdx;
+
+  // validation
+  if (!scheduleIdx) {
+    return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
+  } else if (scheduleIdx <= 0) {
+    return res.end(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
+  }
+
   const absenceListResult = await attendanceProvider.retrieveAbsenceList(
     scheduleIdx
   );
@@ -38,6 +54,13 @@ exports.getAbsence = async function (req, res) {
 exports.getAttendCode = async function (req, res) {
   // Path Variable : scheduleIdx
   const scheduleIdx = req.params.scheduleIdx;
+
+  // validation
+  if (!scheduleIdx) {
+    return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
+  } else if (scheduleIdx <= 0) {
+    return res.end(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
+  }
 
   const attendCodeResult = await attendanceProvider.retrieveAttendCode(
     scheduleIdx

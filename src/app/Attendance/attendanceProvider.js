@@ -19,7 +19,7 @@ exports.retrieveAttendList = async function (scheduleIdx) {
     return response(baseResponse.SUCCESS, attendListResult);
   } catch (err) {
     console.log(err.response);
-    return errResponse(baseResponse.FAILURE);
+    return errResponse(baseResponse.DB_ERROR);
   } finally {
   }
 };
@@ -36,7 +36,7 @@ exports.retrieveAbsenceList = async function (scheduleIdx) {
     return response(baseResponse.SUCCESS, absenceListResult);
   } catch (err) {
     console.log(err.response);
-    return errResponse(baseResponse.FAILURE);
+    return errResponse(baseResponse.DB_ERROR);
   } finally {
   }
 };
@@ -48,7 +48,7 @@ exports.retrieveAttendCode = async function (scheduleIdx) {
       scheduleIdx
     );
     if (scheduleStatusResult != "ACTIVE") {
-      return errResponse(baseResponse.FAILURE);
+      return errResponse(baseResponse.SCHEDULE_STATUS_INACTIVE);
     }
 
     const connection = await pool.getConnection(async (conn) => conn);
@@ -61,7 +61,7 @@ exports.retrieveAttendCode = async function (scheduleIdx) {
     return response(baseResponse.SUCCESS, attendCodeResult[0].attendanceCode);
   } catch (err) {
     console.log(err.message);
-    return errResponse(baseResponse.FAILURE);
+    return errResponse(baseResponse.DB_ERROR);
   } finally {
   }
 };
