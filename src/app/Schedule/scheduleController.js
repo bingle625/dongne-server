@@ -8,6 +8,14 @@ const scheduleService = require("./scheduleService");
  * API Name : 스케줄 생성 API
  * [POST] /schedule
  */
+exports.postSchedule = async function (req, res) {
+  // body : groupIdx, date, init_time, introduction, place, scheduleName
+
+  let r = (Math.random() + 1).toString(36).substring(5);
+  console.log("random", r);
+
+  return res.send(response(baseResponse.SUCCESS));
+};
 
 /**
  * API No. 5.2

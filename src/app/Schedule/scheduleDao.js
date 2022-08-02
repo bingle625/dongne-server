@@ -1,3 +1,18 @@
+// schedule 생성
+async function insertSchedule(connection, insertScheduleParams) {
+  const insertScheduleQuery = `
+  INSERT INTO GroupSchedule(groupIdx, date, attendanceCode, init_time, end_time, introduction, place, createdAt, updatedAt, status, scheduleName)
+  VALUES (?,?,?,?,?,?,?, DEFAULT, DEFAULT, DEFAULT, ?);
+  `;
+
+  const [insertScheduleRow] = await connection.query(
+    insertScheduleQuery,
+    insertScheduleParams
+  );
+
+  return insertScheduleRow;
+}
+
 // groupIdx로 schedule 리스트 조회
 async function selectSchedule(connection, groupIdx) {
   const selectScheduleQuery = `
@@ -151,6 +166,7 @@ async function updateScheduleName(connection, editNameParams) {
 }
 
 module.exports = {
+  insertSchedule,
   selectSchedule,
   selectScheduleInfo,
   selectScheduleStatus,

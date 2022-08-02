@@ -7,6 +7,11 @@ const { logger } = require("../../../config/winston");
 const scheduleDao = require("./scheduleDao");
 const scheduleProvider = require("./scheduleProvider");
 
+// exports.functionName = async function (param) {
+//   const connection = await pool.getConnection(async (conn) => conn);
+//   connection.release();
+// };
+
 exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
