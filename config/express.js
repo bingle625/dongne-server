@@ -2,6 +2,7 @@ const express = require("express");
 const { swaggerUi, specs } = require("../modules/swagger");
 const compression = require("compression");
 const methodOverride = require("method-override");
+const cors = require("cors");
 
 import testRouter from "../src/app/TestInit/TestRouter";
 import scheduleRouter from "../src/app/Schedule/scheduleRouter";
@@ -20,6 +21,9 @@ module.exports = function () {
 
   //method-override 설정
   app.use(methodOverride());
+
+  //cors 설정
+  app.use(cors());
 
   /*
     해당 줄부터 도메인 추가
