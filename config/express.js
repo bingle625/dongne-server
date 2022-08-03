@@ -1,7 +1,9 @@
 const express = require("express");
+const { swaggerUi, specs } = require("../modules/swagger");
+const compression = require("compression");
+
 import testRouter from "../src/app/TestInit/TestRouter";
 import scheduleRouter from "../src/app/Schedule/scheduleRouter";
-const { swaggerUi, specs } = require("../modules/swagger");
 import groupRouter from "../src/app/Group/groupRoute";
 import memberRouter from "../src/app/Member/memberRoute";
 
@@ -11,6 +13,9 @@ module.exports = function () {
   //json 설정
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  //compression 설정
+  app.use(compression());
 
   //해당 줄 아래에 추가할 도메인 추가
   app.use("/test", testRouter);
