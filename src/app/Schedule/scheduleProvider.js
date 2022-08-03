@@ -7,14 +7,19 @@ const { logger } = require("../../../config/winston");
 const scheduleDao = require("./scheduleDao");
 
 exports.retrieveScheduleList = async function (groupIdx) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const scheduleListResult = await scheduleDao.selectSchedule(
-    connection,
-    groupIdx
-  );
-  connection.release();
-
-  return scheduleListResult;
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const scheduleListResult = await scheduleDao.selectSchedule(
+      connection,
+      groupIdx
+    );
+    connection.release();
+    return response(baseResponse.SUCCESS, scheduleListResult);
+  } catch (err) {
+    console.log(err.message);
+    return errResponse(baseResponse.DB_ERROR);
+  } finally {
+  }
 };
 
 exports.checkScheduleStatus = async function (scheduleIdx) {
@@ -39,7 +44,7 @@ exports.retrieveScheduleInfo = async function (scheduleIdx) {
 
     if (scheduleStatusResult[0].status != "ACTIVE") {
       connection.release();
-      return errResponse(baseResponse.FAILURE); // baseResponse.SCHEDULE_STATUS_INACTIVE
+      return errResponse(baseResponse.SCHEDULE_STATUS_INACTIVE);
     }
 
     const scheduleInfoResult = await scheduleDao.selectScheduleInfo(
@@ -51,7 +56,7 @@ exports.retrieveScheduleInfo = async function (scheduleIdx) {
     return response(baseResponse.SUCCESS, scheduleInfoResult);
   } catch (err) {
     console.log(err.message);
-    return errResponse(baseResponse.FAILURE); // baseResponse.DB_ERROR
+    return errResponse(baseResponse.DB_ERROR);
   } finally {
   }
 };

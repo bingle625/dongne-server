@@ -1,7 +1,22 @@
+// schedule 생성
+async function insertSchedule(connection, insertScheduleParams) {
+  const insertScheduleQuery = `
+  INSERT INTO GroupSchedule(groupIdx, scheduleDate, attendanceCode, init_time, end_time, introduction, place, scheduleName)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+  `;
+
+  const [insertScheduleRow] = await connection.query(
+    insertScheduleQuery,
+    insertScheduleParams
+  );
+
+  return insertScheduleRow;
+}
+
 // groupIdx로 schedule 리스트 조회
 async function selectSchedule(connection, groupIdx) {
   const selectScheduleQuery = `
-  SELECT GS.scheduleIdx, GS.scheduleName, GS.date, p.groupName
+  SELECT GS.scheduleIdx, GS.scheduleName, GS.scheduleDate, p.groupName
   FROM GroupSchedule as GS
       left join (SELECT groupIdx, groupName
           FROM GroupList
@@ -30,9 +45,9 @@ async function selectScheduleStatus(connection, scheduleIdx) {
 // scheduleIdx로 schedule 상세 조회
 async function selectScheduleInfo(connection, scheduleIdx) {
   const selectScheduleInfoQuery = `
-    SELECT scheduleIdx, date, init_time, attendanceCode, init_time, end_time, introduction, place
-    FROM GroupSchedule
-    WHERE status='ACTIVE' and scheduleIdx=?;
+  SELECT scheduleIdx, DATE_FORMAT(scheduleDate, '%Y-%m-%d') as scheduleDate, attendanceCode, DATE_FORMAT(init_time, '%Y-%m-%d %T') as init_time, DATE_FORMAT(end_time, '%Y-%m-%d %T') as end_time, introduction, place
+  FROM GroupSchedule
+  WHERE status='ACTIVE' and scheduleIdx=?;
     `;
 
   const [scheduleInfo] = await connection.query(
@@ -64,7 +79,7 @@ async function updateScheduleStatus(connection, scheduleIdx) {
 async function updateScheduleDate(connection, editDateParams) {
   const updateScheduleDateQuery = `
   UPDATE GroupSchedule
-  SET date =?
+  SET scheduleDate =?
   WHERE scheduleIdx =?;
   `;
 
@@ -151,6 +166,7 @@ async function updateScheduleName(connection, editNameParams) {
 }
 
 module.exports = {
+  insertSchedule,
   selectSchedule,
   selectScheduleInfo,
   selectScheduleStatus,
