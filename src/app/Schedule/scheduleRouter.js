@@ -4,7 +4,7 @@ const scheduleRouter = express.Router();
 const schedule = require("./scheduleController");
 
 // 5.1 스케줄 생성 API
-scheduleRouter.post("/schedule", schedule.postSchedule);
+scheduleRouter.post("/", schedule.postSchedule);
 
 // 5.2 스케줄 리스트 조회 API
 scheduleRouter.get("/list/:groupIdx", schedule.getSchedule);

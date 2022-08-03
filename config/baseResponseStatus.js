@@ -17,6 +17,12 @@ module.exports = {
     message: "scheduleIdx는 0보다 큰 값으로 입력해주세요.",
   },
 
+  SCHEDULE_POST_PARAMS_EMPTY: {
+    isSuccess: false,
+    code: 2003,
+    message: "파라미터를 모두 입력하세요.",
+  },
+
   // Reponse ERROR
   SCHEDULE_STATUS_INACTIVE: {
     isSuccess: false,

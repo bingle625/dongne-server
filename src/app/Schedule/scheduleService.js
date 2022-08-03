@@ -7,10 +7,22 @@ const { logger } = require("../../../config/winston");
 const scheduleDao = require("./scheduleDao");
 const scheduleProvider = require("./scheduleProvider");
 
-// exports.functionName = async function (param) {
-//   const connection = await pool.getConnection(async (conn) => conn);
-//   connection.release();
-// };
+exports.postSchedule = async function (postScheduleParams) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const insertScheduleResult = await scheduleDao.insertSchedule(
+      connection,
+      postScheduleParams
+    );
+
+    connection.release();
+    return response(baseResponse.SUCCESS);
+  } catch (err) {
+    console.log(err.message);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
 
 exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
   try {

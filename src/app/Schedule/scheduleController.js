@@ -9,12 +9,46 @@ const scheduleService = require("./scheduleService");
  * [POST] /schedule
  */
 exports.postSchedule = async function (req, res) {
-  // body : groupIdx, date, init_time, introduction, place, scheduleName
+  // body : groupIdx, date, init_time, end_time, introduction, place, scheduleName
+  const {
+    groupIdx,
+    scheduleDate,
+    init_time,
+    end_time,
+    introduction,
+    place,
+    scheduleName,
+  } = req.body;
 
-  let r = (Math.random() + 1).toString(36).substring(5);
-  console.log("random", r);
+  if (
+    !groupIdx ||
+    !scheduleDate ||
+    !init_time ||
+    !end_time ||
+    !introduction ||
+    !place ||
+    !scheduleName
+  ) {
+    return res.send(response(baseResponse.SCHEDULE_POST_PARAMS_EMPTY));
+  }
 
-  return res.send(response(baseResponse.SUCCESS));
+  const attendanceCode = (Math.random() + 1).toString(36).substring(5);
+  const postScheduleParams = [
+    groupIdx,
+    scheduleDate,
+    attendanceCode,
+    init_time,
+    end_time,
+    introduction,
+    place,
+    scheduleName,
+  ];
+
+  const postScheduleResult = await scheduleService.postSchedule(
+    postScheduleParams
+  );
+
+  return res.send(postScheduleResult);
 };
 
 /**

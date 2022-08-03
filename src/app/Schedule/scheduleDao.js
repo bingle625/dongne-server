@@ -1,8 +1,8 @@
 // schedule 생성
 async function insertSchedule(connection, insertScheduleParams) {
   const insertScheduleQuery = `
-  INSERT INTO GroupSchedule(groupIdx, date, attendanceCode, init_time, end_time, introduction, place, createdAt, updatedAt, status, scheduleName)
-  VALUES (?,?,?,?,?,?,?, DEFAULT, DEFAULT, DEFAULT, ?);
+  INSERT INTO GroupSchedule(groupIdx, scheduleDate, attendanceCode, init_time, end_time, introduction, place, scheduleName)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const [insertScheduleRow] = await connection.query(
@@ -45,7 +45,7 @@ async function selectScheduleStatus(connection, scheduleIdx) {
 // scheduleIdx로 schedule 상세 조회
 async function selectScheduleInfo(connection, scheduleIdx) {
   const selectScheduleInfoQuery = `
-    SELECT scheduleIdx, date, init_time, attendanceCode, init_time, end_time, introduction, place
+    SELECT scheduleIdx, scheduleDate, init_time, attendanceCode, init_time, end_time, introduction, place
     FROM GroupSchedule
     WHERE status='ACTIVE' and scheduleIdx=?;
     `;
@@ -79,7 +79,7 @@ async function updateScheduleStatus(connection, scheduleIdx) {
 async function updateScheduleDate(connection, editDateParams) {
   const updateScheduleDateQuery = `
   UPDATE GroupSchedule
-  SET date =?
+  SET scheduleDate =?
   WHERE scheduleIdx =?;
   `;
 
