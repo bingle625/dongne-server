@@ -15,7 +15,7 @@ exports.getAttendance = async function (req, res) {
   if (!scheduleIdx) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
   } else if (scheduleIdx <= 0) {
-    return res.end(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
+    return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
   const attendListResult = await attendanceProvider.retrieveAttendList(
@@ -37,7 +37,7 @@ exports.getAbsence = async function (req, res) {
   if (!scheduleIdx) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
   } else if (scheduleIdx <= 0) {
-    return res.end(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
+    return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
   const absenceListResult = await attendanceProvider.retrieveAbsenceList(
@@ -59,7 +59,7 @@ exports.getAttendCode = async function (req, res) {
   if (!scheduleIdx) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
   } else if (scheduleIdx <= 0) {
-    return res.end(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
+    return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
   const attendCodeResult = await attendanceProvider.retrieveAttendCode(
