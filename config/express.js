@@ -8,9 +8,9 @@ import memberRouter from "../src/app/Member/memberRoute";
 module.exports = function () {
   const app = express();
 
-  app.get("/", function (req, res) {
-    res.send("Hi");
-  });
+  //json 설정
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   //해당 줄 아래에 추가할 도메인 추가
   app.use("/test", testRouter);
