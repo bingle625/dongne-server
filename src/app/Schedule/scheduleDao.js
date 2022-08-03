@@ -16,7 +16,7 @@ async function insertSchedule(connection, insertScheduleParams) {
 // groupIdx로 schedule 리스트 조회
 async function selectSchedule(connection, groupIdx) {
   const selectScheduleQuery = `
-  SELECT GS.scheduleIdx, GS.scheduleName, GS.date, p.groupName
+  SELECT GS.scheduleIdx, GS.scheduleName, GS.scheduleDate, p.groupName
   FROM GroupSchedule as GS
       left join (SELECT groupIdx, groupName
           FROM GroupList
@@ -45,9 +45,9 @@ async function selectScheduleStatus(connection, scheduleIdx) {
 // scheduleIdx로 schedule 상세 조회
 async function selectScheduleInfo(connection, scheduleIdx) {
   const selectScheduleInfoQuery = `
-    SELECT scheduleIdx, scheduleDate, init_time, attendanceCode, init_time, end_time, introduction, place
-    FROM GroupSchedule
-    WHERE status='ACTIVE' and scheduleIdx=?;
+  SELECT scheduleIdx, DATE_FORMAT(scheduleDate, '%Y-%m-%d') as scheduleDate, attendanceCode, DATE_FORMAT(init_time, '%Y-%m-%d %T') as init_time, DATE_FORMAT(end_time, '%Y-%m-%d %T') as end_time, introduction, place
+  FROM GroupSchedule
+  WHERE status='ACTIVE' and scheduleIdx=?;
     `;
 
   const [scheduleInfo] = await connection.query(

@@ -34,42 +34,47 @@ exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
     );
     if (scheduleStatusResult != "ACTIVE") {
       connection.release();
-      return errResponse(baseResponse.FAILURE); // baseResponse.SCHEDULE_STATUS_INACTIVE
+      return errResponse(baseResponse.SCHEDULE_STATUS_INACTIVE); // baseResponse.SCHEDULE_STATUS_INACTIVE
     }
 
     // edit date
-    if (editScheduleParams.date !== undefined) {
-      // date validation
-      const editDateParams = [editScheduleParams.date, scheduleIdx];
-      await scheduleDao.updateScheduleDate(connection, editDateParams);
+    if (editScheduleParams.scheduleDate !== undefined) {
+      const editDateParams = [editScheduleParams.scheduleDate, scheduleIdx];
+      const updateScheduleDateResult = await scheduleDao.updateScheduleDate(
+        connection,
+        editDateParams
+      );
+      console.log(updateScheduleDateResult);
     }
     // edit init_time
     if (editScheduleParams.init_time !== undefined) {
-      // init_time validation
       const editInitTimeParams = [editScheduleParams.init_time, scheduleIdx];
-      await scheduleDao.updateScheduleInitTime(connection, editInitTimeParams);
+      const updateInitTimeResult = await scheduleDao.updateScheduleInitTime(
+        connection,
+        editInitTimeParams
+      );
     }
     // edit end_time
     if (editScheduleParams.end_time !== undefined) {
-      // end_time validation
       const editEndTimeParams = [editScheduleParams.end_time, scheduleIdx];
       await scheduleDao.updateScheduleEndTime(connection, editEndTimeParams);
     }
     // edit introduction
     if (editScheduleParams.introduction !== undefined) {
-      // introduction validation
       const editIntroParams = [editScheduleParams.introduction, scheduleIdx];
-      await scheduleDao.updateScheduleIntro(connection, editIntroParams);
+      const updateIntroResult = await scheduleDao.updateScheduleIntro(
+        connection,
+        editIntroParams
+      );
+      console.log(updateIntroResult);
     }
     // edit place
     if (editScheduleParams.place !== undefined) {
-      // place validation
       const editPlaceParams = [editScheduleParams.place, scheduleIdx];
       await scheduleDao.updateSchedulePlace(connection, editPlaceParams);
     }
     // edit scheduleName
     if (editScheduleParams.scheduleName !== undefined) {
-      // scheduleName validation
       const editNameParams = [editScheduleParams.scheduleName, scheduleIdx];
       await scheduleDao.updateScheduleName(connection, editNameParams);
     }
@@ -78,7 +83,7 @@ exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
     return response(baseResponse.SUCCESS);
   } catch (err) {
     console.log(err.message);
-    return errResponse(baseResponse.FAILURE); // baseResponse.DB_ERROR
+    return errResponse(baseResponse.DB_ERROR); // baseResponse.DB_ERROR
   } finally {
   }
 };
@@ -92,7 +97,7 @@ exports.editScheduleStatus = async function (scheduleIdx) {
 
     if (scheduleStatusResult != "ACTIVE") {
       connection.release();
-      return errResponse(baseResponse.FAILURE); // baseResponse.SCHEDULE_STATUS_INACTIVE
+      return errResponse(baseResponse.SCHEDULE_STATUS_INACTIVE);
     }
 
     const editScheduleStatusResult = await scheduleDao.updateScheduleStatus(
@@ -104,7 +109,7 @@ exports.editScheduleStatus = async function (scheduleIdx) {
     return response(baseResponse.SUCCESS);
   } catch (err) {
     console.log(err.message);
-    return errResponse(baseResponse.FAILURE); // baseResponse.DB_ERROR
+    return errResponse(baseResponse.DB_ERROR); // baseResponse.DB_ERROR
   } finally {
   }
 };
