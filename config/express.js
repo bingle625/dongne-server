@@ -1,6 +1,7 @@
 const express = require("express");
 const { swaggerUi, specs } = require("../modules/swagger");
 const compression = require("compression");
+const methodOverride = require("method-override");
 
 import testRouter from "../src/app/TestInit/TestRouter";
 import scheduleRouter from "../src/app/Schedule/scheduleRouter";
@@ -17,7 +18,14 @@ module.exports = function () {
   //compression 설정
   app.use(compression());
 
-  //해당 줄 아래에 추가할 도메인 추가
+  //method-override 설정
+  app.use(methodOverride());
+
+  /*
+    해당 줄부터 도메인 추가
+   */
+
+  // 0. test API
   app.use("/test", testRouter);
   app.use("/schedule", scheduleRouter);
 
