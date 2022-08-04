@@ -8,6 +8,7 @@ import testRouter from "../src/app/TestInit/TestRouter";
 import scheduleRouter from "../src/app/Schedule/scheduleRouter";
 import groupRouter from "../src/app/Group/groupRoute";
 import memberRouter from "../src/app/Member/memberRoute";
+import adminRouter from "../src/app/Admin/adminRouter";
 
 module.exports = function () {
   const app = express();
@@ -41,6 +42,9 @@ module.exports = function () {
 
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+  // 3. Admin API
+  app.use("/admin", adminRouter);
 
   return app;
 };
