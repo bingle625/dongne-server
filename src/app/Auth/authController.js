@@ -12,9 +12,9 @@ const regexPwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 exports.login = async (req, res) => {
   /*
-    body: email, pwd
+    body: email, password
   */
-  const { email, pwd } = req.body;
+  const { email, password } = req.body;
 
   //email validation
   if (!email) {
@@ -25,14 +25,15 @@ exports.login = async (req, res) => {
     return res.send(errResponse(baseResponse.SIGNIN_EMAIL_ERROR_TYPE));
   }
 
-  //pwd validation
-  if (!pwd) {
+  //password validation
+  if (!password) {
     return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_EMPTY));
-  } else if (pwd.length < 8) {
+  } else if (password.length < 8) {
     return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_LENGTH));
-  } else if (!regexPwd.test(pwd)) {
+  } else if (!regexPwd.test(password)) {
     return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_WRONG));
   }
 
-  const signInResponse = await authService.postSignIn(email, pwd);
+  const signInResponse = await authService.postSignIn(email, password);
+  return res.send(signInResponse);
 };

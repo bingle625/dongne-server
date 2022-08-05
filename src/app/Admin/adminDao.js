@@ -29,4 +29,15 @@ const selectAdminPassword = async (connection, email) => {
   return selectUserPasswordRow;
 };
 
-module.exports = { selectAdmins, selectAdminEmail, selectAdminPassword };
+const selectAdminAccount = async (connection, email) => {
+  const selectAdminAccountQuery = `
+      SELECT status, adminIdx
+      FROM Admin
+      WHERE AdminEmail = ?;
+
+  `;
+  const selectAdminAccountRow = await connection.query(selectAdminAccountQuery, email);
+  return selectAdminAccountRow;
+};
+
+module.exports = { selectAdmins, selectAdminEmail, selectAdminPassword, selectAdminAccount };

@@ -1,9 +1,8 @@
 import express from "express";
-
-const authRouter = express.Router();
 const auth = require("./authController");
+const authRouter = express.Router();
 
 //2.1 로그인 api
-auth.post("/auth/login", auth.login);
+authRouter.post("/login", auth.login);
 
 export default authRouter;

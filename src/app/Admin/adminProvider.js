@@ -38,3 +38,10 @@ exports.passwordCheck = async function (email) {
   connection.release();
   return passwordCheckResult[0];
 };
+
+exports.statusCheck = async (email) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userAcountResult = await adminDao.selectAdminAccount(connection, email);
+  connection.release();
+  return userAcountResult[0];
+};
