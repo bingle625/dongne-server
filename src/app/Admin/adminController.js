@@ -12,14 +12,3 @@ export const getDatabaseTest = async (req, res) => {
   const testAdminResult = await adminProvider.retrieveAdminList();
   return res.send(testAdminResult);
 };
-
-/**
- * [post] /admin/login
- */
-
-export const postAdminLogin = async (req, res) => {
-  const { email, password } = req.body;
-
-  const singInResponse = await adminService.postSignIn(email, password);
-  return res.send(singInResponse);
-};

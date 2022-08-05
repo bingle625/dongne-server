@@ -7,6 +7,4 @@ testRouter.get("/db", getDatabaseTest);
 
 //로그인 api
 
-testRouter.post("/login", postAdminLogin);
-
 export default testRouter;
