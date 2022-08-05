@@ -3,7 +3,7 @@ const response = ({ isSuccess, code, message }, result) => {
     isSuccess: isSuccess,
     code: code,
     message: message,
-    result: result,
+    result: result
   };
 };
 
@@ -11,7 +11,7 @@ const errResponse = ({ isSuccess, code, message }) => {
   return {
     isSuccess: isSuccess,
     code: code,
-    message: message,
+    message: message
   };
 };
 
