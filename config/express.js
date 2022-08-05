@@ -8,6 +8,7 @@ import testRouter from "../src/app/TestInit/TestRouter";
 import scheduleRouter from "../src/app/Schedule/scheduleRouter";
 import groupRouter from "../src/app/Group/groupRoute";
 import memberRouter from "../src/app/Member/memberRoute";
+import authRouter from "../src/app/Auth/authRouter";
 
 module.exports = function () {
   const app = express();
@@ -39,6 +40,8 @@ module.exports = function () {
   // 2. 출결 그룹 API
   app.use("/group", groupRouter);
 
+  // 3. 인증 도메인
+  app.use("/auth", authRouter);
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
