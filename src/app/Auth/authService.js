@@ -29,7 +29,6 @@ exports.postSignIn = async (email, password) => {
     //todo: 계정 상태 확인
     // 계정 상태 확인
     const userInfoRows = await adminProvider.statusCheck(email);
-    console.log("HOOOOOOOOOOOOOOOOOOO", userInfoRows);
     if (userInfoRows[0].status === "INACTIVE") {
       return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
     } else if (userInfoRows[0].status === "DELETED") {

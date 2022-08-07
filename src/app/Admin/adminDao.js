@@ -40,4 +40,14 @@ const selectAdminAccount = async (connection, email) => {
   return selectAdminAccountRow;
 };
 
-module.exports = { selectAdmins, selectAdminEmail, selectAdminPassword, selectAdminAccount };
+const insertAdminInfo = async (connection, insertUserInfoParams) => {
+  const insertUserQuery = `
+  INSERT INTO Admin(clubName, AdminEmail, AdminPwd, establishmentYear, clubRegion,clubIntroduction,clubImgUrl)
+  VALUES (?, ?, ?, ?, ?, ?, ?);
+  `;
+
+  const insertUserInfoRow = await connection.query(insertUserQuery, insertUserInfoParams);
+  return insertUserInfoRow;
+};
+
+module.exports = { selectAdmins, selectAdminEmail, selectAdminPassword, selectAdminAccount, insertAdminInfo };

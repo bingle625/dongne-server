@@ -1,10 +1,11 @@
 import express from "express";
-import { getDatabaseTest, postAdminLogin } from "./adminController";
+import { getDatabaseTest, postAdmin } from "./adminController";
 
-const testRouter = express.Router();
+const adminRouter = express.Router();
 
-testRouter.get("/db", getDatabaseTest);
+adminRouter.get("/db", getDatabaseTest);
 
-//로그인 api
+// 1.1 회원 가입 api
+adminRouter.post("/", postAdmin);
 
-export default testRouter;
+export default adminRouter;

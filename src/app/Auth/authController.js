@@ -14,26 +14,27 @@ exports.login = async (req, res) => {
   /*
     body: email, password
   */
-  const { email, password } = req.body;
+  const { AdminEmail, AdminPwd } = req.body;
 
-  //email validation
-  if (!email) {
+  //AdminEmail validation
+  if (!AdminEmail) {
     return res.send(errResponse(baseResponse.SIGNIN_EMAIL_EMPTY));
-  } else if (email.length > 255) {
+  } else if (AdminEmail.length > 255) {
     return res.send(errResponse(baseResponse.SIGNIN_EMAIL_LENGTH));
-  } else if (!regexEmail.test(email)) {
+  } else if (!regexEmail.test(AdminEmail)) {
     return res.send(errResponse(baseResponse.SIGNIN_EMAIL_ERROR_TYPE));
   }
 
-  //password validation
-  if (!password) {
+  //AdminPwd validation
+  if (!AdminPwd) {
     return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_EMPTY));
-  } else if (password.length < 8) {
+  } else if (AdminPwd.length < 8) {
     return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_LENGTH));
-  } else if (!regexPwd.test(password)) {
-    return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_WRONG));
   }
+  // } else if (!regexPwd.test(AdminPwd)) {
+  //   return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_WRONG));
+  // }
 
-  const signInResponse = await authService.postSignIn(email, password);
+  const signInResponse = await authService.postSignIn(AdminEmail, AdminPwd);
   return res.send(signInResponse);
 };
