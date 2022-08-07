@@ -1,11 +1,13 @@
 const express = require("express");
-const { swaggerUi, specs } = require("../modules/swagger");
 const compression = require("compression");
 const methodOverride = require("method-override");
 const cors = require("cors");
 
 import testRouter from "../src/app/TestInit/TestRouter";
 import scheduleRouter from "../src/app/Schedule/scheduleRouter";
+import attendanceRouter from "../src/app/Attendance/attendanceRouter";
+const { swaggerUi, specs } = require("../modules/swagger");
+const bodyParser = require("body-parser");
 import groupRouter from "../src/app/Group/groupRoute";
 import memberRouter from "../src/app/Member/memberRoute";
 import authRouter from "../src/app/Auth/authRouter";
@@ -34,6 +36,7 @@ module.exports = function () {
   // 0. test API
   app.use("/test", testRouter);
   app.use("/schedule", scheduleRouter);
+  app.use("/attendance", attendanceRouter);
 
   // 1. 회원 명단 API
   app.use("/member", memberRouter);
