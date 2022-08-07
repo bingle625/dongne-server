@@ -11,29 +11,28 @@ groupRouter.get("/db", group.getDatabaseTest);
 // BODY
 groupRouter.post("/", group.postGroup);
 
-
 // 4.2 그룹 조회
 // TO DO : 4
-    // 그룹 이름, 내용 조회
-    // Query String
+// 그룹 이름, 내용 조회
+// Query String
 groupRouter.get("/info", group.getGroupInfo);
 
-    // 그룹 소속회원 조회
-    // Query String
+// 그룹 소속회원 조회
+// Query String
 groupRouter.get("/members", group.getGroupMembers);
 
 // 4.3 그룹 수정
 // TO DO : 5
-    // 그룹 이름, 내용 수정
-    // Path Variable & Body
+// 그룹 이름, 내용 수정
+// Path Variable & Body
 groupRouter.patch("/info/:groupIdx", group.patchGroupInfo);
 
-    // 그룹 회원삭제
-    // Path Variable & Body
-groupRouter.patch("/deleteMembers/:groupIdx",group.patchGroupMembers);
+// 그룹 회원삭제
+// Path Variable & Body
+groupRouter.patch("/deleteMembers/:groupIdx", group.patchGroupMembers);
 
-    // 그룹 회원추가
-    // Path Variable & Body
+// 그룹 회원추가
+// Path Variable & Body
 groupRouter.post("/insertMembers/:groupIdx", group.postGroupMembers);
 
 // 4.4 그룹 삭제
