@@ -1,3 +1,5 @@
+import { GROUP_GROUPINTRODUCTION_EMPTY } from "../../../config/baseResponseStatus";
+
 const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 const groupService = require("./groupService");
@@ -17,10 +19,10 @@ export const getDatabaseTest = async (req, res) => {
 
 /*
     개발 노트 📝
-    req Data's Validation : 형식적 Validation 처리 우선 // DB Validation 후 순위
-    기본적인 Validation : req Data's not null and length
-    Validation : req Data's Status
-    Validation은 기본적인 Validation으로 API를 만들고 DB Validation을 수행
+    req Data's Validation : 형식적 Validation 처리 우선 ✅ // DB Validation 후 순위 ❌
+    Validation (basic) : req Data's not null and length
+    Validation (middle) : req Data's Status
+    Validation은 Validation (basic)을 구성해 API를 만들고 작업 후 순위로 Validation (middle)을 구성
 */
 
 
@@ -32,11 +34,11 @@ export const getDatabaseTest = async (req, res) => {
 */
 export const postGroup = async (req, res) => {
     /*
-        Body : userIdx, content, postImgUrls
+        Body : adminIdx, groupName, groupIntroduction, userIdx
     */
   const {adminIdx, groupName, groupIntroduction, userIdx} = req.body;
 
-  // Group Create's Body Data Validation
+  // Group Create's Body Data Validation (basic) ✅
   if (!adminIdx){
     return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
   } else if (adminIdx <= 0 ){
@@ -55,10 +57,11 @@ export const postGroup = async (req, res) => {
     return res.send(errResponse(baseResponse.GROUP_GROUPINTRODUCTION_LENGTH));
   }
 
-  // adminIdx Status Validation ❌
-  // TO DO : 그룹 생성 만든 후에 제작
-  // Validation Point : valid adminIdx?
-
+  // Group Create's Body Data Validation (middle) ❌
+  /*
+    adminIdx's Status valid with Admin Table
+    JWT's Token's adminIdx include req.adminIdx?
+  */
 
   // Group Create ➕ Transcation 추가필요
   // createGroupResponse = groupIdx
@@ -69,8 +72,8 @@ export const postGroup = async (req, res) => {
   );
   
 
-  // Group Members add's Body Data Validation
-  // TO DO : Group Create 만든 후 제작 ✅
+
+  // Group Members add's Body Data Validation (basic) ✅
   var groupUserIdx;
   for (groupUserIdx of userIdx){
     if(!groupUserIdx){
@@ -79,23 +82,13 @@ export const postGroup = async (req, res) => {
       return res.send(errResponse(baseResponse.GROUP_USERIDX_LENGTH));
     }
 
-    // groupUserIdx's Status Check(1) - User Table ❌
-    // TO DO : Group Members add 만든 후 제작
-    // Validation Point : add's userIdx valid user?
+    // Group Members add's Body Data Validation (middle) ❌
     /*
-    const userStatus = await groupProvider.checkClubStatus(groupUserIdx);
-    if (userStatus != "ACTIVE"){
-        return res.send(errResponse(baseResponse.USER_USERIDX_STATUS));
-    }
+      groupUserIdx's Status valid with User Table ?
+      JWT Token's adminIdx include req.groupUserIdx ?
+      groupUserIdx's Status NULL or DELETED with GroupMembers Table ?
     */
 
-    // groupUserIdx's Status Check(2) - GroupMembers Table ❌
-    // API NO. 4.3 & API NO. 4.4 만든 후 제작
-    // Validation Point : add's userIdx include this group?
-
-    // groupUserIdx's joinned Club Check - ClubMemberTable (WHERE ID : adminIdx) ❌
-    // 한줄요약 : "admin이 요청한 UserIdx가 Club에 속해있는가?" 에 대한 검사
-    // LATER TO DO : 백엔드 회의 후 만들기 - 클라이언트 입장 유효한 Validation인가?
   }
 
 
@@ -110,7 +103,7 @@ export const postGroup = async (req, res) => {
     /*
         API No. 4.2
         API Nanme: 그룹 조회
-        Part 1 and Part 2
+        Part 1, Part 2
         [GET]
     */
 
@@ -125,7 +118,7 @@ export const getGroupInfo = async (req, res) => {
   */
   const groupIdx = req.query.groupIdx;
 
-  // validation
+  // validation (basic) ✅
   if(!groupIdx) {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
   } 
@@ -133,13 +126,10 @@ export const getGroupInfo = async (req, res) => {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
 
-  // Group Table Validation (status == ACTIVE)
-  // TO DO : 모든 API를 만들고 후 순위로 작업 ❌ 
+  // Validation (Middle) ❌ 
   /*
-  const groupStatus = await groupProvider.checkGroupStatus(groupIdx);
-  if (groupStatus != "ACTIVE"){
-      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_STATUS));
-  }
+    + groupIdx's Status valid with GroupList Table ?
+    + JWT Token's groupIdx include req.groupIdx ?
   */
 
   // 그룹 이름, 내용 조회
@@ -160,7 +150,7 @@ export const getGroupMembers = async (req, res) => {
   */
   const groupIdx = req.query.groupIdx;
 
-  // validation
+  // validation (basic) ✅
   if(!groupIdx) {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
   } 
@@ -168,13 +158,11 @@ export const getGroupMembers = async (req, res) => {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
 
-  // Group Table Validation (status == ACTIVE)
-  // TO DO : 모든 API를 만들고 후 순위로 작업 ❌ 
+
+  // Validation (Middle) ❌ 
   /*
-  const groupStatus = await groupProvider.checkGroupStatus(groupIdx);
-  if (groupStatus != "ACTIVE"){
-      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_STATUS));
-  }
+    + groupIdx's Status valid with GroupList Table ?
+    + JWT Token's groupIdx include req.groupIdx ?
   */
 
   // 그룹 소속회원 조회
@@ -186,10 +174,179 @@ export const getGroupMembers = async (req, res) => {
 
 
 
+  /*
+      API No. 4.3
+      API Nanme: 그룹 수정
+      Part 1, Part 2, Part 3
+  */
+
+
+/*
+    API No. 4.3 - Part 1
+    API Nanme: 그룹 이름, 내용 수정
+    [PATCH] /group/info/:groupIdx
+*/
+export const patchGroupInfo = async (req, res) => {
+  /*
+      Body : groupName, groupIntroduction
+      Path Variable: groupIdx
+  */
+  const groupIdx = req.params.groupIdx;
+  const {groupName, groupIntroduction} = req.body;
+  
+  // Validation (basic) ✅
+  if (!groupIdx){
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
+  } else if (groupIdx <= 0) {
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
+
+  if (!groupName){
+    return res.send(errResponse(baseResponse.GROUP_GROUPNAME_EMPTY));
+  } else if (groupName.length > 45){
+    return res.send(errResponse(baseResponse.GROUP_GROUPNAME_LENGTH));
+  }
+
+  if (!groupIntroduction){
+    return res.send(errResponse(baseResponse>GROUP_GROUPINTRODUCTION_EMPTY));
+  } else if (groupIntroduction.length > 200){
+    return res.send(errResponse(baseResponse.GROUP_GROUPINTRODUCTION_LENGTH));
+  }
+
+  // Validation (Middle) ❌ 
+  /*
+    + groupIdx's Status valid with GroupList Table ?
+    + JWT Token's groupIdx include req.groupIdx ?
+  */
+
+  
+  // 그룹 이름, 정보 수정
+  const editGroupInfoResponse = await groupService.editGroupInfo(groupIdx, groupName, groupIntroduction);
+
+  return res.send(editGroupInfoResponse);
+}
+
+
+
+/*
+    API No. 4.3 - Part 2
+    API Nanme: 그룹 소속회원 삭제
+    [PATCH] /group/deleteMembers/:groupIdx
+*/
+export const patchGroupMembers = async (req, res) => {
+  /*
+      Body : userIdx [array type]
+      Path Variable: groupIdx
+  */
+  const groupIdx = req.params.groupIdx;
+  const {userIdx} = req.body;
+  
+  // Validation (basic) ✅
+  if (!groupIdx){
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
+  } else if (groupIdx <= 0) {
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
+
+  var groupUserIdx;
+  for (groupUserIdx of userIdx){
+    if (!groupUserIdx){
+      return res.send(errResponse(baseResponse.GROUP_USERIDX_EMPTY));
+    } else if (groupUserIdx <= 0){
+      return res.send(errResponse(baseResponse.GROUP_USERIDX_LENGTH));
+    }
+  }
+
+  // Validation (Middle) ❌ 
+  /*
+    + groupIdx's Status valid with GroupList Table ?
+    + JWT Token's groupIdx include req.groupIdx ?
+    + userIdx's Status valid with User Table ?
+    + userIdx's Status in GroupMembers Table is ACTIVE ?
+  */
+
+  // 그룹 소속회원 삭제
+  const editGroupMembersResponse = await groupService.editGroupMembers(groupIdx, userIdx);
+
+  return res.send(editGroupMembersResponse);
+}
+
+
+
+/*
+    API No. 4.3 - Part 3
+    API Nanme: 그룹 소속회원 추가
+    [POST] /group/insertMembers/:groupIdx
+*/
+export const postGroupMembers = async (req, res) => {
+  /*
+      Body : userIdx [array type]
+      Path Variable: groupIdx
+  */
+  const groupIdx = req.params.groupIdx;
+  const {userIdx} = req.body;
+  
+  // Validation (basic) ✅
+  if (!groupIdx){
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
+  } else if (groupIdx <= 0) {
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
+
+  var groupUserIdx;
+  for (groupUserIdx of userIdx){
+    if (!groupUserIdx){
+      return res.send(errResponse(baseResponse.GROUP_USERIDX_EMPTY));
+    } else if (groupUserIdx <= 0){
+      return res.send(errResponse(baseResponse.GROUP_USERIDX_LENGTH));
+    }
+  }
+
+  // Validation (Middle) ❌ 
+  /*
+    + groupIdx's Status valid with GroupList Table ?
+    + JWT Token's groupIdx include req.groupIdx ?
+    + userIdx's Status valid with User Table ?
+    + userIdx's Status in GroupMembers Table is DELETED or NULL ?
+    + userIdx's Status in ClubMembers Table is ACTIVE ?
+  */
+
+  // 그룹 소속회원 추가
+  const createGroupMembersResponse = await groupService.createGroupMembers(groupIdx, userIdx);
+
+  return res.send(createGroupMembersResponse);
+}
 
 
 
 
+/*
+    API No. 4.4
+    API Nanme: 그룹 삭제
+    [PATHCH] /group/delete/:groupIdx
+*/
+export const patchGroup = async (req, res) => {
+  /*
+      Path Variable: groupIdx
+  */
+  const groupIdx = req.params.groupIdx;
+  
+  // Validation (basic) ✅
+  if (!groupIdx){
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
+  } else if (groupIdx <= 0) {
+      return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
 
+  // Validation (Middle) ❌ 
+  /*
+    + groupIdx's Status valid with GroupList Table ?
+    + JWT Token's groupIdx include req.groupIdx ?
+  */
 
+  // 그룹 삭제
+  const deleteGroupResponse = await groupService.deleteGroup(groupIdx);
+
+  return res.send(deleteGroupResponse);
+}
 

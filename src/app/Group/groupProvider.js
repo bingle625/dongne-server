@@ -40,4 +40,5 @@ exports.retrieveGroupMembers = async function (groupIdx) {
     connection.release();
     return errResponse(baseResponseStatus.FAILURE);
   }
+  
 };

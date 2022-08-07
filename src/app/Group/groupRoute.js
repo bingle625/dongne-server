@@ -24,10 +24,21 @@ groupRouter.get("/members", group.getGroupMembers);
 
 // 4.3 그룹 수정
 // TO DO : 5
+    // 그룹 이름, 내용 수정
+    // Path Variable & Body
+groupRouter.patch("/info/:groupIdx", group.patchGroupInfo);
 
+    // 그룹 회원삭제
+    // Path Variable & Body
+groupRouter.patch("/deleteMembers/:groupIdx",group.patchGroupMembers);
+
+    // 그룹 회원추가
+    // Path Variable & Body
+groupRouter.post("/insertMembers/:groupIdx", group.postGroupMembers);
 
 // 4.4 그룹 삭제
 // TO DO : 6
-//
+// Path Variable
+groupRouter.patch("/delete/:groupIdx", group.patchGroup);
 
 export default groupRouter;

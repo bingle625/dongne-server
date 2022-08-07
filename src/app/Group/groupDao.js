@@ -22,7 +22,7 @@ async function insertGroup(connection, insertGroupParams){
   return insertGroupRow;
 };
 
-// 그룹 추가 / Group Members add - API NO. 4.1
+// 그룹 추가 / Group Members add - API NO. 4.1 , API NO. 4.3 -> Part 3
 async function insertGroupMembers(connection, insertGroupMemberParams){
   const insertGroupMemberQuery = `
   INSERT INTO GroupMembers(userIdx, groupIdx)
@@ -37,9 +37,6 @@ async function insertGroupMembers(connection, insertGroupMemberParams){
 
 // 그룹 이름, 내용 조회 - API NO. 4.2 -> Part 1
 const selectGroupInfo = async (connection, groupIdx) => {
-  // group status 예외처리 필요 -> 클라이언트에게 예외처리됨을 알려줘야되기 때문 //// 예외처리 방법은 두가지 방법 (My Thinking) ❌ 
-    // 1. Controller에서 ACTIVE 예외처리
-    // 2. Dao에서 정보를 가져오지 않으면 예외처리
   const selectGroupInfoQuery = `
     SELECT 
     groupName as 그룹이름,
@@ -71,12 +68,57 @@ const selectGroupMembers = async (connection, groupIdx) => {
   return groupMembersRows;
 };
 
+// 그룹 이름, 내용 수정 - API NO. 4.3 -> Part 1
+const editGroupInfo = async (connection, editGroupInfoParams) => {
+
+  const updateGroupInfoQuery = `
+    UPDATE GroupList
+    SET groupName = ? , groupIntroduction = ?
+    WHERE groupIdx = ?;
+      `;
+
+  const [updateGroupInfoRows] = await connection.query(updateGroupInfoQuery, editGroupInfoParams);
+  return updateGroupInfoRows;
+};
+
+// 그룹 소속회원 삭제 - API NO. 4.3 -> Part 2
+const editGroupMembers = async (connection, editGroupMembersParams) => {
+
+  const updateGroupMembersQuery = `
+    UPDATE GroupMembers
+    SET status = "DELETED"
+    WHERE groupIdx = ? and userIdx = ?;
+      `;
+
+  const [updateGroupMembersRows] = await connection.query(updateGroupMembersQuery, editGroupMembersParams);
+  return updateGroupMembersRows;
+};
+
+// 그룹 삭제 - API NO. 4.4
+const editGroup = async (connection, groupIdx) => {
+
+  const updateGroupQuery = `
+    UPDATE GroupList
+    SET status = "DELETED"
+    WHERE groupIdx = ?;
+      `;
+
+  const [updateGroupRows] = await connection.query(updateGroupQuery, groupIdx);
+  return updateGroupRows;
+};
+
+
   module.exports = { 
     selectUserPosts,
     insertGroup,
     insertGroupMembers,
     selectGroupInfo,
     selectGroupMembers,
+    editGroupInfo,
+    editGroupMembers,
+    editGroup,
+
+
 
     
 

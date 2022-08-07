@@ -51,3 +51,82 @@ exports.createGroupMembers = async function(userIdx, createGroupResponse){
     }
 }
 
+// 그룹 이름, 내용 수정 - API 4.3 -> Part 1
+exports.editGroupInfo = async function (groupIdx, groupName, groupIntroduction){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+
+    try {
+        const editGroupInfoParams = [groupName, groupIntroduction, groupIdx];
+        const editGroupInfoResult = await groupDao.editGroupInfo(connection, editGroupInfoParams);
+        return response(baseResponseStatus.SUCCESS);
+
+    } catch (err) {
+        handleError(error);
+        return errResponse(baseResponseStatus.FAILURE);
+    } finally {
+        connection.release(); 
+    }
+}
+
+// 그룹 소속회원 삭제 - API 4.3 -> Part 2
+exports.editGroupMembers = async function (groupIdx, userIdx){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+
+    try {
+        var groupUserIdx;
+        for (groupUserIdx of userIdx){
+            const editGroupMembersParams = [groupIdx, groupUserIdx];
+            const editGroupMembersResult = await groupDao.editGroupMembers(connection, editGroupMembersParams);
+        }
+
+        return response(baseResponseStatus.SUCCESS);
+
+    } catch (err) {
+        handleError(error);
+        return errResponse(baseResponseStatus.FAILURE);
+    } finally {
+        connection.release(); 
+    }
+}
+
+// 그룹 소속회원 추가 - API 4.3 -> Part 3
+exports.createGroupMembers = async function (groupIdx, userIdx){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+
+    try {
+        var groupUserIdx;
+        for (groupUserIdx of userIdx){
+            const insertGroupMembersParams = [groupUserIdx, groupIdx];
+            const GroupMembersResult = await groupDao.insertGroupMembers(connection, insertGroupMembersParams);
+        }
+
+        return response(baseResponseStatus.SUCCESS);
+
+    } catch (err) {
+        handleError(error);
+        return errResponse(baseResponseStatus.FAILURE);
+    } finally {
+        connection.release(); 
+    }
+}
+
+
+// 그룹 삭제 - API NO. 4.4
+exports.deleteGroup = async function (groupIdx){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+
+    try {
+        const GroupResult = await groupDao.editGroup(connection, groupIdx);
+        return response(baseResponseStatus.SUCCESS);
+
+    } catch (err) {
+        handleError(error);
+        return errResponse(baseResponseStatus.FAILURE);
+    } finally {
+        connection.release(); 
+    }
+}
