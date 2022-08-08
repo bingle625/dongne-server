@@ -21,13 +21,17 @@ module.exports = {
 
   //GROUP's errReponse
   GROUP_GROUPNAME_EMPTY: {isSuccess: false, code: 4001, message: "groupName을 입력해주세요."},
-  GROUP_GROUPNAME_LENGTH: {isSuccess: false, code: 4002, message: "groupName를 45바이트 이내로 입력해주세요."},
+  GROUP_GROUPNAME_LENGTH: {isSuccess: false, code: 4002, message: "groupName를 45자 이내로 입력해주세요."},
   GROUP_GROUPINTRODUCTION_EMPTY: {isSuccess: false, code: 4003, message: "groupIntroduction을 입력해주세요."},
-  GROUP_GROUPINTRODUCTION_LENGTH: {isSuccess: false, code: 4004, message: "groupIntroduction을 200바이트 이내로 입력해주세요."},
+  GROUP_GROUPINTRODUCTION_LENGTH: {isSuccess: false, code: 4004, message: "groupIntroduction을 200자 이내로 입력해주세요."},
   GROUP_USERIDX_EMPTY: {isSuccess: false, code: 4005, message: "group에 추가/삭제할 userIdx를 입력해주세요."},
   GROUP_USERIDX_LENGTH: {isSuccess: false, code: 4006, message: "group에 추가/삭제할 userIdx를 0보다 큰 값을 입력해주세요."},
   GROUP_GROUPIDX_EMPTY: {isSuccess: false, code: 4007, message: "groupIdx를 입력해주세요."},
   GROUP_GROUPIDX_LENGTH: {isSuccess: false, code: 4008, message: "groupIdx를 0보다 큰 값을 입력해주세요."},
+  
+
+  //DB Error
+  DB_ERRORS: {isSuccess: false, code: 5000, message: "데이터베이스 에러"},
   
 
   

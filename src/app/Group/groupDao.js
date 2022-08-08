@@ -60,7 +60,7 @@ const selectGroupMembers = async (connection, groupIdx) => {
     FROM GroupMembers
     JOIN User
     ON GroupMembers.userIdx = User.userIdx
-    WHERE groupIdx = ? and User.status = "ACTIVE";   
+    WHERE groupIdx = ? and User.status = "ACTIVE" and GroupMembers.status = "ACTIVE";   
       `;
 
   const [groupMembersRows] = await connection.query(selectGroupMembersQuery, groupIdx);

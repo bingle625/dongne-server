@@ -48,7 +48,7 @@ export const postGroup = async (req, res) => {
   if (!groupName){
     return res.send(errResponse(baseResponse.GROUP_GROUPNAME_EMPTY));
   } else if (groupName.length > 45){
-    return res.send(errResponse(baseResponse.GROUP_GROUPNAME_LENGHT));
+    return res.send(errResponse(baseResponse.GROUP_GROUPNAME_LENGTH));
   }
 
   if (!groupIntroduction){
@@ -91,7 +91,7 @@ export const postGroup = async (req, res) => {
 
   }
 
-
+  console.log(userIdx);
   // Group Members add ➕ Transcation 추가필요
   const createGroupMembersResponse = await groupService.createGroupMembers(userIdx, createGroupResponse);
 
@@ -146,7 +146,7 @@ export const getGroupInfo = async (req, res) => {
 */
 export const getGroupMembers = async (req, res) => {
   /*
-      Query String: group
+      Query String: groupIdx
   */
   const groupIdx = req.query.groupIdx;
 
@@ -312,7 +312,7 @@ export const postGroupMembers = async (req, res) => {
   */
 
   // 그룹 소속회원 추가
-  const createGroupMembersResponse = await groupService.createGroupMembers(groupIdx, userIdx);
+  const createGroupMembersResponse = await groupService.insertGroupMembers(groupIdx, userIdx);
 
   return res.send(createGroupMembersResponse);
 }
