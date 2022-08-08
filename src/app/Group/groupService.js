@@ -9,7 +9,7 @@ const groupDao = require("./groupDao");
 // 그룹 추가 / Group Create - API 4.1
 exports.createGroup = async function(adminIdx, groupName, groupIntroduction){
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌createGroup DB Error: ${error.message}`);
 
 
     try {
@@ -19,9 +19,9 @@ exports.createGroup = async function(adminIdx, groupName, groupIntroduction){
         const groupIdx = groupResult[0].insertId;
         return groupIdx;
         
-    } catch (err) {
+    } catch (error) {
         handleError(error);
-        return errResponse(baseResponseStatus.FAILURE);
+        return errResponse(baseResponseStatus.DB_ERRORS);
     } finally {
         connection.release(); 
     }
@@ -30,11 +30,12 @@ exports.createGroup = async function(adminIdx, groupName, groupIntroduction){
 // 그룹 추가 / Group Members add - API 4.1
 exports.createGroupMembers = async function(userIdx, createGroupResponse){
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌createGroupMembers DB Error: ${error.message}`);
 
 
     try {
         // One UserIdx INSERT
+        console.log(userIdx);
         var groupUserIdx;
         for (groupUserIdx of userIdx){
             const insertGroupMemberParams = [groupUserIdx, createGroupResponse];
@@ -43,27 +44,27 @@ exports.createGroupMembers = async function(userIdx, createGroupResponse){
 
         return response(baseResponseStatus.SUCCESS, {addedGroup: createGroupResponse});
         
-    } catch (err) {
+    } catch (error) {
         handleError(error);
-        return errResponse(baseResponseStatus.FAILURE);
+        return errResponse(baseResponseStatus.DB_ERRORS);
     } finally {
-        connection.release(); 
+        connection.release();
     }
 }
 
 // 그룹 이름, 내용 수정 - API 4.3 -> Part 1
 exports.editGroupInfo = async function (groupIdx, groupName, groupIntroduction){
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌editGroupInfo DB Error: ${error.message}`);
 
     try {
         const editGroupInfoParams = [groupName, groupIntroduction, groupIdx];
         const editGroupInfoResult = await groupDao.editGroupInfo(connection, editGroupInfoParams);
         return response(baseResponseStatus.SUCCESS);
 
-    } catch (err) {
+    } catch (error) {
         handleError(error);
-        return errResponse(baseResponseStatus.FAILURE);
+        return errResponse(baseResponseStatus.DB_ERRORS);
     } finally {
         connection.release(); 
     }
@@ -72,7 +73,7 @@ exports.editGroupInfo = async function (groupIdx, groupName, groupIntroduction){
 // 그룹 소속회원 삭제 - API 4.3 -> Part 2
 exports.editGroupMembers = async function (groupIdx, userIdx){
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌editGroupMembers DB Error: ${error.message}`);
 
     try {
         var groupUserIdx;
@@ -83,18 +84,18 @@ exports.editGroupMembers = async function (groupIdx, userIdx){
 
         return response(baseResponseStatus.SUCCESS);
 
-    } catch (err) {
+    } catch (error) {
         handleError(error);
-        return errResponse(baseResponseStatus.FAILURE);
+        return errResponse(baseResponseStatus.DB_ERRORS);
     } finally {
         connection.release(); 
     }
 }
 
 // 그룹 소속회원 추가 - API 4.3 -> Part 3
-exports.createGroupMembers = async function (groupIdx, userIdx){
+exports.insertGroupMembers = async function (groupIdx, userIdx){
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌createGroupMembers DB Error: ${error.message}`);
 
     try {
         var groupUserIdx;
@@ -105,9 +106,9 @@ exports.createGroupMembers = async function (groupIdx, userIdx){
 
         return response(baseResponseStatus.SUCCESS);
 
-    } catch (err) {
+    } catch (error) {
         handleError(error);
-        return errResponse(baseResponseStatus.FAILURE);
+        return errResponse(baseResponseStatus.DB_ERRORS);
     } finally {
         connection.release(); 
     }
@@ -117,15 +118,15 @@ exports.createGroupMembers = async function (groupIdx, userIdx){
 // 그룹 삭제 - API NO. 4.4
 exports.deleteGroup = async function (groupIdx){
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌deleteGroup DB Error: ${error.message}`);
 
     try {
         const GroupResult = await groupDao.editGroup(connection, groupIdx);
         return response(baseResponseStatus.SUCCESS);
 
-    } catch (err) {
+    } catch (error) {
         handleError(error);
-        return errResponse(baseResponseStatus.FAILURE);
+        return errResponse(baseResponseStatus.DB_ERRORS);
     } finally {
         connection.release(); 
     }
