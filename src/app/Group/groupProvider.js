@@ -8,7 +8,7 @@ const groupDao = require("./groupDao");
 // 그룹 이름, 내용 조회 - API 4.2 -> Part 1
 exports.retrieveGroupInfo = async function (groupIdx) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌retrieveGroupInfo DB Error: ${error.message}`);
   
     //Try문 예외처리
     try {
@@ -19,14 +19,14 @@ exports.retrieveGroupInfo = async function (groupIdx) {
     } catch (error) {
       handleError(error);
       connection.release();
-      return errResponse(baseResponseStatus.FAILURE);
+      return errResponse(baseResponseStatus.DB_ERRORS);
     }
   };
 
 // 그룹 소속회원 조회 - API 4.2 -> Part 2
 exports.retrieveGroupMembers = async function (groupIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+  const handleError = (error) => logger.error(`❌retrieveGroupMembers DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
@@ -38,7 +38,7 @@ exports.retrieveGroupMembers = async function (groupIdx) {
   } catch (error) {
     handleError(error);
     connection.release();
-    return errResponse(baseResponseStatus.FAILURE);
+    return errResponse(baseResponseStatus.DB_ERRORS);
   }
   
 };

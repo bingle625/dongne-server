@@ -8,7 +8,7 @@ const memberDao = require("./memberDao");
 // DB Test
 exports.retrieveUserList = async function () {
     const connection = await pool.getConnection(async (conn) => conn);
-    const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+    const handleError = (error) => logger.error(`❌retrieveUserList DB Error: ${error.message}`);
   
     try {
       const testResult = await memberDao.selectUserPosts(connection);
@@ -17,14 +17,14 @@ exports.retrieveUserList = async function () {
     } catch (error) {
       handleError(error);
       connection.release();
-      return errResponse(baseResponseStatus.FAILURE);
+      return errResponse(baseResponseStatus.DB_ERRORS);
     }
   };
 
 // 단체 모든 회원명단 리스트 조회 - API NO. 3.1
 exports.retrieveClubMemberList = async function (adminIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+  const handleError = (error) => logger.error(`❌retriebeClubMemberList DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
@@ -35,14 +35,14 @@ exports.retrieveClubMemberList = async function (adminIdx) {
   } catch (error) {
     handleError(error);
     connection.release();
-    return errResponse(baseResponseStatus.FAILURE);
+    return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
 
 // API NO. 3.1 - AdminIdx Status Check
 exports.checkClubStatus = async function (adminIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+  const handleError = (error) => logger.error(`❌checkClubStatus DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
@@ -53,14 +53,14 @@ exports.checkClubStatus = async function (adminIdx) {
   } catch (error) {
     handleError(error);
     connection.release();
-    return errResponse(baseResponseStatus.FAILURE);
+    return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
 
 // 회원 상세 조회 - API NO. 3.3
 exports.retrieveMemberInfo = async function (userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+  const handleError = (error) => logger.error(`❌retrieveMemberInfo DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
@@ -71,14 +71,14 @@ exports.retrieveMemberInfo = async function (userIdx) {
   } catch (error) {
     handleError(error);
     connection.release();
-    return errResponse(baseResponseStatus.FAILURE);
+    return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
 
 // API NO. 3.3 - User Status Check
 exports.checkUserStatus = async function (userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const handleError = (error) => logger.error(`❌DB Error: ${error.message}`);
+  const handleError = (error) => logger.error(`❌checkUserStatus DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
@@ -89,6 +89,6 @@ exports.checkUserStatus = async function (userIdx) {
   } catch (error) {
     handleError(error);
     connection.release();
-    return errResponse(baseResponseStatus.FAILURE);
+    return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
