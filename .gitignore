@@ -3,7 +3,7 @@
 
 ### Node ###
 # Logs
-log
+log/
 logs
 *.log
 npm-debug.log*
@@ -193,5 +193,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
+# Macbook's auto file
+*.DS_Store
 
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,windows
