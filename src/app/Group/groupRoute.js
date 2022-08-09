@@ -15,31 +15,31 @@ groupRouter.get("/db", group.getDatabaseTest);
  *     tags: [출석 그룹]
  *     summary: 그룹 추가 API
  *     consumes:
- *         - application/json
+ *       - application/json
  *     parameters:
- *         - in: body
- *           name: group
- *           description: 그룹 파라미터
- *           required:
+ *       - in: body
+ *         name: group
+ *         description: 그룹 파라미터
+ *         schema:
+ *            type: object
+ *            required:
  *              - adminIdx
  *              - groupName
  *              - groupIntroduction
  *              - userIdx
- *           schema:
- *              type: object
- *              properties:
+ *            properties:
  *                  adminIdx:
- *                      description: 단체 인덱스
- *                      type: integer
+ *                        description: 단체 인덱스
+ *                        type: integer
  *                  groupName:
- *                      description: 그룹 이름
- *                      type: string
+ *                        description: 그룹 이름
+ *                        type: string
  *                  groupIntroduction:
- *                      description: 그룹 소개
- *                      type: string
+ *                        description: 그룹 소개
+ *                        type: string
  *                  userIdx:
- *                      description: 유저 인덱스 배열
- *                      type: integer
+ *                        description: 유저 인덱스 배열
+ *                        type: arrry
  *     responses:
  *       "1000":
  *         description: 그룹 추가 API 성공
@@ -70,14 +70,14 @@ groupRouter.post("/", group.postGroup);
 /**
  * @swagger
  * paths:
- *  /group/info?groupIdx=2:
+ *  /group/info?groupIdx={groupIdx}:
  *   get:
  *     tags: [출석 그룹]
  *     summary: 그룹 정보(그룹 이름, 내용) 조회 API
  *     parameters:
- *         - in: Query
+ *         - in: query
  *           name: groupIdx
- *           schema:
+ *           securitySchemes:
  *              type: integer
  *           example: 1
  *           required: true
@@ -100,14 +100,14 @@ groupRouter.get("/info", group.getGroupInfo);
 /**
  * @swagger
  * paths:
- *  /group/members?groupIdx=11:
+ *  /group/members?groupIdx={groupIdx}:
  *   get:
  *     tags: [출석 그룹]
  *     summary: 그룹 소속회원 조회 API
  *     parameters:
- *         - in: Query
+ *         - in: query
  *           name: groupIdx
- *           schema:
+ *           securitySchemes:
  *              type: integer
  *           example: 1
  *           required: true
@@ -125,6 +125,7 @@ groupRouter.get("/info", group.getGroupInfo);
  */
 groupRouter.get("/members", group.getGroupMembers);
 
+
 // 4.3 그룹 수정
 // TO DO : 5
 // 그룹 이름, 내용 수정
@@ -132,7 +133,7 @@ groupRouter.get("/members", group.getGroupMembers);
 /**
  * @swagger
  * paths:
- *  /group/info/:groupIdx:
+ *  /group/info/{groupIdx}:
  *   patch:
  *     tags: [출석 그룹]
  *     summary: 그룹 정보(그룹 이름, 내용) 수정 API
@@ -149,18 +150,18 @@ groupRouter.get("/members", group.getGroupMembers);
  *         - in: body
  *           name: group
  *           description: 그룹 파라미터
- *           required:
- *              - groupName
- *              - groupIntroduction
  *           schema:
  *              type: object
+ *              required:
+ *                - groupName
+ *                - groupIntroduction
  *              properties:
- *                  groupName:
- *                      description: 그룹 이름
- *                      type: string
- *                  groupIntroduction:
- *                      description: 그룹 소개
- *                      type: string
+ *                    groupName:
+ *                          description: 그룹 이름
+ *                          type: string
+ *                    groupIntroduction:
+ *                          description: 그룹 소개
+ *                          type: string
  *     responses:
  *       "1000":
  *         description: 그룹 정보(그룹 이름, 내용) 수정 API 성공
@@ -182,12 +183,13 @@ groupRouter.get("/members", group.getGroupMembers);
  */
 groupRouter.patch("/info/:groupIdx", group.patchGroupInfo);
 
+
 // 그룹 회원삭제
 // Path Variable & Body
 /**
  * @swagger
  * paths:
- *  /group/deleteMembers/:groupIdx:
+ *  /group/deleteMembers/{groupIdx}:
  *   patch:
  *     tags: [출석 그룹]
  *     summary: 그룹 소속회원 삭제 수정 API
@@ -204,14 +206,14 @@ groupRouter.patch("/info/:groupIdx", group.patchGroupInfo);
  *         - in: body
  *           name: group
  *           description: 그룹 파라미터
- *           required:
- *              - userIdx
  *           schema:
  *              type: object
+ *              required:
+ *                - userIdx
  *              properties:
- *                  userIdx:
- *                      description: 유저 인덱스 배열
- *                      type: integer
+ *                    userIdx:
+ *                         description: 유저 인덱스 배열
+ *                         type: arrry
  *     responses:
  *       "1000":
  *         description: 그룹 소속회원 삭제 수정 API 성공
@@ -234,7 +236,7 @@ groupRouter.patch("/deleteMembers/:groupIdx", group.patchGroupMembers);
 /**
  * @swagger
  * paths:
- *  /group/insertMembers/:groupIdx:
+ *  /group/insertMembers/{groupIdx}:
  *   post:
  *     tags: [출석 그룹]
  *     summary: 그룹 소속회원 추가 수정 API
@@ -251,14 +253,14 @@ groupRouter.patch("/deleteMembers/:groupIdx", group.patchGroupMembers);
  *         - in: body
  *           name: group
  *           description: 그룹 파라미터
- *           required:
- *              - userIdx
  *           schema:
  *              type: object
+ *              required:
+ *                - userIdx
  *              properties:
- *                  userIdx:
- *                      description: 유저 인덱스 배열
- *                      type: integer
+ *                    userIdx:
+ *                        description: 유저 인덱스 배열
+ *                        type: arrry
  *     responses:
  *       "1000":
  *         description: 그룹 소속회원 추가 수정 API 성공
@@ -282,7 +284,7 @@ groupRouter.post("/insertMembers/:groupIdx", group.postGroupMembers);
 /**
  * @swagger
  * paths:
- *  /group/delete/:groupIdx:
+ *  /group/delete/{groupIdx}:
  *   patch:
  *     tags: [출석 그룹]
  *     summary: 그룹 삭제 API

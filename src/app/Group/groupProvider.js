@@ -32,7 +32,6 @@ exports.retrieveGroupMembers = async function (groupIdx) {
   try {
     const groupMembersResult = await groupDao.selectGroupMembers(connection, groupIdx);
     connection.release();
-    console.log(groupMembersResult);
     return groupMembersResult;
 
   } catch (error) {

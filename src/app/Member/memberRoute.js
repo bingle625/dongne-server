@@ -11,14 +11,14 @@ memberRouter.get("/db", member.getDatabaseTest);
 /**
  * @swagger
  * paths:
- *  /member?adminIdx=1:
+ *  /member?adminIdx={adminIdx}:
  *   get:
  *     tags: [회원 명단]
  *     summary: 단체 모든 회원명단 리스트 조회 API
  *     parameters:
  *         - in: query
  *           name: adminIdx
- *           schema:
+ *           securitySchemes:
  *              type: integer
  *           example: 1
  *           required: true
@@ -43,14 +43,14 @@ memberRouter.get("/", member.getClubMemberList);
 /**
  * @swagger
  * paths:
- *  /member/info?userIdx=1:
+ *  /member/info?userIdx={userIdx}:
  *   get:
  *     tags: [회원 명단]
  *     summary: 회원 상세 조회 API
  *     parameters:
  *         - in: query
  *           name: userIdx
- *           schema:
+ *           securitySchemes:
  *              type: integer
  *           example: 2
  *           required: true
