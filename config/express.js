@@ -3,15 +3,15 @@ const compression = require("compression");
 const methodOverride = require("method-override");
 const cors = require("cors");
 
-import testRouter from "../src/app/TestInit/TestRouter";
-import scheduleRouter from "../src/app/Schedule/scheduleRouter";
-import attendanceRouter from "../src/app/Attendance/attendanceRouter";
+import testRouter from "../src/admin/TestInit/TestRouter";
+import scheduleRouter from "../src/admin/Schedule/scheduleRouter";
+import attendanceRouter from "../src/admin/Attendance/attendanceRouter";
 const { swaggerUi, specs } = require("../modules/swagger");
 const bodyParser = require("body-parser");
-import groupRouter from "../src/app/Group/groupRoute";
-import memberRouter from "../src/app/Member/memberRoute";
-import authRouter from "../src/app/Auth/authRouter";
-import adminRouter from "../src/app/Admin/adminRouter";
+import groupRouter from "../src/admin/Group/groupRoute";
+import memberRouter from "../src/admin/Member/memberRoute";
+import authRouter from "../src/admin/Auth/authRouter";
+import adminRouter from "../src/admin/Admin/adminRouter";
 
 module.exports = function () {
   const app = express();
