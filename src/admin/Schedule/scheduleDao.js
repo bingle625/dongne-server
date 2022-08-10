@@ -13,6 +13,17 @@ async function insertSchedule(connection, insertScheduleParams) {
   return insertScheduleRow;
 }
 
+// groupIdx에 속한 user 조회
+async function selectUser(connection, groupIdx) {
+  const selectUserQuery = `
+  SELECT userIdx
+  FROM GroupMembers
+  WHERE groupIdx = ?;
+  `;
+  const [userRows] = await connection.query(selectUserQuery, groupIdx);
+  return userRows;
+}
+
 // groupIdx로 schedule 리스트 조회
 async function selectSchedule(connection, groupIdx) {
   const selectScheduleQuery = `
@@ -167,6 +178,7 @@ async function updateScheduleName(connection, editNameParams) {
 
 module.exports = {
   insertSchedule,
+  selectUser,
   selectSchedule,
   selectScheduleInfo,
   selectScheduleStatus,

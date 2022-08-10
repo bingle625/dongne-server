@@ -1,3 +1,16 @@
+// 출결 만들기
+async function insertAttendance(connection, insertAttendanceParams) {
+  const insertAttendanceQuery = `
+  INSERT INTO Attendance(userIdx, scheduleIdx, attendanceStatus, createdAt, updatedAt, status)
+  VALUES (?,?, 2, DEFAULT, DEFAULT, DEFAULT);
+  `;
+  const [insertAttendRows] = await connection.query(
+    insertAttendanceQuery,
+    insertAttendanceParams
+  );
+  return insertAttendRows;
+}
+
 // 출석한 회원 조회
 async function selectAttendList(connection, scheduleIdx) {
   const selectAttendListQuery = `
@@ -51,6 +64,7 @@ async function selectAttendCode(connection, scheduleIdx) {
 }
 
 module.exports = {
+  insertAttendance,
   selectAttendList,
   selectAbsenceList,
   selectAttendCode,
