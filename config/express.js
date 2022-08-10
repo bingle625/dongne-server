@@ -6,6 +6,7 @@ const cors = require("cors");
 import testRouter from "../src/admin/TestInit/TestRouter";
 import scheduleRouter from "../src/admin/Schedule/scheduleRouter";
 import attendanceRouter from "../src/admin/Attendance/attendanceRouter";
+import userAttendanceRouter from "../src/user/Attendance/attendanceRouter";
 const { swaggerUi, specs } = require("../modules/swagger");
 const bodyParser = require("body-parser");
 import groupRouter from "../src/admin/Group/groupRoute";
@@ -42,7 +43,7 @@ module.exports = function () {
   // 스케줄 API (user)
 
   // 출결 API (user)
-
+  app.use("/user/attendance", userAttendanceRouter);
   // 1. 회원 명단 API
   app.use("/member", memberRouter);
 
