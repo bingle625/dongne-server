@@ -35,10 +35,14 @@ module.exports = function () {
 
   // 0. test API
   app.use("/test", testRouter);
-  // 5. 스케줄 API (Admin)
+  // 5. 스케줄 API (admin)
   app.use("/admin/schedule", scheduleRouter);
-  // 5. 출결 API (Admin)
+  // 6. 출결 API (admin)
   app.use("/admin/attendance", attendanceRouter);
+  // 스케줄 API (user)
+  app.use("/user/schedule");
+  // 출결 API (user)
+  app.use("/user/attendance");
 
   // 1. 회원 명단 API
   app.use("/member", memberRouter);
