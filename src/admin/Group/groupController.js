@@ -72,7 +72,7 @@ export const postGroup = async (req, res) => {
   );
   
 
-
+  
   // Group Members add's Body Data Validation (basic) ✅
   var groupUserIdx;
   for (groupUserIdx of userIdx){
@@ -91,7 +91,7 @@ export const postGroup = async (req, res) => {
 
   }
 
-  console.log(userIdx);
+  
   // Group Members add ➕ Transcation 추가필요
   const createGroupMembersResponse = await groupService.createGroupMembers(userIdx, createGroupResponse);
 

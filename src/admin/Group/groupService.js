@@ -35,7 +35,6 @@ exports.createGroupMembers = async function(userIdx, createGroupResponse){
 
     try {
         // One UserIdx INSERT
-        console.log(userIdx);
         var groupUserIdx;
         for (groupUserIdx of userIdx){
             const insertGroupMemberParams = [groupUserIdx, createGroupResponse];
