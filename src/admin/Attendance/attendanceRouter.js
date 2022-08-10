@@ -7,7 +7,7 @@ const attendance = require("./attendanceController");
 /**
  * @swagger
  * paths:
- *  /attendance/{scheduleIdx}:
+ *  /admin/attendance/{scheduleIdx}:
  *   get:
  *     tags: [출석]
  *     summary: 출석한 회원 리스트 조회 API
@@ -37,7 +37,7 @@ attendanceRouter.get("/:scheduleIdx", attendance.getAttendance);
 /**
  * @swagger
  * paths:
- *  /attendance/absence/{scheduleIdx}:
+ *  /admin/attendance/absence/{scheduleIdx}:
  *   get:
  *     tags: [출석]
  *     summary: 결석한 회원 리스트 조회 API
@@ -67,7 +67,7 @@ attendanceRouter.get("/absence/:scheduleIdx", attendance.getAbsence);
 /**
  * @swagger
  * paths:
- *  /attendance/code/{scheduleIdx}:
+ *  /admin/attendance/code/{scheduleIdx}:
  *   get:
  *     tags: [출석]
  *     summary: 출석코드 API 조회

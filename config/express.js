@@ -35,8 +35,10 @@ module.exports = function () {
 
   // 0. test API
   app.use("/test", testRouter);
-  app.use("/schedule", scheduleRouter);
-  app.use("/attendance", attendanceRouter);
+  // 5. 스케줄 API (Admin)
+  app.use("/admin/schedule", scheduleRouter);
+  // 5. 출결 API (Admin)
+  app.use("/admin/attendance", attendanceRouter);
 
   // 1. 회원 명단 API
   app.use("/member", memberRouter);

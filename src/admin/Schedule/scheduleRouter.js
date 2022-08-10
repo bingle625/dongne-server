@@ -7,7 +7,7 @@ const schedule = require("./scheduleController");
 /**
  * @swagger
  * paths:
- *  /schedule:
+ *  /admin/schedule:
  *   post:
  *     tags: [스케줄]
  *     summary: 스케줄 생성 API
@@ -87,7 +87,7 @@ scheduleRouter.post("/", schedule.postSchedule);
 /**
  * @swagger
  * paths:
- *  /schedule/list/{groupIdx}:
+ *  /admin/schedule/list/{groupIdx}:
  *   get:
  *     tags: [스케줄]
  *     summary: 스케줄 리스트 조회 API
@@ -117,7 +117,7 @@ scheduleRouter.get("/list/:groupIdx", schedule.getSchedule);
 /**
  * @swagger
  * paths:
- *  /schedule/{scheduleIdx}:
+ *  /admin/schedule/{scheduleIdx}:
  *   get:
  *     tags: [스케줄]
  *     summary: 스케줄 상세 조회 API
@@ -149,7 +149,7 @@ scheduleRouter.get("/:scheduleIdx", schedule.getScheduleInfo);
 /**
  * @swagger
  * paths:
- *  /schedule/{scheduleIdx}:
+ *  /admin/schedule/{scheduleIdx}:
  *   patch:
  *     tags: [스케줄]
  *     summary: 스케줄 수정 API
@@ -226,7 +226,7 @@ scheduleRouter.patch("/:scheduleIdx", schedule.patchSchedule);
 /**
  * @swagger
  * paths:
- *  /schedule/{scheduleIdx}/status:
+ *  /admin/schedule/{scheduleIdx}/status:
  *   patch:
  *     tags: [스케줄]
  *     summary: 스케줄 삭제 API
