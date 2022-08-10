@@ -109,11 +109,23 @@ module.exports = {
     message: "groupIdx는 0보다 큰 값으로 입력해주세요.",
   },
 
+  ATTENDANCE_CODE_EMPTY: {
+    isSuccess: false,
+    code: 2019,
+    message: "출결코드(attendanceCode)를 입력해주세요.",
+  },
+
   // Reponse ERROR
   SCHEDULE_STATUS_INACTIVE: {
     isSuccess: false,
     code: 3001,
     message: "이미 삭제된 스케줄입니다.",
+  },
+
+  ATTENDANCE_ERROR: {
+    isSuccess: false,
+    code: 3002,
+    message: "출결코드가 틀렸습니다.",
   },
 
   //Connection, Transaction 등의 서버 오류

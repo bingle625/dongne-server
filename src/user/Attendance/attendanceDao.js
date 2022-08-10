@@ -30,4 +30,17 @@ async function updateAttendance(connection, editAttendParams) {
   );
   return updateAttendRow;
 }
-module.exports = { insertAttendanceCode, updateAttendance };
+
+// user 조회
+async function checkUserStatus(connection, userIdx) {
+  const checkUserStatusQuery = `
+  SELECT status
+  FROM User
+  WHERE userIdx = ?;
+  `;
+
+  const [checkUserRow] = await connection.query(checkUserStatusQuery, userIdx);
+  return checkUserRow;
+}
+
+module.exports = { insertAttendanceCode, updateAttendance, checkUserStatus };

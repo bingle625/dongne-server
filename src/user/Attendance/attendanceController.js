@@ -18,6 +18,23 @@ exports.postAttendanceCode = async function (req, res) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
+  if (!userIdx) {
+    return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+  }
+  if (userIdx <= 0) {
+    return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+  }
+
+  if (!attendanceCode) {
+    return res.send(errResponse(baseResponse.ATTENDANCE_CODE_EMPTY));
+  }
+
   // response
-  return response(baseResponse.SUCCESS);
+  const postAttendCodeResponse = await attendanceService.editAttendance(
+    scheduleIdx,
+    userIdx,
+    attendanceCode
+  );
+
+  return res.send(postAttendCodeResponse);
 };

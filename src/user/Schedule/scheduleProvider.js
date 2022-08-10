@@ -60,3 +60,28 @@ exports.retrieveScheduleInfo = async function (scheduleIdx) {
   } finally {
   }
 };
+
+exports.checkScheduleStatus = async function (scheduleIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  const scheduleStatusResult = await scheduleDao.selectScheduleStatus(
+    connection,
+    scheduleIdx
+  );
+  connection.release();
+
+  return scheduleStatusResult[0].status;
+};
+
+exports.checkUserExist = async function (groupIdx, userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const selectExistParams = [groupIdx, userIdx];
+
+  const userExistResult = await scheduleDao.selectExistUser(
+    connection,
+    selectExistParams
+  );
+  connection.release();
+
+  return userExistResult[0].success;
+};
