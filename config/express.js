@@ -40,9 +40,8 @@ module.exports = function () {
   // 6. 출결 API (admin)
   app.use("/admin/attendance", attendanceRouter);
   // 스케줄 API (user)
-  app.use("/user/schedule");
+
   // 출결 API (user)
-  app.use("/user/attendance");
 
   // 1. 회원 명단 API
   app.use("/member", memberRouter);

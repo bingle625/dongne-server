@@ -5,22 +5,50 @@ const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
 
 const scheduleDao = require("./scheduleDao");
+const attendanceDao = require("../Attendance/attendanceDao");
 const scheduleProvider = require("./scheduleProvider");
 
 exports.postSchedule = async function (postScheduleParams) {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const connection = await pool.getConnection(async (conn) => conn);
+    // transaction begin
+    await connection.beginTransaction();
 
+    // 1. select user
+    const selectUserResult = await scheduleDao.selectUser(
+      connection,
+      postScheduleParams[0]
+    );
+    console.log(selectUserResult[0].userIdx);
+    console.log(selectUserResult.length);
+
+    // 2. post schedule
     const insertScheduleResult = await scheduleDao.insertSchedule(
       connection,
       postScheduleParams
     );
+    console.log(insertScheduleResult.insertId);
 
-    connection.release();
+    // 3. attendance schedule
+    const scheduleIdx = insertScheduleResult.insertId;
+    for (var i = 0; i < selectUserResult.length; i++) {
+      const postAttendParams = [selectUserResult[i].userIdx, scheduleIdx];
+      const insertAttendResult = await attendanceDao.insertAttendance(
+        connection,
+        postAttendParams
+      );
+    }
+
+    // transaction commit
+    await connection.commit();
     return response(baseResponse.SUCCESS);
   } catch (err) {
+    // transaction rollback
+    await connection.rollback();
     console.log(err.message);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
