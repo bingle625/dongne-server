@@ -16,7 +16,7 @@ async function insertSchedule(connection, insertScheduleParams) {
 // groupIdx로 schedule 리스트 조회
 async function selectSchedule(connection, groupIdx) {
   const selectScheduleQuery = `
-  SELECT GS.scheduleIdx, GS.scheduleName, GS.scheduleDate, p.groupName
+  SELECT GS.scheduleIdx, GS.scheduleName, DATE_FORMAT(GS.scheduleDate, '%Y-%m-%d') as scheduleDate, p.groupName
   FROM GroupSchedule as GS
       left join (SELECT groupIdx, groupName
           FROM GroupList
