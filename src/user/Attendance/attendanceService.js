@@ -13,7 +13,6 @@ exports.editAttendance = async function (scheduleIdx, userIdx, attendanceCode) {
 
     // check schedule active
     const scheduleStatusResult = await scheduleProvider.checkScheduleStatus(
-      connection,
       scheduleIdx
     );
     if (scheduleStatusResult != "ACTIVE") {
@@ -23,7 +22,7 @@ exports.editAttendance = async function (scheduleIdx, userIdx, attendanceCode) {
 
     // check user active
     const userStatusResult = await attendanceDao.checkUserStatus(
-      connectionn,
+      connection,
       userIdx
     );
     if (userStatusResult[0].status != "ACTIVE") {
