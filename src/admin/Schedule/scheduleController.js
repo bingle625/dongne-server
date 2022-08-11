@@ -10,7 +10,7 @@ const moment = require("moment");
  * [POST] admin/schedule
  */
 exports.postSchedule = async function (req, res) {
-  // body : groupIdx, date, init_time, end_time, introduction, place, scheduleName
+  // body : groupIdx, date, init_time, end_time, introduction, place, scheduleName, adminIdx
   const {
     groupIdx,
     scheduleDate,
@@ -19,6 +19,7 @@ exports.postSchedule = async function (req, res) {
     introduction,
     place,
     scheduleName,
+    adminIdx,
   } = req.body;
 
   if (
@@ -28,9 +29,21 @@ exports.postSchedule = async function (req, res) {
     !end_time ||
     !introduction ||
     !place ||
-    !scheduleName
+    !scheduleName ||
+    !adminIdx
   ) {
     return res.send(response(baseResponse.SCHEDULE_POST_PARAMS_EMPTY));
+  }
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
   }
 
   // groupIdx validation
@@ -108,7 +121,18 @@ exports.postSchedule = async function (req, res) {
  */
 exports.getSchedule = async function (req, res) {
   // body: curPage
-  const { groupIdx, curPage } = req.body;
+  const { adminIdx, groupIdx, curPage } = req.body;
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validation
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // groupIdx validation
   if (!groupIdx) {
@@ -137,6 +161,19 @@ exports.getSchedule = async function (req, res) {
 exports.getScheduleInfo = async function (req, res) {
   // Path Variable: scheduleIdx
   const scheduleIdx = req.params.scheduleIdx;
+  // body: adminIdx
+  const { adminIdx } = req.body;
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // scheduleIdx validation
   if (!scheduleIdx) {
@@ -168,8 +205,19 @@ exports.patchSchedule = async function (req, res) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
-  // body : scheduleDate, init_time, end_time, introduction, place, scheduleName
+  // body : scheduleDate, init_time, end_time, introduction, place, scheduleName, adminIdx
   const editScheduleParams = req.body;
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!editScheduleParams.adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (editScheduleParams.adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (editScheduleParams.adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // scheduleDate valid
   if (
@@ -244,6 +292,19 @@ exports.patchSchedule = async function (req, res) {
 exports.patchScheduleStatus = async function (req, res) {
   // Path Variable: scheduleIdx
   const scheduleIdx = req.params.scheduleIdx;
+  // body: adminIdx
+  const { adminIdx } = req.body;
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // scheduleIdx validation
   if (!scheduleIdx) {

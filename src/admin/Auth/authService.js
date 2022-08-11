@@ -18,7 +18,10 @@ exports.postSignIn = async (email, password) => {
       return errResponse(baseResponse.SIGNIN_EMAIL_WRONG);
     }
 
-    const hashedPassword = await crypto.createHash("sha512").update(password).digest("hex");
+    const hashedPassword = await crypto
+      .createHash("sha512")
+      .update(password)
+      .digest("hex");
 
     const passwordRows = await adminProvider.passwordCheck(email);
 
@@ -39,19 +42,19 @@ exports.postSignIn = async (email, password) => {
     let token = jwt.sign(
       // 토큰의 내용 (payload)
       {
-        adminId: userInfoRows[0].adminIdx
+        adminId: userInfoRows[0].adminIdx,
       },
       process.env.JWT_SECRET,
       {
         expiresIn: "365d",
-        subject: "Admin"
+        subject: "Admin",
       }
     );
 
     // const token = "i have to make this";
     return response(baseResponse.SUCCESS, {
       userId: userInfoRows[0].adminIdx,
-      jwt: token
+      jwt: token,
     });
   } catch (err) {
     logger.error(`App - postSignIn Service error: ${err.message}`);

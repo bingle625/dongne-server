@@ -250,6 +250,11 @@ module.exports = {
     code: 2003,
     message: "유효하지 않는 adminIdx입니다.",
   },
+  ADMIN_ADMINIDX_NOT_MATCH: {
+    isSuccess: false,
+    code: 2004,
+    message: "adminIdx값을 확인해주세요.",
+  },
 
   //USER's errResponse
   USER_USERIDX_EMPTY: {
