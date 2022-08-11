@@ -35,8 +35,8 @@ const selectAdminAccount = async (connection, email) => {
 //admin 레코드 생성
 const insertAdminInfo = async (connection, insertUserInfoParams) => {
   const insertUserQuery = `
-  INSERT INTO Admin(clubName, adminEmail, adminPwd, establishmentYear, clubRegion,clubIntroduction,clubWebLink,clubImgUrl)
-  VALUES (?, ?, ?, ?, ?, ?, ?,?);
+  INSERT INTO Admin(clubName, adminEmail, adminPwd, establishmentYear, clubRegion,clubIntroduction,clubImgUrl)
+  VALUES (?, ?, ?, ?, ?, ?, ?);
   `;
 
   const insertUserInfoRow = await connection.query(insertUserQuery, insertUserInfoParams);

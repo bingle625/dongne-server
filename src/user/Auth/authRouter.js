@@ -1,13 +1,13 @@
 import express from "express";
 const auth = require("./authController");
-const adminAuthRouter = express.Router();
+const userAuthRouter = express.Router();
 
 /**
  * @swagger
  * paths:
- *  /user/auth/login:
+ *  admin/auth/login:
  *   post:
- *     tags: [admin 계정 관리]
+ *     tags: [admin 로그인]
  *     summary: admin 로그인 api
  *     consumes:
  *       - application/json
@@ -18,14 +18,14 @@ const adminAuthRouter = express.Router();
  *         schema:
  *            type: object
  *            required:
- *              - adminEmail
- *              - adminPwd
+ *              - AdminEmail
+ *              - AdminPwd
  *            properties:
- *                  adminEmail:
+ *                  AdminEmail:
  *                        default: umcbingle@gmail.com
  *                        description: admin 이메일
  *                        type: string
- *                  adminPwd:
+ *                  AdminPwd:
  *                        default: umc12345678
  *                        description: admin 비밀번호
  *                        type: string
@@ -52,14 +52,14 @@ const adminAuthRouter = express.Router();
  *         description: 데이터 베이스 에러
  *
  */
-adminAuthRouter.post("/login", auth.login);
+userAuthRouter.post("/login", auth.login);
 
 /**
  * @swagger
  * paths:
  *  /admin/auth/register:
  *   post:
- *     tags: [admin 계정 관리]
+ *     tags: [admin 회원가입]
  *     summary: admin 회원가입 api
  *     consumes:
  *       - application/json
@@ -71,19 +71,19 @@ adminAuthRouter.post("/login", auth.login);
  *            type: object
  *            required:
  *              - clubName
- *              - adminEmail
- *              - adminPwd
+ *              - AdminEmail
+ *              - AdminPwd
  *              - clubImgUrl
  *            properties:
  *                  clubName:
  *                        default: 빙글빙글
  *                        description: 동아리 이름
  *                        type: string
- *                  adminEmail:
+ *                  AdminEmail:
  *                        default: dongdong@gmail.com
  *                        description: admin 이메일
  *                        type: string
- *                  adminPwd:
+ *                  AdminPwd:
  *                        default: dong12345
  *                        description: admin 비밀번호
  *                        type: string
@@ -98,10 +98,6 @@ adminAuthRouter.post("/login", auth.login);
  *                  clubIntroduction:
  *                        default: 동그라미를 그리는 동아리입니다.
  *                        description: 동아리 소개
- *                        type: string
- *                  clubWebLink:
- *                        default: https://www.naver.com
- *                        description: 동아리 웹사이트 링크
  *                        type: string
  *                  clubImgUrl:
  *                        description: 동아리 사진
@@ -132,6 +128,6 @@ adminAuthRouter.post("/login", auth.login);
  *
  */
 
-adminAuthRouter.post("/register", auth.registerAdmin);
+userAuthRouter.post("/register", auth.registerAdmin);
 
 export default adminAuthRouter;

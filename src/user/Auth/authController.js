@@ -45,8 +45,7 @@ export const login = async (req, res) => {
  * [POST] admin/auth/login
  */
 export const registerAdmin = async (req, res) => {
-  const { clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl } = req.body;
-  console.log(clubWebLink);
+  const { clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubImgUrl } = req.body;
   //빈 값 체크
 
   if (!adminEmail) {
@@ -69,6 +68,6 @@ export const registerAdmin = async (req, res) => {
   // if (!establishmentYear) return res.send(response(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
   // if (!clubRegion) return res.send(response(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
 
-  const createAdminResult = await authService.createAdmin(clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl);
+  const createAdminResult = await authService.createAdmin(clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubImgUrl);
   return res.send(createAdminResult);
 };

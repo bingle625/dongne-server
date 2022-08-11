@@ -59,10 +59,10 @@ exports.postSignIn = async (email, password) => {
   }
 };
 
-export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
+export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubImgUrl) => {
   try {
     const hashedPassword = await crypto.createHash("sha512").update(adminPwd).digest("hex");
-    const adminInfo = [clubName, adminEmail, hashedPassword, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl];
+    const adminInfo = [clubName, adminEmail, hashedPassword, establishmentYear, clubRegion, clubIntroduction, clubImgUrl];
     const connection = await pool.getConnection(async (conn) => conn);
 
     //이메일 중복 확인
