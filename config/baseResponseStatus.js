@@ -124,7 +124,7 @@ module.exports = {
 
   ATTENDANCE_ERROR: {
     isSuccess: false,
-    code: 3002,
+    code: 3003,
     message: "출결코드가 틀렸습니다.",
   },
 
