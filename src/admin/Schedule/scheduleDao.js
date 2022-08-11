@@ -33,6 +33,7 @@ async function selectSchedule(connection, selectScheduleParmams) {
         FROM GroupList
         WHERE status='ACTIVE') p on p.groupIdx = GS.groupIdx
   WHERE GS.status='ACTIVE' and GS.groupIdx=?
+  ORDER BY GS.createdAt
   LIMIT ?, ?;
   `;
 

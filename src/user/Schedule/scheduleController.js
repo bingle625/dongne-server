@@ -9,7 +9,7 @@ const scheduleProvider = require("./scheduleProvider");
  */
 exports.getSchedule = async function (req, res) {
   //  body : groupIdx, userIdx
-  const { groupIdx, userIdx } = req.body;
+  const { groupIdx, userIdx, curPage } = req.body;
 
   // groupIdx validation
   if (!groupIdx) {
@@ -17,11 +17,15 @@ exports.getSchedule = async function (req, res) {
   } else if (groupIdx <= 0) {
     return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
+  if (curPage <= 0) {
+    curPage = 1;
+  }
 
   // Response
   const scheduleListResponse = await scheduleProvider.retrieveScheduleList(
     groupIdx,
-    userIdx
+    userIdx,
+    curPage
   );
   return res.send(scheduleListResponse);
 };

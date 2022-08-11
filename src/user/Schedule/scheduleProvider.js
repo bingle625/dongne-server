@@ -6,9 +6,11 @@ const { logger } = require("../../../config/winston");
 
 const scheduleDao = require("./scheduleDao");
 
-exports.retrieveScheduleList = async function (groupIdx, userIdx) {
+// paging 추가 ✅
+exports.retrieveScheduleList = async function (groupIdx, userIdx, curPage) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
+    // query params
     const selectScheduleParams = [groupIdx, userIdx];
     // group, user validation
     const existUserResult = await scheduleDao.selectExistUser(
@@ -20,13 +22,35 @@ exports.retrieveScheduleList = async function (groupIdx, userIdx) {
       return errResponse(baseResponse.GROUP_USERIDX_EXIST);
     }
 
-    const scheduleListResult = await scheduleDao.selectSchedule(
+    // paging
+    const countScheduleResult = await scheduleDao.countSchedule(
       connection,
       selectScheduleParams
     );
+    const page_size = 12; // 페이지당 스케줄 수
+    const totalSchedule = countScheduleResult[0].count; // 전체 스케줄 수
+    if (totalSchedule < 0) {
+      totalSchedule = 0;
+    }
+    const totalPage = Math.ceil(totalSchedule / page_size); // 전체 페이지 수
+    const offset = (curPage - 1) * page_size; // 시작 번호
+
+    // query param
+    const scheduleListParmas = [groupIdx, userIdx, offset, page_size];
+    // select schedule
+    const scheduleListResult = await scheduleDao.selectSchedule(
+      connection,
+      scheduleListParmas
+    );
     connection.release();
 
-    return response(baseResponse.SUCCESS, scheduleListResult);
+    const result = {
+      schedule: scheduleListResult,
+      totalPage: totalPage,
+      curPage: curPage,
+    };
+
+    return response(baseResponse.SUCCESS, result);
   } catch (err) {
     console.log(err.message);
     return errResponse(baseResponse.DB_ERROR);

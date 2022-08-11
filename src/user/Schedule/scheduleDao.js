@@ -1,19 +1,42 @@
+// groupIdx에 속한 리스트 개수 조회
+async function countSchedule(connection, countScheduleParams) {
+  const countScheduleQuery = `
+  SELECT COUNT(*) as count
+  FROM GroupSchedule as GS
+      left join (SELECT groupIdx
+          FROM GroupList
+          WHERE status='ACTIVE') p on p.groupIdx = GS.groupIdx
+      left join(SELECT scheduleIdx, userIdx
+                FROM Attendance
+                WHERE status = 'ACTIVE') u on u.scheduleIdx = GS.scheduleIdx
+  WHERE GS.status='ACTIVE' and GS.groupIdx=? and u.userIdx=?;
+  `;
+
+  const [countScheduleRow] = await connection.query(
+    countScheduleQuery,
+    countScheduleParams
+  );
+  return countScheduleRow;
+}
+
 // groupIdx로 schedule 리스트 조회
-async function selectSchedule(connection, selectScheduleParams) {
+async function selectSchedule(connection, scheduleListParmas) {
   const selectScheduleQuery = `
-    SELECT GS.scheduleIdx, GS.scheduleName, DATE_FORMAT(GS.scheduleDate, '%Y-%m-%d') as scheduleDate, p.groupName, u.attendanceStatus
-    FROM GroupSchedule as GS
-        left join (SELECT groupIdx, groupName
-            FROM GroupList
-            WHERE status='ACTIVE') p on p.groupIdx = GS.groupIdx
-        left join(SELECT scheduleIdx, attendanceStatus, userIdx
-                  FROM Attendance
-                  WHERE status = 'ACTIVE') u on u.scheduleIdx = GS.scheduleIdx
-    WHERE GS.status='ACTIVE' and GS.groupIdx=? and u.userIdx=?;
+  SELECT GS.scheduleIdx, GS.scheduleName, DATE_FORMAT(GS.scheduleDate, '%Y-%m-%d') as scheduleDate, p.groupName, u.attendanceStatus
+  FROM GroupSchedule as GS
+      left join (SELECT groupIdx, groupName
+          FROM GroupList
+          WHERE status='ACTIVE') p on p.groupIdx = GS.groupIdx
+      left join(SELECT scheduleIdx, attendanceStatus, userIdx
+                FROM Attendance
+                WHERE status = 'ACTIVE') u on u.scheduleIdx = GS.scheduleIdx
+  WHERE GS.status='ACTIVE' and GS.groupIdx=? and u.userIdx=?
+  ORDER BY GS.createdAt
+  LIMIT ?,?;
     `;
   const [scheduleRows] = await connection.query(
     selectScheduleQuery,
-    selectScheduleParams
+    scheduleListParmas
   );
   return scheduleRows;
 }
@@ -65,6 +88,7 @@ async function selectScheduleInfo(connection, scheduleIdx) {
 }
 
 module.exports = {
+  countSchedule,
   selectSchedule,
   selectExistUser,
   selectScheduleInfo,
