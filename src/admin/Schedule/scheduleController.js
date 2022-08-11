@@ -117,11 +117,12 @@ exports.postSchedule = async function (req, res) {
 /**
  * API No. 5.2
  * API Name : 스케줄 리스트 조회 API
- * [GET] admin/schedule/list/:groupIdx
+ * [GET] admin/schedule/list?adminIdx=#&groupIdx=#&curPage=#
  */
 exports.getSchedule = async function (req, res) {
-  // body: curPage
-  const { adminIdx, groupIdx, curPage } = req.body;
+  // query parameters
+  const { adminIdx, groupIdx, curPage } = req.query;
+
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
 
@@ -155,14 +156,13 @@ exports.getSchedule = async function (req, res) {
 /**
  * API No. 5.3
  * API Name : 스케줄 상세 조회 API
- * [GET] admin/schedule/:scheduleIdx
+ * [GET] admin/schedule?scheduleIdx=#&adminIdx=#:
  */
 
 exports.getScheduleInfo = async function (req, res) {
-  // Path Variable: scheduleIdx
-  const scheduleIdx = req.params.scheduleIdx;
-  // body: adminIdx
-  const { adminIdx } = req.body;
+  // Query Variable: scheduleIdx, adminIdx
+  const { scheduleIdx, adminIdx } = req.query;
+
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
 

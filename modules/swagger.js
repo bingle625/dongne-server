@@ -9,6 +9,14 @@ const swaggerDefinition = {
   },
   host: "localhost:3000",
   basePath: "/",
+  securityDefinitions: {
+    jwt: {
+      type: "apiKey",
+      name: "x-access-token",
+      in: "header",
+    },
+  },
+  security: [{ jwt: [] }],
 };
 
 const options = {
@@ -22,7 +30,7 @@ const options = {
     "./src/admin/Auth/*.js",
     "./src/admin/Admin/*.js",
     "./src/user/Schedule/*.js",
-    "./src/user/Schedule/*.js",
+    "./src/user/Attendance/*.js",
   ],
 };
 

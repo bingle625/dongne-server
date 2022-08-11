@@ -7,13 +7,13 @@ module.exports = {
 
   SCHEDULE_SCHEDULEIDX_EMPTY: {
     isSuccess: false,
-    code: 2001,
+    code: 2021,
     message: "scheduleIdx를 입력해주세요.",
   },
 
   SCHEDULE_SCHEDULEIDX_LENGTH: {
     isSuccess: false,
-    code: 2002,
+    code: 2022,
     message: "scheduleIdx는 0보다 큰 값으로 입력해주세요.",
   },
 
@@ -264,7 +264,7 @@ module.exports = {
   },
   ADMIN_ADMINIDX_NOT_MATCH: {
     isSuccess: false,
-    code: 2004,
+    code: 2020,
     message: "adminIdx값을 확인해주세요.",
   },
 
