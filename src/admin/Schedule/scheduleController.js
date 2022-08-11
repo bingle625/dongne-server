@@ -7,7 +7,7 @@ const moment = require("moment");
 /**
  * API No. 5.1
  * API Name : 스케줄 생성 API
- * [POST] /schedule
+ * [POST] admin/schedule
  */
 exports.postSchedule = async function (req, res) {
   // body : groupIdx, date, init_time, end_time, introduction, place, scheduleName
@@ -104,11 +104,11 @@ exports.postSchedule = async function (req, res) {
 /**
  * API No. 5.2
  * API Name : 스케줄 리스트 조회 API
- * [GET] /schedule/list/:groupIdx
+ * [GET] admin/schedule/list/:groupIdx
  */
 exports.getSchedule = async function (req, res) {
-  // Path Variable: groupIdx
-  const groupIdx = req.params.groupIdx;
+  // body: curPage
+  const { groupIdx, curPage } = req.body;
 
   // groupIdx validation
   if (!groupIdx) {
@@ -116,9 +116,14 @@ exports.getSchedule = async function (req, res) {
   } else if (groupIdx <= 0) {
     return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
+  // curPage validation
+  if (curPage < 0) {
+    curPage = 0;
+  }
 
   const scheduleListResponse = await scheduleProvider.retrieveScheduleList(
-    groupIdx
+    groupIdx,
+    curPage
   );
   return res.send(scheduleListResponse);
 };
@@ -126,7 +131,7 @@ exports.getSchedule = async function (req, res) {
 /**
  * API No. 5.3
  * API Name : 스케줄 상세 조회 API
- * [GET] /schedule/:scheduleIdx
+ * [GET] admin/schedule/:scheduleIdx
  */
 
 exports.getScheduleInfo = async function (req, res) {
@@ -150,7 +155,7 @@ exports.getScheduleInfo = async function (req, res) {
 /**
  * API No. 5.4
  * API Name : 스케줄 수정 API
- * [PATCH] /schedule/:scheduleIdx
+ * [PATCH] admin/schedule/:scheduleIdx
  */
 exports.patchSchedule = async function (req, res) {
   // path variable
@@ -234,7 +239,7 @@ exports.patchSchedule = async function (req, res) {
 /**
  * API No. 5.5
  * API Name : 스케줄 삭제 API
- * [PATCH] /schedule/:scheduleIdx/status
+ * [PATCH] admin/schedule/:scheduleIdx/status
  */
 exports.patchScheduleStatus = async function (req, res) {
   // Path Variable: scheduleIdx

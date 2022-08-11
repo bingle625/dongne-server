@@ -111,7 +111,7 @@ scheduleRouter.post("/", schedule.postSchedule);
  *
  *
  */
-scheduleRouter.get("/list/:groupIdx", schedule.getSchedule);
+scheduleRouter.get("/list", schedule.getSchedule); // parameter body로 변경
 
 // 5.3 스케줄 상세 조회 API
 /**
