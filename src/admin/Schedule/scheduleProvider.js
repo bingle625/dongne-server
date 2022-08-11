@@ -6,15 +6,40 @@ const { logger } = require("../../../config/winston");
 
 const scheduleDao = require("./scheduleDao");
 
-exports.retrieveScheduleList = async function (groupIdx) {
+// paging 추가 ✅
+exports.retrieveScheduleList = async function (groupIdx, curPage) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
-    const scheduleListResult = await scheduleDao.selectSchedule(
+
+    const countScheduleResult = await scheduleDao.countSchedule(
       connection,
       groupIdx
     );
+
+    const page_size = 12; // 페이지당 스케줄 수
+    const totalSchedule = countScheduleResult[0].count; // 전체 스케줄 개수
+    // validation
+    if (totalSchedule < 0) {
+      totalSchedule = 0;
+    }
+    const totalPage = Math.ceil(totalSchedule / page_size); // 전체 페이지 수
+    const offset = (curPage - 1) * page_size; // 시작 번호
+
+    // query param
+    const selectScheduleParmams = [groupIdx, offset, page_size];
+    // select schedule
+    const scheduleListResult = await scheduleDao.selectSchedule(
+      connection,
+      selectScheduleParmams
+    );
     connection.release();
-    return response(baseResponse.SUCCESS, scheduleListResult);
+
+    const result = {
+      schedule: scheduleListResult,
+      totalPage: totalPage,
+      curPage: curPage,
+    };
+    return response(baseResponse.SUCCESS, result);
   } catch (err) {
     console.log(err.message);
     return errResponse(baseResponse.DB_ERROR);

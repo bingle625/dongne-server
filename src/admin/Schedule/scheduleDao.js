@@ -25,18 +25,40 @@ async function selectUser(connection, groupIdx) {
 }
 
 // groupIdx로 schedule 리스트 조회
-async function selectSchedule(connection, groupIdx) {
+async function selectSchedule(connection, selectScheduleParmams) {
   const selectScheduleQuery = `
   SELECT GS.scheduleIdx, GS.scheduleName, DATE_FORMAT(GS.scheduleDate, '%Y-%m-%d') as scheduleDate, p.groupName
   FROM GroupSchedule as GS
-      left join (SELECT groupIdx, groupName
+    left join (SELECT groupIdx, groupName
+        FROM GroupList
+        WHERE status='ACTIVE') p on p.groupIdx = GS.groupIdx
+  WHERE GS.status='ACTIVE' and GS.groupIdx=?
+  LIMIT ?, ?;
+  `;
+
+  const [scheduleRows] = await connection.query(
+    selectScheduleQuery,
+    selectScheduleParmams
+  );
+  return scheduleRows;
+}
+
+// groupIdx로 schedule 개수 조회
+async function countSchedule(connection, groupIdx) {
+  const countScheduleQuery = `
+  SELECT COUNT(*) as count
+  FROM GroupSchedule as GS
+      left join (SELECT groupIdx
           FROM GroupList
           WHERE status='ACTIVE') p on p.groupIdx = GS.groupIdx
   WHERE GS.status='ACTIVE' and GS.groupIdx=?;
   `;
 
-  const [scheduleRows] = await connection.query(selectScheduleQuery, groupIdx);
-  return scheduleRows;
+  const [countScheduleRow] = await connection.query(
+    countScheduleQuery,
+    groupIdx
+  );
+  return countScheduleRow;
 }
 
 // scheduleIdx 상태 체크
@@ -180,6 +202,7 @@ module.exports = {
   insertSchedule,
   selectUser,
   selectSchedule,
+  countSchedule,
   selectScheduleInfo,
   selectScheduleStatus,
   updateScheduleStatus,

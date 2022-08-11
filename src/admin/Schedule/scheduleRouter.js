@@ -2,6 +2,7 @@ import express from "express";
 
 const scheduleRouter = express.Router();
 const schedule = require("./scheduleController");
+const jwtMiddleware = require("../../../config/jwtMiddleWare");
 
 // 5.1 스케줄 생성 API
 /**
@@ -81,7 +82,7 @@ const schedule = require("./scheduleController");
  *         description: 데이터 베이스 에러
  *
  */
-scheduleRouter.post("/", schedule.postSchedule);
+scheduleRouter.post("/", jwtMiddleware, schedule.postSchedule);
 
 // 5.2 스케줄 리스트 조회 API
 /**
@@ -111,7 +112,7 @@ scheduleRouter.post("/", schedule.postSchedule);
  *
  *
  */
-scheduleRouter.get("/list/:groupIdx", schedule.getSchedule);
+scheduleRouter.get("/list", jwtMiddleware, schedule.getSchedule); // parameter body로 변경
 
 // 5.3 스케줄 상세 조회 API
 /**
@@ -143,7 +144,7 @@ scheduleRouter.get("/list/:groupIdx", schedule.getSchedule);
  *
  *
  */
-scheduleRouter.get("/:scheduleIdx", schedule.getScheduleInfo);
+scheduleRouter.get("/:scheduleIdx", jwtMiddleware, schedule.getScheduleInfo);
 
 // 5.4 스케줄 수정 API
 /**
@@ -220,7 +221,7 @@ scheduleRouter.get("/:scheduleIdx", schedule.getScheduleInfo);
  *
  *
  */
-scheduleRouter.patch("/:scheduleIdx", schedule.patchSchedule);
+scheduleRouter.patch("/:scheduleIdx", jwtMiddleware, schedule.patchSchedule);
 
 // 5.5 스케줄 삭제 API
 /**
@@ -251,6 +252,10 @@ scheduleRouter.patch("/:scheduleIdx", schedule.patchSchedule);
  *         description: 데이터 베이스 에러
  *
  */
-scheduleRouter.patch("/:scheduleIdx/status", schedule.patchScheduleStatus);
+scheduleRouter.patch(
+  "/:scheduleIdx/status",
+  jwtMiddleware,
+  schedule.patchScheduleStatus
+);
 
 export default scheduleRouter;
