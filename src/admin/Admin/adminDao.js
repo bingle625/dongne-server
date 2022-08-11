@@ -21,9 +21,9 @@ const selectAdminEmail = async (connection, email) => {
 
 const selectAdminPassword = async (connection, email) => {
   const selectUserPasswordQuery = `
-      SELECT adminIdx, AdminPwd
+      SELECT adminIdx, adminPwd
       FROM Admin
-      WHERE AdminEmail = ?;
+      WHERE adminEmail = ?;
   `;
   const selectUserPasswordRow = await connection.query(selectUserPasswordQuery, email);
   return selectUserPasswordRow;

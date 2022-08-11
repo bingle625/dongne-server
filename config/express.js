@@ -10,8 +10,8 @@ const { swaggerUi, specs } = require("../modules/swagger");
 const bodyParser = require("body-parser");
 import groupRouter from "../src/admin/Group/groupRoute";
 import memberRouter from "../src/admin/Member/memberRoute";
-import authRouter from "../src/admin/Auth/authRouter";
-import adminRouter from "../src/admin/Admin/adminRouter";
+import adminAuthRouter from "../src/admin/Auth/authRouter";
+// import userAuthRouter from "../src/user/Auth/authRouter";
 
 module.exports = function () {
   const app = express();
@@ -45,12 +45,10 @@ module.exports = function () {
   app.use("/group", groupRouter);
 
   // 3. 인증 도메인
-  app.use("/auth", authRouter);
+  app.use("/admin/auth", adminAuthRouter);
+  // app.use("/user/auth", userAuthRouter);
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-
-  // 4. Admin API
-  app.use("/admin", adminRouter);
 
   return app;
 };

@@ -1,64 +1,51 @@
-// groupIdx로 schedule 리스트 조회
-async function selectSchedule(connection, groupIdx) {
-  const selectScheduleQuery = `
-  SELECT GS.scheduleIdx, GS.scheduleName, GS.date, p.groupName
-  FROM GroupSchedule as GS
-      left join (SELECT groupIdx, groupName
-          FROM GroupList
-          WHERE status='ACTIVE') p on p.groupIdx = GS.groupIdx
-  WHERE GS.status='ACTIVE' and GS.groupIdx=?;
+//admin 이메일 조회
+const selectAdminEmail = async (connection, email) => {
+  const selectAdminEmailQuery = `
+        SELECT adminEmail
+        From Admin
+        WHERE adminEmail =?
+  `;
+  const adminResult = await connection.query(selectAdminEmailQuery, [email]);
+  return adminResult;
+};
+
+//admin 비밀번호 조회
+const selectAdminPassword = async (connection, email) => {
+  const selectUserPasswordQuery = `
+      SELECT adminIdx, adminPwd
+      FROM Admin
+      WHERE adminEmail = ?;
+  `;
+  const selectUserPasswordRow = await connection.query(selectUserPasswordQuery, email);
+  return selectUserPasswordRow;
+};
+
+//admin 계정 상태 확인
+const selectAdminAccount = async (connection, email) => {
+  const selectAdminAccountQuery = `
+      SELECT status, adminIdx
+      FROM Admin
+      WHERE AdminEmail = ?;
+
+  `;
+  const selectAdminAccountRow = await connection.query(selectAdminAccountQuery, email);
+  return selectAdminAccountRow;
+};
+
+//admin 레코드 생성
+const insertAdminInfo = async (connection, insertUserInfoParams) => {
+  const insertUserQuery = `
+  INSERT INTO Admin(clubName, adminEmail, adminPwd, establishmentYear, clubRegion,clubIntroduction,clubImgUrl)
+  VALUES (?, ?, ?, ?, ?, ?, ?);
   `;
 
-  const [scheduleRows] = await connection.query(selectScheduleQuery, groupIdx);
-  return scheduleRows;
-}
-
-// scheduleIdx 상태 체크
-async function selectScheduleStatus(connection, scheduleIdx) {
-  const selectScheduleStatusQuery = `
-    SELECT status
-    From GroupSchedule
-    WHERE scheduleIdx=?;`;
-
-  const [scheduleStatus] = await connection.query(
-    selectScheduleStatusQuery,
-    scheduleIdx
-  );
-  return scheduleStatus;
-}
-
-// scheduleIdx로 schedule 상세 조회
-async function selectScheduleInfo(connection, scheduleIdx) {
-  const selectScheduleInfoQuery = `
-    SELECT scheduleIdx, date, init_time, attendanceCode, init_time, end_time, introduction, place
-    FROM GroupSchedule
-    WHERE status='ACTIVE' and scheduleIdx=?;
-    `;
-
-  const [scheduleInfo] = await connection.query(
-    selectScheduleInfoQuery,
-    scheduleIdx
-  );
-  return scheduleInfo;
-}
-
-// 스케줄 삭제
-async function updateScheduleStatus(connection, scheduleIdx) {
-  const updateScheduleStatusQuery = `
-    UPDATE GroupSchedule
-    SET status = 'INACTIVE'
-    WHERE scheduleIdx = ?;`;
-
-  const [updateScheduleStatusRow] = await connection.query(
-    updateScheduleStatusQuery,
-    scheduleIdx
-  );
-  return updateScheduleStatusRow;
-}
+  const insertUserInfoRow = await connection.query(insertUserQuery, insertUserInfoParams);
+  return insertUserInfoRow;
+};
 
 module.exports = {
-  selectSchedule,
-  selectScheduleInfo,
-  selectScheduleStatus,
-  updateScheduleStatus,
+  selectAdminEmail,
+  insertAdminInfo,
+  selectAdminPassword,
+  selectAdminAccount
 };

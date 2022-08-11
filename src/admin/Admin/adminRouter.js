@@ -59,7 +59,7 @@ const adminRouter = express.Router();
  *
  *     responses:
  *       "1000":
- *         description: 그룹 추가 API 성공
+ *         description: API 성공
  *       "2001":
  *         description: 이메일을 입력해주세요.
  *       "2002":
@@ -72,7 +72,7 @@ const adminRouter = express.Router();
  *         description: 비밀번호는 8~20자리를 입력해주세요.
  *       "2008":
  *         description: 동아리 이름을 입력해주세요
- *       "2009":
+ *       "3001":
  *         description: 이미 존재하는 이메일입니다.
  *       "4000":
  *         description: 데이터 베이스 에러

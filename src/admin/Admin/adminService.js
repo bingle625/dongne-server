@@ -16,7 +16,7 @@ export const createAdmin = async (clubName, AdminEmail, AdminPwd, establishmentY
     //이메일 중복 확인
     const emailStatus = await adminDao.selectAdminEmail(connection, AdminEmail);
     if (emailStatus[0].length > 0) {
-      return errResponse(baseResponse.SIGNUP_EMAIL_EXIST);
+      return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
     }
     //   const createAdminResult = "hello World";
 
@@ -24,7 +24,7 @@ export const createAdmin = async (clubName, AdminEmail, AdminPwd, establishmentY
     connection.release();
     return response(baseResponse.SUCCESS, createAdminResult[0].insertId);
   } catch (err) {
-    logger.error(`App - createAdmin Service error: ${err.message}`);
+    logger.error(`App - createAdmin2 Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
   }
