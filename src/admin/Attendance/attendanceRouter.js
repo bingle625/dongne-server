@@ -104,4 +104,18 @@ attendanceRouter.get(
   attendance.getAttendCode
 );
 
+// 6.4 회원 출석 처리 API
+attendanceRouter.patch(
+  "/:scheduleIdx",
+  jwtMiddleware,
+  attendance.patchAttendacne
+);
+
+// 6.5 회원 결석 처리 API
+attendanceRouter.patch(
+  "/absence/:scheduleIdx",
+  jwtMiddleware,
+  attendance.patchAbsence
+);
+
 export default attendanceRouter;

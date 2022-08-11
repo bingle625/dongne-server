@@ -101,6 +101,36 @@ async function selectAttendCode(connection, scheduleIdx) {
   return attendCode;
 }
 
+// 출석 처리
+async function updateAttendance(connection, attendParams) {
+  const updateAttendanceQuery = `
+  UPDATE Attendance
+  SET attendanceStatus = 1
+  WHERE scheduleIdx =? and userIdx = ?;  
+  `;
+
+  const [updateAttendRows] = await connection.query(
+    updateAttendanceQuery,
+    attendParams
+  );
+  return updateAttendRows;
+}
+
+// 결석 처리
+async function updateAbsence(connection, absenceParams) {
+  const updateAbsenceQuery = `
+  UPDATE Attendance
+  SET attendanceStatus = 0
+  WHERE scheduleIdx =? and userIdx = ?;
+  `;
+
+  const [updateAbsenceRows] = await connection.query(
+    updateAbsenceQuery,
+    absenceParams
+  );
+  return updateAbsenceRows;
+}
+
 module.exports = {
   insertAttendance,
   selectAttendList,
@@ -108,4 +138,6 @@ module.exports = {
   selectAbsenceList,
   countAbsenceList,
   selectAttendCode,
+  updateAttendance,
+  updateAbsence,
 };
