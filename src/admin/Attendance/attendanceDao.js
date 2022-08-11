@@ -11,38 +11,76 @@ async function insertAttendance(connection, insertAttendanceParams) {
   return insertAttendRows;
 }
 
+// 출석한 회원 수 조회
+async function countAttendList(connection, scheduleIdx) {
+  const countAttendListQuery = `
+    SELECT COUNT(*) as count
+    FROM User u
+      right join (SELECT userIdx
+                 FROM Attendance
+                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=1) p on p.userIdx = u.userIdx
+    WHERE u.status = 'ACTIVE';
+  `;
+
+  const [countAttendRows] = await connection.query(
+    countAttendListQuery,
+    scheduleIdx
+  );
+  return countAttendRows;
+}
+
 // 출석한 회원 조회
-async function selectAttendList(connection, scheduleIdx) {
+async function selectAttendList(connection, selectAttendParams) {
   const selectAttendListQuery = `
     SELECT u.userIdx, u.name
     FROM User u
-    right join (SELECT userIdx
-               FROM Attendance
-               WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=1) p on p.userIdx = u.userIdx
-    WHERE u.status = 'ACTIVE';
+      right join (SELECT userIdx
+                 FROM Attendance
+                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=1) p on p.userIdx = u.userIdx
+    WHERE u.status = 'ACTIVE'
+    LIMIT ?, ?;
     `;
 
   const [attendRows] = await connection.query(
     selectAttendListQuery,
-    scheduleIdx
+    selectAttendParams
   );
   return attendRows;
 }
 
+// 결석한 회원수 조회
+async function countAbsenceList(connection, scheduleIdx) {
+  const countAbsenceListQuery = `
+    SELECT COUNT(*) as count
+    FROM User u
+      right join (SELECT userIdx
+                 FROM Attendance
+                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=0) p on p.userIdx = u.userIdx
+    WHERE u.status = 'ACTIVE';
+  `;
+
+  const [countAbsenceRows] = await connection.query(
+    countAbsenceListQuery,
+    scheduleIdx
+  );
+  return countAbsenceRows;
+}
+
 // 결석한 회원 조회
-async function selectAbsenceList(connection, scheduleIdx) {
+async function selectAbsenceList(connection, selectAbsenceParmas) {
   const selectAbsenceListQuery = `
     SELECT u.userIdx, u.name
     FROM User u
-    right join (SELECT userIdx
-               FROM Attendance
-               WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=0) p on p.userIdx = u.userIdx
-    WHERE u.status = 'ACTIVE';
+      right join (SELECT userIdx
+                 FROM Attendance
+                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=0) p on p.userIdx = u.userIdx
+    WHERE u.status = 'ACTIVE'
+    LIMIT ?, ?;
     `;
 
   const [absenceRows] = await connection.query(
     selectAbsenceListQuery,
-    scheduleIdx
+    selectAbsenceParmas
   );
   return absenceRows;
 }
@@ -66,6 +104,8 @@ async function selectAttendCode(connection, scheduleIdx) {
 module.exports = {
   insertAttendance,
   selectAttendList,
+  countAttendList,
   selectAbsenceList,
+  countAbsenceList,
   selectAttendCode,
 };
