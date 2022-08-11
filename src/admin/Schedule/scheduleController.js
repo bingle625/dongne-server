@@ -141,8 +141,8 @@ exports.getSchedule = async function (req, res) {
     return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
   // curPage validation
-  if (curPage < 0) {
-    curPage = 0;
+  if (curPage <= 0) {
+    curPage = 1;
   }
 
   const scheduleListResponse = await scheduleProvider.retrieveScheduleList(
