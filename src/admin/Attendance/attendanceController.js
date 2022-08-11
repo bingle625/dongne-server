@@ -6,13 +6,12 @@ const attendanceService = require("./attendanceService");
 /**
  * API No. 6.1
  * API Name : 출석한 회원 리스트 조회 API
- * [GET] admin/attendance/:scheduleIdx
+ * [GET] admin/attendance?scheduleIdx=#&adminIdx=#&curPage=#
  */
 exports.getAttendance = async function (req, res) {
-  // Path Variable : scheduleIdx
-  const scheduleIdx = req.params.scheduleIdx;
-  // body : adminIdx, curPage
-  const { adminIdx, curPage } = req.body;
+  // Query Params : scheduleIdx, adminIdx, curPage
+  const { scheduleIdx, adminIdx, curPage } = req.query;
+
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
 
@@ -46,13 +45,12 @@ exports.getAttendance = async function (req, res) {
 /**
  * API No. 6.2
  * API Name : 결석한 회원 리스트 조회 API
- * [GET] admin/attendance/absence/:scheduleIdx
+ * [GET] admin/attendance/absence?scheduleIdx=#&adminIdx=#&curPage=#
  */
 exports.getAbsence = async function (req, res) {
-  // Path Variable : scheduleIdx
-  const scheduleIdx = req.params.scheduleIdx;
-  // body : adminIdx,curPage
-  const { adminIdx, curPage } = req.body;
+  // Query Params : scheduleIdx, adminIdx, curPage
+  const { scheduleIdx, adminIdx, curPage } = req.query;
+
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
 
@@ -85,13 +83,12 @@ exports.getAbsence = async function (req, res) {
 /**
  * API No. 6.3
  * API Name : 출석코드 API 조회
- * [GET] admin/attendance/code/:scheduleIdx
+ * [GET] admin/attendance/code?scheduleIdx=#&adminIdx=#
  */
 exports.getAttendCode = async function (req, res) {
-  // Path Variable : scheduleIdx
-  const scheduleIdx = req.params.scheduleIdx;
-  // body : adminIdx
-  const { adminIdx } = req.body;
+  // Query Params : scheduleIdx, adminIdx, curPage
+  const { scheduleIdx, adminIdx } = req.query;
+
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
 
@@ -121,13 +118,12 @@ exports.getAttendCode = async function (req, res) {
 /**
  * API No. 6.4
  * API Name : 회원 출석 처리 API
- * [POST] admin/attendance/:scheduleIdx
+ * [PATCH] admin/attendance?scheduleIdx=#&adminIdx=#&userIdx=#
  */
 exports.patchAttendacne = async function (req, res) {
-  // Path Variable : scheduleIdx
-  const scheduleIdx = req.params.scheduleIdx;
-  // body : adminIdx, userIdx
-  const { adminIdx, userIdx } = req.body;
+  // Query Params : scheduleIdx, adminIdx, curPage
+  const { scheduleIdx, adminIdx, userIdx } = req.query;
+
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
 
@@ -163,13 +159,12 @@ exports.patchAttendacne = async function (req, res) {
 /**
  * API No. 6.5
  * API Name : 회원 결석 처리 API
- * [POST] admin/attendance/absence/:scheduleIdx
+ * [PATCH] admin/attendance/absence?scheduleIdx=#&adminIdx=#&userIdx=#
  */
 exports.patchAbsence = async function (req, res) {
-  // Path Variable : scheduleIdx
-  const scheduleIdx = req.params.scheduleIdx;
-  // body : adminIdx, userIdx
-  const { adminIdx, userIdx } = req.body;
+  // Query Params : scheduleIdx, adminIdx, curPage
+  const { scheduleIdx, adminIdx, userIdx } = req.query;
+
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
 
