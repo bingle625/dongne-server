@@ -132,8 +132,8 @@ attendanceRouter.get("/absence", jwtMiddleware, attendance.getAbsence);
  *         description: 스케줄 인덱스를 입력해주세요.
  *       "2022":
  *         description: 스케줄 인덱스를 0보다 큰 값으로 입력해주세요.
- *       "3001":
- *         description: 삭제된 스케줄입니다.
+ *       "3004":
+ *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
  *

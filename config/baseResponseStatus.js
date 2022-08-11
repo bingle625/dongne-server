@@ -118,7 +118,7 @@ module.exports = {
   // Reponse ERROR
   SCHEDULE_STATUS_INACTIVE: {
     isSuccess: false,
-    code: 3001,
+    code: 3004,
     message: "이미 삭제된 스케줄입니다.",
   },
 

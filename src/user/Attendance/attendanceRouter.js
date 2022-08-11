@@ -54,6 +54,8 @@ const attendance = require("./attendanceController");
  *         description: 유효하지 않는 userIdx입니다.
  *       "3003":
  *         description: 출석코드가 틀렸습니다.
+ *       "3004":
+ *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
  *

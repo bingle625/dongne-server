@@ -176,7 +176,7 @@ scheduleRouter.get("/list", jwtMiddleware, schedule.getSchedule);
  *         description: 스케줄 인덱스를 입력해주세요.
  *       "2022":
  *         description: scheduleIdx는 0보다 큰 값으로 입력해주세요.
- *       "3001":
+ *       "3004":
  *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
@@ -261,7 +261,7 @@ scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
  *         description: 스케줄 시작시간을 YYYY/MM/DD HH:mm:ss 또는 YYYY-MM-DD HH:mm:ss 형식으로 입력하세요.
  *       "2016":
  *         description: 스케줄 종료시간을 YYYY/MM/DD HH:mm:ss 또는 YYYY-MM-DD HH:mm:ss 형식으로 입력하세요.
- *       "3001":
+ *       "3004":
  *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
@@ -311,7 +311,7 @@ scheduleRouter.patch("/:scheduleIdx", jwtMiddleware, schedule.patchSchedule);
  *         description: 스케줄 인덱스를 입력해주세요.
  *       "2022":
  *         description: scheduleIdx는 0보다 큰 값으로 입력해주세요.
- *       "3001":
+ *       "3004":
  *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
