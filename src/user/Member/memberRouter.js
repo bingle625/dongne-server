@@ -1,34 +1,17 @@
 import express from "express";
 // import  {getDatabaseTest, getClubMemberList} from "./memberController";
 const member = require("./memberController");
-const jwtMiddleWare = require("../../../config/jwtMiddleWare");
 
 const memberRouter = express.Router();
 
 // Route Test
 memberRouter.get("/db", member.getDatabaseTest);
 
-/*
-    개발 노트 (8/12) 📝
-    jwtMiddleWare 를 통과했다는 의미는 로그인을 성공해서 헤더에 jwt 토큰을 제공한 상황임.
-
-    - authController
-    jwt token은 로그인하면 발급을 해준다.
-    여기서 jwt token은 어드민의 계정상태가 ACTIVE 이면서, {이메일, 비밀번호}가 일치할 때 발급을 수행한다.
-
-    - jwtMiddleWare
-    발급 받은 jwt token을 jwtMiddleWare에서 올바른 token인지 검증을 진행한다.
-    따라서, jwtMiddleWare 를 통과한 건 ACTIVE 상태(동네 웹에 등록된 어드민)인 어드민 클라이언트가 접근을 했다를 의미한다.
-
-        그렇기에, 어드민 side의 API에서 필요한 Validation을 기록했다.
-        - 로그인 한 어드민이 자신의 권한에 맞는 API 요청을 하는지에 대한 Validation 필요
-*/
-
-// 3.1 단체 모든 회원명단 리스트 조회 API
+// 4.1 단체 모든 회원명단 리스트 조회 API
 /**
  * @swagger
  * paths:
- *  /member?adminIdx={adminIdx}:
+ *  /user/member?adminIdx={adminIdx}:
  *   get:
  *     tags: [회원 명단]
  *     summary: 단체 모든 회원명단 리스트 조회 API
@@ -53,14 +36,14 @@ memberRouter.get("/db", member.getDatabaseTest);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/",jwtMiddleWare ,member.getClubMemberList);
+memberRouter.get("/", member.getClubMemberList);
 
 
-// 3.2 회원 상세 조회 API
+// 4.2 회원 상세 조회 API
 /**
  * @swagger
  * paths:
- *  /member/info?userIdx={userIdx}:
+ *  /user/member/info?userIdx={userIdx}:
  *   get:
  *     tags: [회원 명단]
  *     summary: 회원 상세 조회 API
@@ -85,14 +68,6 @@ memberRouter.get("/",jwtMiddleWare ,member.getClubMemberList);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/info",jwtMiddleWare ,member.getMemberInfo);
-
-
-
-
-// 3.3 회원 삭제하기
-// Query String
-// JWT Token 적용하고 진행
-memberRouter.patch("/",jwtMiddleWare ,member.patchMember);
+memberRouter.get("/info", member.getMemberInfo);
 
 export default memberRouter;

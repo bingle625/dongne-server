@@ -4,7 +4,6 @@ const { response, errResponse } = require("../../../config/response");
 const { logger } = require("../../../config/winston");
 
 const memberDao = require("./memberDao");
-const res = require("express/lib/response");
 
 // DB Test
 exports.retrieveUserList = async function () {
@@ -23,16 +22,15 @@ exports.retrieveUserList = async function () {
   };
 
 // 단체 모든 회원명단 리스트 조회 - API NO. 3.1
-exports.retrieveClubMemberList = async function (adminIdx, start, pageSize) {
+exports.retrieveClubMemberList = async function (adminIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retriebeClubMemberList DB Error: ${error.message}`);
 
-
+  //Try문 예외처리
   try {
-    const clubMembersPagingParams = [adminIdx, start, pageSize]
-    const clubMembersResult = await memberDao.selectClub(connection, clubMembersPagingParams);
+    const clubMemberResult = await memberDao.selectClub(connection, adminIdx);
     connection.release();
-    return clubMembersResult;
+    return clubMemberResult;
 
   } catch (error) {
     handleError(error);
@@ -59,25 +57,7 @@ exports.checkClubStatus = async function (adminIdx) {
   }
 };
 
-// API NO. 3.1 - Paging's totalDataCount (3.1에서 조회하는 Data 갯수 조회)
-exports.retrieveTotalDataCount = async function (adminIdx) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const handleError = (error) => logger.error(`❌retrieveTotalDataCount DB Error: ${error.message}`);
-
-  //Try문 예외처리
-  try {
-    const totalDataCountResult = await memberDao.selectTotalDataCount(connection, adminIdx);
-    connection.release();
-    return totalDataCountResult;
-
-  } catch (error) {
-    handleError(error);
-    connection.release();
-    return errResponse(baseResponseStatus.DB_ERRORS);
-  }
-};
-
-// 회원 상세 조회 - API NO. 3.2
+// 회원 상세 조회 - API NO. 3.3
 exports.retrieveMemberInfo = async function (userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveMemberInfo DB Error: ${error.message}`);
@@ -95,7 +75,7 @@ exports.retrieveMemberInfo = async function (userIdx) {
   }
 };
 
-// API NO. 3.2 - User Status Check
+// API NO. 3.3 - User Status Check
 exports.checkUserStatus = async function (userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌checkUserStatus DB Error: ${error.message}`);
@@ -105,25 +85,6 @@ exports.checkUserStatus = async function (userIdx) {
     const userStatus = await memberDao.selectUserStatus(connection, userIdx);
     connection.release();
     return userStatus[0].status;
-
-  } catch (error) {
-    handleError(error);
-    connection.release();
-    return errResponse(baseResponseStatus.DB_ERRORS);
-  }
-};
-
-// API NO. 3.2 - Token User with AdminIdx Status Check
-exports.checkTokenUserStatus = async function (userIdx, JWT_Token_adminIdx) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const handleError = (error) => logger.error(`❌checkUserStatus DB Error: ${error.message}`);
-
-  //Try문 예외처리
-  try {
-    const TokenUserStatusParams = [userIdx, JWT_Token_adminIdx];
-    const tokenUserStatus = await memberDao.selectTokenUserStatus(connection, TokenUserStatusParams);
-    connection.release();
-    return tokenUserStatus[0].status;
 
   } catch (error) {
     handleError(error);

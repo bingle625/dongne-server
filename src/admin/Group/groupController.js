@@ -37,6 +37,7 @@ export const postGroup = async (req, res) => {
         Body : adminIdx, groupName, groupIntroduction, userIdx
     */
   const {adminIdx, groupName, groupIntroduction, userIdx} = req.body;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
 
   // Group Create's Body Data Validation (basic) ✅
   if (!adminIdx){
@@ -57,11 +58,15 @@ export const postGroup = async (req, res) => {
     return res.send(errResponse(baseResponse.GROUP_GROUPINTRODUCTION_LENGTH));
   }
 
-  // Group Create's Body Data Validation (middle) ❌
+  // Group Create's Body Data Validation (middle) ✅
   /*
-    adminIdx's Status valid with Admin Table
     JWT's Token's adminIdx include req.adminIdx?
+      - Token's adminIdx valid with AdminTable ? - auth에서 이미 검증함.
+      - Token's adminIdx same req.adminIdx ?
   */
+  if (adminIdx != JWT_Token_adminIdx){
+    return res.send(errResponse(baseResponse.JWT_GROUP_DIFFERENT))
+  }
 
   // Group Create ➕ Transcation 추가필요
   // createGroupResponse = groupIdx
@@ -84,9 +89,9 @@ export const postGroup = async (req, res) => {
 
     // Group Members add's Body Data Validation (middle) ❌
     /*
-      groupUserIdx's Status valid with User Table ?
-      JWT Token's adminIdx include req.groupUserIdx ?
-      groupUserIdx's Status NULL or DELETED with GroupMembers Table ?
+      groupUserIdx's Status valid with User Table ? - 프론트진에서 필요한 지 생각 후 Validation
+      JWT Token's adminIdx include req.groupUserIdx ? - 프론트진에서 필요한 지 생각 후 Validation
+      groupUserIdx's Status NULL or DELETED with GroupMembers Table ? - 프론트진에서 필요한 지 생각 후 Validation
     */
 
   }
@@ -100,15 +105,52 @@ export const postGroup = async (req, res) => {
 
 };
 
+
+/*
+    API No. 4.2
+    API Nanme: 그룹 리스트 조회
+    [GET] /user/group?adminIdx=
+*/
+export const getGroupList = async (req, res) => {
+  /*
+      Query String: adminIdx
+  */
+  const adminIdx = req.query.adminIdx;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+
+  // validation (basic) ✅
+  if(!adminIdx) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  // Validation (Middle) ✅
+  /*
+    + adminIdx's Status valid with GroupList Table ? - Dao에서 status = "ACTIVE" 분류 조회함. (필요성이 없음)
+    + Token's adminIdx same req.adminIdx ?
+  */
+ if(adminIdx != JWT_Token_adminIdx){
+   return res.send(errResponse(baseResponse.JWT_GROUPLIST_DIFFERENT));
+ }
+ 
+  // 그룹 리스트 조회
+  const groupListResult = await groupProvider.retrieveGroupList(adminIdx);
+
+  return res.send(response(baseResponse.SUCCESS, groupListResult));
+};
+
+
     /*
-        API No. 4.2
-        API Nanme: 그룹 조회
+        API No. 4.3
+        API Nanme: 그룹 상세 조회
         Part 1, Part 2
         [GET]
     */
 
 /*
-    API No. 4.2 - Part 1
+    API No. 4.3 - Part 1
     API Nanme: 그룹 이름, 내용조회
     [GET] /group/Info?groupIdx=
 */
@@ -128,8 +170,8 @@ export const getGroupInfo = async (req, res) => {
 
   // Validation (Middle) ❌ 
   /*
-    + groupIdx's Status valid with GroupList Table ?
-    + JWT Token's groupIdx include req.groupIdx ?
+    + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + JWT Token's adminIdx include req.groupIdx ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
   */
 
   // 그룹 이름, 내용 조회
@@ -140,7 +182,7 @@ export const getGroupInfo = async (req, res) => {
 
 
 /*
-    API No. 4.2 - Part 2
+    API No. 4.3 - Part 2
     API Nanme: 그룹 소속회원 조회
     [GET] /group/members?groupIdx=
 */
@@ -161,8 +203,8 @@ export const getGroupMembers = async (req, res) => {
 
   // Validation (Middle) ❌ 
   /*
-    + groupIdx's Status valid with GroupList Table ?
-    + JWT Token's groupIdx include req.groupIdx ?
+    + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + JWT Token's groupIdx include req.groupIdx ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
   */
 
   // 그룹 소속회원 조회
@@ -175,14 +217,14 @@ export const getGroupMembers = async (req, res) => {
 
 
   /*
-      API No. 4.3
+      API No. 4.4
       API Nanme: 그룹 수정
       Part 1, Part 2, Part 3
   */
 
 
 /*
-    API No. 4.3 - Part 1
+    API No. 4.4 - Part 1
     API Nanme: 그룹 이름, 내용 수정
     [PATCH] /group/info/:groupIdx
 */
@@ -215,8 +257,8 @@ export const patchGroupInfo = async (req, res) => {
 
   // Validation (Middle) ❌ 
   /*
-    + groupIdx's Status valid with GroupList Table ?
-    + JWT Token's groupIdx include req.groupIdx ?
+    + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + JWT Token's groupIdx include req.groupIdx ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
   */
 
   
@@ -229,7 +271,7 @@ export const patchGroupInfo = async (req, res) => {
 
 
 /*
-    API No. 4.3 - Part 2
+    API No. 4.4 - Part 2
     API Nanme: 그룹 소속회원 삭제
     [PATCH] /group/deleteMembers/:groupIdx
 */
@@ -259,10 +301,10 @@ export const patchGroupMembers = async (req, res) => {
 
   // Validation (Middle) ❌ 
   /*
-    + groupIdx's Status valid with GroupList Table ?
-    + JWT Token's groupIdx include req.groupIdx ?
-    + userIdx's Status valid with User Table ?
-    + userIdx's Status in GroupMembers Table is ACTIVE ?
+    + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + JWT Token's groupIdx include req.groupIdx ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
+    + userIdx's Status valid with User Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + userIdx's Status in GroupMembers Table is ACTIVE ? - 프론트진에서 필요한 지 생각 후 Validation
   */
 
   // 그룹 소속회원 삭제
@@ -274,7 +316,7 @@ export const patchGroupMembers = async (req, res) => {
 
 
 /*
-    API No. 4.3 - Part 3
+    API No. 4.4 - Part 3
     API Nanme: 그룹 소속회원 추가
     [POST] /group/insertMembers/:groupIdx
 */
@@ -304,11 +346,11 @@ export const postGroupMembers = async (req, res) => {
 
   // Validation (Middle) ❌ 
   /*
-    + groupIdx's Status valid with GroupList Table ?
-    + JWT Token's groupIdx include req.groupIdx ?
-    + userIdx's Status valid with User Table ?
-    + userIdx's Status in GroupMembers Table is DELETED or NULL ?
-    + userIdx's Status in ClubMembers Table is ACTIVE ?
+    + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + JWT Token's groupIdx include req.groupIdx ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
+    + userIdx's Status valid with User Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + userIdx's Status in GroupMembers Table is DELETED or NULL ? - 프론트진에서 필요한 지 생각 후 Validation (추가할 수 있는 회원 리스트 API 생성)
+    + userIdx's Status in ClubMembers Table is ACTIVE ? - 프론트진에서 필요한 지 생각 후 Validation
   */
 
   // 그룹 소속회원 추가
@@ -321,7 +363,7 @@ export const postGroupMembers = async (req, res) => {
 
 
 /*
-    API No. 4.4
+    API No. 4.5
     API Nanme: 그룹 삭제
     [PATHCH] /group/delete/:groupIdx
 */
@@ -340,8 +382,8 @@ export const patchGroup = async (req, res) => {
 
   // Validation (Middle) ❌ 
   /*
-    + groupIdx's Status valid with GroupList Table ?
-    + JWT Token's groupIdx include req.groupIdx ?
+    + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
+    + JWT Token's groupIdx include req.groupIdx ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
   */
 
   // 그룹 삭제

@@ -34,8 +34,22 @@ async function insertGroupMembers(connection, insertGroupMemberParams){
   return insertGroupMemberRow;
 };
 
+// 그룹 리스트 조회 - API NO. 4.2
+const selectGroupList = async (connection, adminIdx) => {
+  const selectGroupListQuery = `
+    SELECT
+    groupName as "단체에 생성된 출결그룹"
+    FROM GroupList
+    WHERE adminIdx = ? and status = "ACTIVE"       
+      `;
 
-// 그룹 이름, 내용 조회 - API NO. 4.2 -> Part 1
+  const [groupListRows] = await connection.query(selectGroupListQuery, adminIdx);
+
+  return groupListRows;
+};
+
+
+// 그룹 이름, 내용 조회 - API NO. 4.3 -> Part 1
 const selectGroupInfo = async (connection, groupIdx) => {
   const selectGroupInfoQuery = `
     SELECT 
@@ -51,7 +65,7 @@ const selectGroupInfo = async (connection, groupIdx) => {
 };
 
 
-// 그룹 소속회원 조회 - API NO. 4.2 -> Part 2
+// 그룹 소속회원 조회 - API NO. 4.3 -> Part 2
 const selectGroupMembers = async (connection, groupIdx) => {
 
   const selectGroupMembersQuery = `
@@ -68,7 +82,7 @@ const selectGroupMembers = async (connection, groupIdx) => {
   return groupMembersRows;
 };
 
-// 그룹 이름, 내용 수정 - API NO. 4.3 -> Part 1
+// 그룹 이름, 내용 수정 - API NO. 4.4 -> Part 1
 const editGroupInfo = async (connection, editGroupInfoParams) => {
 
   const updateGroupInfoQuery = `
@@ -81,7 +95,7 @@ const editGroupInfo = async (connection, editGroupInfoParams) => {
   return updateGroupInfoRows;
 };
 
-// 그룹 소속회원 삭제 - API NO. 4.3 -> Part 2
+// 그룹 소속회원 삭제 - API NO. 4.4 -> Part 2
 const editGroupMembers = async (connection, editGroupMembersParams) => {
 
   const updateGroupMembersQuery = `
@@ -94,7 +108,7 @@ const editGroupMembers = async (connection, editGroupMembersParams) => {
   return updateGroupMembersRows;
 };
 
-// 그룹 삭제 - API NO. 4.4
+// 그룹 삭제 - API NO. 4.5
 const editGroup = async (connection, groupIdx) => {
 
   const updateGroupQuery = `
@@ -112,6 +126,7 @@ const editGroup = async (connection, groupIdx) => {
     selectUserPosts,
     insertGroup,
     insertGroupMembers,
+    selectGroupList,
     selectGroupInfo,
     selectGroupMembers,
     editGroupInfo,

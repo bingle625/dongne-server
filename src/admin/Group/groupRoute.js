@@ -1,6 +1,8 @@
 import express from "express";
 // import { getDatabaseTest } from "./groupController";
 const group = require("./groupController");
+const jwtMiddleWare = require("../../../config/jwtMiddleWare");
+
 const groupRouter = express.Router();
 
 // Route Test
@@ -61,9 +63,17 @@ groupRouter.get("/db", group.getDatabaseTest);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.post("/", group.postGroup);
+groupRouter.post("/", jwtMiddleWare ,group.postGroup);
 
-// 4.2 그룹 조회
+
+
+// 4.2 그룹 리스트 조회
+// Query String
+groupRouter.get("/", jwtMiddleWare ,group.getGroupList);
+
+
+
+// 4.3 그룹 상세 조회
 // TO DO : 4
 // 그룹 이름, 내용 조회 - part 1
 // Query String
@@ -93,7 +103,7 @@ groupRouter.post("/", group.postGroup);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.get("/info", group.getGroupInfo);
+groupRouter.get("/info", jwtMiddleWare ,group.getGroupInfo);
 
 // 그룹 소속회원 조회 - part 2
 // Query String
@@ -123,10 +133,10 @@ groupRouter.get("/info", group.getGroupInfo);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.get("/members", group.getGroupMembers);
+groupRouter.get("/members", jwtMiddleWare ,group.getGroupMembers);
 
 
-// 4.3 그룹 수정
+// 4.4 그룹 수정
 // TO DO : 5
 // 그룹 이름, 내용 수정
 // Path Variable & Body
@@ -181,7 +191,7 @@ groupRouter.get("/members", group.getGroupMembers);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/info/:groupIdx", group.patchGroupInfo);
+groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
 
 
 // 그룹 회원삭제
@@ -229,7 +239,7 @@ groupRouter.patch("/info/:groupIdx", group.patchGroupInfo);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/deleteMembers/:groupIdx", group.patchGroupMembers);
+groupRouter.patch("/deleteMembers/:groupIdx", jwtMiddleWare ,group.patchGroupMembers);
 
 // 그룹 회원추가
 // Path Variable & Body
@@ -276,9 +286,9 @@ groupRouter.patch("/deleteMembers/:groupIdx", group.patchGroupMembers);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.post("/insertMembers/:groupIdx", group.postGroupMembers);
+groupRouter.post("/insertMembers/:groupIdx", jwtMiddleWare ,group.postGroupMembers);
 
-// 4.4 그룹 삭제
+// 4.5 그룹 삭제
 // TO DO : 6
 // Path Variable
 /**
@@ -307,6 +317,6 @@ groupRouter.post("/insertMembers/:groupIdx", group.postGroupMembers);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/delete/:groupIdx", group.patchGroup);
+groupRouter.patch("/delete/:groupIdx", jwtMiddleWare ,group.patchGroup);
 
 export default groupRouter;

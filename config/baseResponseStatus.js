@@ -169,5 +169,20 @@ module.exports = {
   GROUP_GROUPIDX_LENGTH: { isSuccess: false, code: 4008, message: "groupIdx를 0보다 큰 값을 입력해주세요." },
 
   //DB Error
-  DB_ERRORS: { isSuccess: false, code: 5000, message: "데이터베이스 에러" }
+  DB_ERRORS: { isSuccess: false, code: 5000, message: "데이터베이스 에러" },
+
+  // JWT token errResponse
+  JWT_TOKEN_DIFFERENT: {isSuccess: false, code: 6000, message: "조회할 수 없는 동아리입니다. 본인 동아리에 대해서만 조회하세요." },
+  JWT_TOKEN_API_3_2: {isSuccess: false, code: 6001, message: "상세 조회할 수 없는 회원입니다. 본인이 개설한 단체의 회원을 조회하세요."},
+  JWT_GROUP_DIFFERENT: {isSuccess: false, code: 6000, message: "본인 동아리에 대해서만 그룹을 생성할 수 있습니다." },
+  JWT_GROUPLIST_DIFFERENT: {isSuccess: false, code: 6000, message: "본인 동아리에 대해서만 그룹리스트를 조회할 수 있습니다." },
+
+
+  // Paging's errResponse
+  PAGING_PARAMS_EMPTY: {isSuccess: false, code: 7000, message: "paging 파라미터를 입력해주세요."},
+  PAGING_PAGE_WRONG: {isSuccess: false, code: 7001, message: "조회할 수 없는 page 번호입니다."},
+
+
+ 
+
 };

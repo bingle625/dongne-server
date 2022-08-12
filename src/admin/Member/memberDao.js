@@ -11,16 +11,17 @@ const selectUserPosts = async (connection) => {
   };
 
 // 단체 모든 회원명단 리스트 조회 (SELECT) - API NO. 3.1
-const selectClub = async (connection, adminIdx) => {
+const selectClub = async (connection, clubMembersPagingParams) => {
     const selectClubMemberQuery = `
-        SELECT name, userImgUrl
-        FROM ClubMembers
-        JOIN User
-        ON ClubMembers.userIdx = User.userIdx
-        WHERE adminIdx = ? and User.status = "ACTIVE";       
+      SELECT name, userImgUrl
+      FROM ClubMembers
+      JOIN User
+      ON ClubMembers.userIdx = User.userIdx
+      WHERE adminIdx = ? and User.status = "ACTIVE"
+      LIMIT ?, ?;
         `;
 
-    const [clubMemberRows] = await connection.query(selectClubMemberQuery, adminIdx);
+    const [clubMemberRows] = await connection.query(selectClubMemberQuery, clubMembersPagingParams);
   
     return clubMemberRows;
   };
@@ -38,7 +39,21 @@ const selectClubStatus = async (connection, adminIdx) => {
   return clubStatusRows;
 };
 
-// 회원 상세 조회 - API NO. 3.3
+// API NO. 3.1 - Paging's Total Data Count
+const selectTotalDataCount = async (connection, adminIdx) => {
+  const selectTotalDataCountQuery = `
+    SELECT COUNT(adminIdx) as totalDataCount
+    FROM ClubMembers
+    WHERE adminIdx = ?;
+      `;
+
+  const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, adminIdx);
+
+  return totalDataCountRows;
+};
+
+
+// 회원 상세 조회 - API NO. 3.2
 const selectMemberInfo = async (connection, userIdx) => {
   const selectMemberInfoQuery = `
   SELECT name as 이름,
@@ -56,7 +71,7 @@ const selectMemberInfo = async (connection, userIdx) => {
   return memberInfoRows;
 };
 
-// API NO. 3.3 - User Status Check
+// API NO. 3.2 - User Status Check
 const selectUserStatus = async (connection, userIdx) => {
   const selectUserStatusQuery = `
       SELECT status
@@ -69,13 +84,42 @@ const selectUserStatus = async (connection, userIdx) => {
   return userStatusRows;
 };
 
+// API NO. 3.2 - Token User with adminIdx Status Check
+const selectTokenUserStatus = async (connection, TokenUserStatusParams) => {
+  const selectTokenUserStatusQuery = `
+      SELECT status
+      FROM ClubMembers
+      WHERE userIdx = ? and adminIdx = ?;
+      `;
+
+  const [tokenUserStatusRows] = await connection.query(selectTokenUserStatusQuery, TokenUserStatusParams);
+
+  return tokenUserStatusRows;
+};
+
+// 회원 삭제 - API NO. 3.3
+const editMember = async (connection, editMemberParams) => {
+  const selectUserStatusQuery = `
+    UPDATE ClubMembers
+    SET status = "DELETED"
+    WHERE userIdx = ? and adminIdx = ?;
+      `;
+
+  const [userStatusRows] = await connection.query(selectUserStatusQuery, editMemberParams);
+
+  return userStatusRows;
+};
+
 
   module.exports = 
   { selectUserPosts,
     selectClub,
     selectClubStatus,
+    selectTotalDataCount,
     selectMemberInfo,
     selectUserStatus,
+    selectTokenUserStatus,
+    editMember,
 
 
     
