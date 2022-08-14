@@ -4,7 +4,7 @@ const accountProvider = require("./finAccountProvider");
 const accountService = require("./finAccountService");
 
 /**
- * API No. 5.1
+ * API No. 7.1
  * API Name : 회계 생성 api
  * [POST] admin/finAccount/
  */
@@ -20,7 +20,7 @@ export const createFinAccount = async (req, res) => {
       - finAccountDate : DATE
       - etc : VARCHAR(200)
   */
-  const { adminIdx, finAccountCategoryIdx, isProfit, finAccountCost, finAccountDate, etc } = req.body;
+  const { adminIdx, finAccountCategoryIdx, isProfit, finAccountItem, finAccountCost, finAccountDate, etc } = req.body;
 
   //todo: admin 상태 확인
 
@@ -32,6 +32,38 @@ export const createFinAccount = async (req, res) => {
 
   //todo: finAccountDate 형식 yyyy-mm-dd 맞는 지 확인
 
-  const createFinAccountResult = await accountService.createFinAccount(adminIdx, finAccountCategoryIdx, isProfit, finAccountCost, finAccountDate, etc);
+  //todo: finAccountItem 길이 확인
+
+  const createFinAccountResult = await accountService.createFinAccount(adminIdx, finAccountCategoryIdx, isProfit, finAccountItem, finAccountCost, finAccountDate, etc);
   return res.send(createFinAccountResult);
+};
+
+/**
+ * API No. 7.2
+ * API Name : 회계 카테고리 생성 api
+ * [POST] admin/finAccount/category
+ */
+
+export const createFinAccCategory = async (req, res) => {
+  /*
+    body: 
+      - categoryName
+      - adminIdx
+  */
+  const { categoryName, adminIdx } = req.body;
+  const createFinAccCategorytResult = await accountService.createFinAccCategory(categoryName, adminIdx);
+  return res.send(createFinAccCategorytResult);
+};
+
+/**
+ * API No. 7.3
+ * API Name : 최근 4개 회계 조회 api
+ * [GET] admin/finAccount/
+ */
+
+export const getFinAccount = async (req, res) => {
+  const adminIdx = req.get("adminIdx");
+  const adminIdxNum = Number(adminIdx);
+  const getFinAccountResult = await accountProvider.getRecentFinAccount(adminIdxNum);
+  return res.send(getFinAccountResult);
 };

@@ -6,14 +6,15 @@ const { logger } = require("../../../config/winston");
 
 const accountDao = require("./finAccountDao");
 
-export const emailCheck = async (email) => {
+export const getRecentFinAccount = async (adminIdxNum) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const emailCheckResult = await authDao.selectAdminEmail(connection, email);
+    const getRecentFinAccountResult = await accountDao.retrieveFinAccount(connection, adminIdxNum);
     connection.release();
-    return emailCheckResult[0];
+    return response(baseResponse.SUCCESS, getRecentFinAccountResult[0]);
   } catch (error) {
-    handleError(error);
     connection.release();
+    logger.error(`Admin - getRecentFinAccount Provider error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
   }
 };

@@ -61,4 +61,10 @@ const adminfinAccountRouter = express.Router();
  */
 adminfinAccountRouter.post("/", finAccount.createFinAccount);
 
+// api 7.2 회계 카테고리 생성 api
+adminfinAccountRouter.post("/category", finAccount.createFinAccCategory);
+
+//api 7.3 최근 회계 4개 조회 api
+adminfinAccountRouter.get("/", finAccount.getFinAccount);
+
 export default adminfinAccountRouter;
