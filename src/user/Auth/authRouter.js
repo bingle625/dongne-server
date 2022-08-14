@@ -7,7 +7,7 @@ const userAuthRouter = express.Router();
  * paths:
  *  user/auth/login:
  *   post:
- *     tags: [user 로그인]
+ *     tags: [user 계정 관리]
  *     summary: user 로그인 api
  *     consumes:
  *       - application/json
@@ -59,7 +59,7 @@ userAuthRouter.post("/login", auth.login);
  * paths:
  *  /user/auth/register:
  *   post:
- *     tags: [user 회원가입]
+ *     tags: [user 계정 관리]
  *     summary: user 회원가입 api
  *     consumes:
  *       - application/json
