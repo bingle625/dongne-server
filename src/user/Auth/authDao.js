@@ -1,42 +1,42 @@
 //admin 이메일 조회
-const selectAdminEmail = async (connection, email) => {
-  const selectAdminEmailQuery = `
-        SELECT adminEmail
-        From Admin
-        WHERE adminEmail =?
+const selectUserEmail = async (connection, email) => {
+  const selectUserEmailQuery = `
+        SELECT userEmail
+        From User
+        WHERE userEmail =?
   `;
-  const adminResult = await connection.query(selectAdminEmailQuery, [email]);
-  return adminResult;
+  const userEmailResult = await connection.query(selectUserEmailQuery, [email]);
+  return userEmailResult;
 };
 
-//admin 비밀번호 조회
-const selectAdminPassword = async (connection, email) => {
+//user 비밀번호 조회
+const selectUserPassword = async (connection, email) => {
   const selectUserPasswordQuery = `
-      SELECT adminIdx, adminPwd
-      FROM Admin
-      WHERE adminEmail = ?;
+      SELECT userIdx, password
+      FROM User
+      WHERE userEmail = ?;
   `;
   const selectUserPasswordRow = await connection.query(selectUserPasswordQuery, email);
   return selectUserPasswordRow;
 };
 
 //admin 계정 상태 확인
-const selectAdminAccount = async (connection, email) => {
-  const selectAdminAccountQuery = `
-      SELECT status, adminIdx
-      FROM Admin
-      WHERE AdminEmail = ?;
+const selectUserAccount = async (connection, email) => {
+  const selectUserAccountQuery = `
+      SELECT status, userIdx
+      FROM User
+      WHERE userEmail = ?;
 
   `;
-  const selectAdminAccountRow = await connection.query(selectAdminAccountQuery, email);
-  return selectAdminAccountRow;
+  const selectUserAccountRow = await connection.query(selectUserAccountQuery, email);
+  return selectUserAccountRow;
 };
 
 //admin 레코드 생성
-const insertAdminInfo = async (connection, insertUserInfoParams) => {
+const insertUserInfo = async (connection, insertUserInfoParams) => {
   const insertUserQuery = `
-  INSERT INTO Admin(clubName, adminEmail, adminPwd, establishmentYear, clubRegion,clubIntroduction,clubImgUrl)
-  VALUES (?, ?, ?, ?, ?, ?, ?);
+  INSERT INTO User(name, userEmail, password, phoneNum, school, birth, address, introduction, userImgUrl)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const insertUserInfoRow = await connection.query(insertUserQuery, insertUserInfoParams);
@@ -44,8 +44,8 @@ const insertAdminInfo = async (connection, insertUserInfoParams) => {
 };
 
 module.exports = {
-  selectAdminEmail,
-  insertAdminInfo,
-  selectAdminPassword,
-  selectAdminAccount
+  selectUserEmail,
+  insertUserInfo,
+  selectUserPassword,
+  selectUserAccount
 };

@@ -21,7 +21,7 @@ exports.postSignIn = async (email, password) => {
 
     const passwordRows = await authProvider.passwordCheck(email);
 
-    if (passwordRows[0].adminPwd !== hashedPassword) {
+    if (passwordRows[0].password !== hashedPassword) {
       return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
     }
 
@@ -38,7 +38,7 @@ exports.postSignIn = async (email, password) => {
     let token = jwt.sign(
       // 토큰의 내용 (payload)
       {
-        adminId: userInfoRows[0].adminIdx
+        adminId: userInfoRows[0].userIdx
       },
       process.env.JWT_SECRET,
       {
@@ -49,7 +49,7 @@ exports.postSignIn = async (email, password) => {
 
     // const token = "i have to make this";
     return response(baseResponse.SUCCESS, {
-      userId: userInfoRows[0].adminIdx,
+      userId: userInfoRows[0].userIdx,
       jwt: token
     });
   } catch (err) {
@@ -59,23 +59,23 @@ exports.postSignIn = async (email, password) => {
   }
 };
 
-export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubImgUrl) => {
+export const createUser = async (name, userEmail, password, phoneNum, school, birth, address, introduction, userImgUrl) => {
   try {
-    const hashedPassword = await crypto.createHash("sha512").update(adminPwd).digest("hex");
-    const adminInfo = [clubName, adminEmail, hashedPassword, establishmentYear, clubRegion, clubIntroduction, clubImgUrl];
+    const hashedPassword = await crypto.createHash("sha512").update(password).digest("hex");
+    const userInfo = [name, userEmail, hashedPassword, phoneNum, school, birth, address, introduction, userImgUrl];
     const connection = await pool.getConnection(async (conn) => conn);
 
     //이메일 중복 확인
-    const emailStatus = await authDao.selectAdminEmail(connection, adminEmail);
+    const emailStatus = await authDao.selectUserEmail(connection, userEmail);
     if (emailStatus[0].length > 0) {
       return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
     }
 
-    const createAdminResult = await authDao.insertAdminInfo(connection, adminInfo);
+    const createUserResult = await authDao.insertUserInfo(connection, userInfo);
     connection.release();
-    return response(baseResponse.SUCCESS, createAdminResult[0].insertId);
+    return response(baseResponse.SUCCESS, createUserResult[0].insertId);
   } catch (err) {
-    logger.error(`App - createAdmin Service error: ${err.message}`);
+    logger.error(`App - createUser Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
   }

@@ -43,12 +43,16 @@ module.exports = {
   SIGNUP_EMAIL_ERROR_TYPE: { isSuccess: false, code: 2003, message: "이메일을 형식을 정확하게 입력해주세요." },
   SIGNUP_PASSWORD_EMPTY: { isSuccess: false, code: 2004, message: "비밀번호를 입력 해주세요." },
   SIGNUP_PASSWORD_LENGTH: { isSuccess: false, code: 2005, message: "비밀번호는 8~20자리를 입력해주세요." },
-  SIGNUP_CLUBNAME_EMPTY: { isSuccess: false, code: 2008, message: "이름을 입력해주세요." },
+  SIGNUP_USERNAME_EMPTY: { isSuccess: false, code: 2006, message: "이름을 입력해주세요." },
+  SIGNUP_BIRTHDATE_EMPTY: { isSuccess: false, code: 2007, message: "생년월일을 입력해주세요." },
+  SIGNUP_SCHOOL_EMPTY: { isSuccess: false, code: 2008, message: "학교를 입력해주세요." },
+  SIGNUP_PHONENUMBER_EMPTY: { isSuccess: false, code: 2009, message: "전화번호를 입력해주세요." },
+  SIGNUP_ADDRESS_EMPTY: { isSuccess: false, code: 2010, message: "거주지를 입력해주세요." },
 
-  SIGNIN_EMAIL_EMPTY: { isSuccess: false, code: 2009, message: "이메일을 입력해주세요." },
-  SIGNIN_EMAIL_LENGTH: { isSuccess: false, code: 2010, message: "이메일은 30자리 미만으로 입력해주세요." },
-  SIGNIN_EMAIL_ERROR_TYPE: { isSuccess: false, code: 2011, message: "이메일을 형식을 정확하게 입력해주세요." },
-  SIGNIN_PASSWORD_EMPTY: { isSuccess: false, code: 2012, message: "비밀번호를 입력 해주세요." },
+  SIGNIN_EMAIL_EMPTY: { isSuccess: false, code: 2011, message: "이메일을 입력해주세요." },
+  SIGNIN_EMAIL_LENGTH: { isSuccess: false, code: 2012, message: "이메일은 30자리 미만으로 입력해주세요." },
+  SIGNIN_EMAIL_ERROR_TYPE: { isSuccess: false, code: 2013, message: "이메일을 형식을 정확하게 입력해주세요." },
+  SIGNIN_PASSWORD_EMPTY: { isSuccess: false, code: 2014, message: "비밀번호를 입력 해주세요." },
 
   // Response error
   SIGNUP_REDUNDANT_EMAIL: { isSuccess: false, code: 3001, message: "중복된 이메일입니다." },

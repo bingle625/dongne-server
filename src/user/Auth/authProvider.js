@@ -8,26 +8,21 @@ const authDao = require("./authDao");
 
 exports.emailCheck = async (email) => {
   const connection = await pool.getConnection(async (conn) => conn);
-  try {
-    const emailCheckResult = await authDao.selectAdminEmail(connection, email);
-    connection.release();
-    return emailCheckResult[0];
-  } catch (error) {
-    handleError(error);
-    connection.release();
-  }
+  const emailCheckResult = await authDao.selectUserEmail(connection, email);
+  connection.release();
+  return emailCheckResult[0];
 };
 
 exports.passwordCheck = async function (email) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const passwordCheckResult = await authDao.selectAdminPassword(connection, email);
+  const passwordCheckResult = await authDao.selectUserPassword(connection, email);
   connection.release();
   return passwordCheckResult[0];
 };
 
 exports.statusCheck = async (email) => {
   const connection = await pool.getConnection(async (conn) => conn);
-  const userAcountResult = await authDao.selectAdminAccount(connection, email);
+  const userAcountResult = await authDao.selectUserAccount(connection, email);
   connection.release();
   return userAcountResult[0];
 };

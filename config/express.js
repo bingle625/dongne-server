@@ -11,7 +11,7 @@ const bodyParser = require("body-parser");
 import groupRouter from "../src/admin/Group/groupRoute";
 import memberRouter from "../src/admin/Member/memberRoute";
 import adminAuthRouter from "../src/admin/Auth/authRouter";
-// import userAuthRouter from "../src/user/Auth/authRouter";
+import userAuthRouter from "../src/user/Auth/authRouter";
 
 module.exports = function () {
   const app = express();
@@ -46,7 +46,8 @@ module.exports = function () {
 
   // 3. 인증 도메인
   app.use("/admin/auth", adminAuthRouter);
-  // app.use("/user/auth", userAuthRouter);
+  app.use("/user/auth", userAuthRouter);
+
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
