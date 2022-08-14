@@ -12,6 +12,7 @@ import groupRouter from "../src/admin/Group/groupRoute";
 import memberRouter from "../src/admin/Member/memberRoute";
 import adminAuthRouter from "../src/admin/Auth/authRouter";
 import userAuthRouter from "../src/user/Auth/authRouter";
+import adminfinAccountRouter from "../src/admin/FinAccount/finAccountRouter";
 
 module.exports = function () {
   const app = express();
@@ -47,6 +48,9 @@ module.exports = function () {
   // 3. 인증 도메인
   app.use("/admin/auth", adminAuthRouter);
   app.use("/user/auth", userAuthRouter);
+
+  //4. 회계 api
+  app.use("/admin/finAccount", adminfinAccountRouter);
 
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
