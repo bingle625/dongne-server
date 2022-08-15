@@ -69,9 +69,9 @@ export const getFinAccount = async (req, res) => {
 };
 
 /**
- * API No. 7.3
- * API Name : 최근 4개 회계 조회 api
- * [GET] admin/finAccount/
+ * API No. 7.4
+ * API Name : 월별 회계 조회 api
+ * [GET] admin/finAccount/month
  */
 
 export const getFinAccountMonthly = async (req, res) => {
@@ -92,6 +92,11 @@ export const getFinAccountMonthly = async (req, res) => {
   // return res.send(response(baseResponse.SUCCESS));
 };
 
+/**
+ * API No. 7.5
+ * API Name : 일별 회계 조회 api
+ * [GET] admin/finAccount/day
+ */
 export const getFinAccountDaily = async (req, res) => {
   /*
     query string: 
@@ -110,4 +115,59 @@ export const getFinAccountDaily = async (req, res) => {
   // console.log(req);
   // console.log(req.query);
   // return res.send(response(baseResponse.SUCCESS));
+};
+
+/**
+ * API No. 7.5
+ * API Name : 회계 카테고리 수정 api
+ * [PATCH] admin/finAccount/category/{cid}
+ */
+export const patchCategory = async (req, res) => {
+  /*
+      path variable = cId
+      header variable = adminIdx
+      
+      body:
+        - categoryName
+  */
+  const adminIdx = req.get("adminIdx");
+  const categroyIdx = req.params.cId;
+  const { categoryName } = req.body;
+  const patchCategoryResult = await accountService.updateFinCategory(adminIdx, categroyIdx, categoryName);
+  return res.send(patchCategoryResult);
+};
+
+/**
+ * API No. 7.5
+ * API Name : 회계 카테고리 수정 api
+ * [PATCH] admin/finAccount/category/{cid}
+ */
+export const patchFinAccount = async (req, res) => {
+  /*
+      header variable = adminIdx
+      
+      body:
+        - finAccountCategoryIdx
+        - finAccountItem
+        - isProfit : 0: 비용(negative), 1: 수입(profit)
+        - finAccountCost
+        - finAccountDate : DATE
+        - etc : VARCHAR(200)
+  */
+  const adminIdx = req.get("adminIdx");
+  const accountIdx = req.params.fId;
+  const { finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc } = req.body;
+  //todo: admin 상태 확인
+
+  //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
+
+  //todo: isProfit 0과 1중 하나 맞는지 확인
+
+  //todo: finAccountCost 범위 확인
+
+  //todo: finAccountDate 형식 yyyy-mm-dd 맞는 지 확인
+
+  //todo: finAccountItem 길이 확인
+  const patchFinAccountResult = await accountService.updateFinAccount(accountIdx, adminIdx, finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc);
+  return res.send(patchFinAccountResult);
 };

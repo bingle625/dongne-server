@@ -13,7 +13,6 @@ export const getRecentFinAccount = async (adminIdxNum) => {
     connection.release();
     return response(baseResponse.SUCCESS, getRecentFinAccountResult[0]);
   } catch (error) {
-    connection.release();
     logger.error(`Admin - getRecentFinAccount Provider error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
   }
@@ -26,7 +25,6 @@ export const getFinAccountByMonth = async (adminIdxNum, year, month) => {
     connection.release();
     return response(baseResponse.SUCCESS, getMonthlyFinAccountResult[0]);
   } catch (err) {
-    connection.release();
     logger.error(`Admin - getFinAccountByMonth Provider error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
   }
@@ -39,7 +37,6 @@ export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
     connection.release();
     return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
   } catch (err) {
-    connection.release();
     logger.error(`Admin - getFinAccountByDay Provider error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
   }

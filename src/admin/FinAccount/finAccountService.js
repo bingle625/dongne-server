@@ -33,8 +33,41 @@ export const createFinAccCategory = async (categoryName, adminIdx) => {
     connection.release();
     return response(baseResponse.SUCCESS, createAccCategoryResult[0].insertId);
   } catch (err) {
-    connection.release();
     logger.error(`Admin - createFinAccCategory Service error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
+export const updateFinCategory = async (adminIdx, categroyIdx, categoryName) => {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const finAccCategoryInfo = [categoryName, categroyIdx];
+    //todo: admin 상태 확인
+    //todo: categoryName 중복 확인
+    const updateAccCategoryResult = await accountDao.modifyFinAccCategory(connection, finAccCategoryInfo);
+    connection.release();
+    return response(baseResponse.SUCCESS, updateAccCategoryResult[0].insertId);
+  } catch (err) {
+    logger.error(`Admin - updateFinCategory Service error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
+export const updateFinAccount = async (accountIdx, adminIdx, finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc) => {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const finAccountInfo = [finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc, accountIdx];
+    //todo: accountIdx 상태 확인
+    //todo: adminIdx 상태 확인
+    //todo: 카테고리 idx 존재하는 지 확인
+    //todo: finAccountItem 길이 확인 ?
+    //todo: finAccountcost 길이 확인 ?
+    //todo: finAccountDate 형식 확인
+    const updateFinAccountResult = await accountDao.modifyFinAccount(connection, finAccountInfo);
+    connection.release();
+    return response(baseResponse.SUCCESS, updateFinAccountResult[0].insertId);
+  } catch (err) {
+    logger.error(`Admin - updateFinAccount Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
   }
 };

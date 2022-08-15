@@ -67,10 +67,16 @@ adminfinAccountRouter.post("/category", finAccount.createFinAccCategory);
 //api 7.3 최근 회계 4개 조회 api
 adminfinAccountRouter.get("/", finAccount.getFinAccount);
 
-//api 월별 회계 조회 api
+//api 7.4 월별 회계 조회 api
 adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
 
-//api 일자별 회계 조회 api
+//api 7.5 일자별 회계 조회 api
 adminfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
+
+//api 7.6 회계 카테고리 수정
+adminfinAccountRouter.patch("/category/:cId", finAccount.patchCategory);
+
+//api 7.7 회계 항목 수정
+adminfinAccountRouter.patch("/:fId", finAccount.patchFinAccount);
 
 export default adminfinAccountRouter;
