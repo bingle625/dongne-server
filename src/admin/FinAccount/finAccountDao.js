@@ -19,7 +19,7 @@ const insertFinAccCategory = async (connection, finAccCategoryParams) => {
 
 const retrieveFinAccount = async (connection, adminIdx) => {
   const getFinAccountQuery = `
-        SELECT c.categoryName,f.finAccountCategoryIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
+        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
         FROM FinAccountCategory as c, (
             SELECT finAccountIdx, finAccountDate, isProfit, finAccountCategoryIdx, finAccountItem, finAccountCost
         FROM FinancialAccount
@@ -42,11 +42,24 @@ const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) =
   const getFinAccountQueryResult = await connection.query(getFinAccountQuery, [adminIdxNum, month, year]);
   return getFinAccountQueryResult;
 };
-retrieveFinAccountByMonth;
+const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day) => {
+  const retrieveFinAccountByDayQuery = `
+        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
+        FROM FinAccountCategory as c, (
+              SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx
+              FROM FinancialAccount
+              WHERE adminIdx = ? AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?) AND DAY(finAccountDate) = ?)
+            ) f
+        WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx
+  `;
+  const retrieveFinAccountByDayQueryResult = await connection.query(retrieveFinAccountByDayQuery, [adminIdxNum, month, year, day]);
+  return retrieveFinAccountByDayQueryResult;
+};
 
 module.exports = {
   insertFinAccount,
   insertFinAccCategory,
   retrieveFinAccount,
-  retrieveFinAccountByMonth
+  retrieveFinAccountByMonth,
+  retrieveFinAccountByDay
 };

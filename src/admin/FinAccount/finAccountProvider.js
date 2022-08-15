@@ -31,3 +31,17 @@ export const getFinAccountByMonth = async (adminIdxNum, year, month) => {
     return errResponse(baseResponse.DB_ERROR);
   }
 };
+
+export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  try {
+    const getDailyFinAccountResult = await accountDao.retrieveFinAccountByDay(connection, adminIdxNum, year, month, day);
+    connection.release();
+    return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
+  } catch (err) {
+    connection.release();
+    logger.error(`Admin - getFinAccountByDay Provider error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+getFinAccountByDay;

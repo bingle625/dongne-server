@@ -69,4 +69,8 @@ adminfinAccountRouter.get("/", finAccount.getFinAccount);
 
 //api 월별 회계 조회 api
 adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
+
+//api 일자별 회계 조회 api
+adminfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
+
 export default adminfinAccountRouter;

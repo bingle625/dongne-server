@@ -91,3 +91,23 @@ export const getFinAccountMonthly = async (req, res) => {
   // console.log(req.query);
   // return res.send(response(baseResponse.SUCCESS));
 };
+
+export const getFinAccountDaily = async (req, res) => {
+  /*
+    query string: 
+      - year
+      - month
+      - day
+  */
+  const adminIdx = req.get("adminIdx");
+  const year = req.query.year;
+  const month = req.query.month;
+  const day = req.query.day;
+
+  const adminIdxNum = Number(adminIdx);
+  const getFinAccountResult = await accountProvider.getFinAccountByDay(adminIdxNum, year, month, day);
+  return res.send(getFinAccountResult);
+  // console.log(req);
+  // console.log(req.query);
+  // return res.send(response(baseResponse.SUCCESS));
+};
