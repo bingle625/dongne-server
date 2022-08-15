@@ -67,4 +67,6 @@ adminfinAccountRouter.post("/category", finAccount.createFinAccCategory);
 //api 7.3 최근 회계 4개 조회 api
 adminfinAccountRouter.get("/", finAccount.getFinAccount);
 
+//api 월별 회계 조회 api
+adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
 export default adminfinAccountRouter;

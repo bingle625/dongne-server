@@ -67,3 +67,27 @@ export const getFinAccount = async (req, res) => {
   const getFinAccountResult = await accountProvider.getRecentFinAccount(adminIdxNum);
   return res.send(getFinAccountResult);
 };
+
+/**
+ * API No. 7.3
+ * API Name : 최근 4개 회계 조회 api
+ * [GET] admin/finAccount/
+ */
+
+export const getFinAccountMonthly = async (req, res) => {
+  /*
+    query string: 
+      - year
+      - month
+  */
+  const adminIdx = req.get("adminIdx");
+  const year = req.query.year;
+  const month = req.query.month;
+
+  const adminIdxNum = Number(adminIdx);
+  const getFinAccountResult = await accountProvider.getFinAccountByMonth(adminIdxNum, year, month);
+  return res.send(getFinAccountResult);
+  // console.log(req);
+  // console.log(req.query);
+  // return res.send(response(baseResponse.SUCCESS));
+};

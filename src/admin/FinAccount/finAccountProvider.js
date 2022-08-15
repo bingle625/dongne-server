@@ -18,3 +18,16 @@ export const getRecentFinAccount = async (adminIdxNum) => {
     return errResponse(baseResponse.DB_ERROR);
   }
 };
+
+export const getFinAccountByMonth = async (adminIdxNum, year, month) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  try {
+    const getMonthlyFinAccountResult = await accountDao.retrieveFinAccountByMonth(connection, adminIdxNum, year, month);
+    connection.release();
+    return response(baseResponse.SUCCESS, getMonthlyFinAccountResult[0]);
+  } catch (err) {
+    connection.release();
+    logger.error(`Admin - getFinAccountByMonth Provider error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
