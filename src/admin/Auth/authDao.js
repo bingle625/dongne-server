@@ -9,6 +9,16 @@ const selectAdminEmail = async (connection, email) => {
   return adminResult;
 };
 
+const selectAdminAccountByIdx = async (connection, adminIdx) => {
+  const selectAdminEmailQuery = `
+      SELECT status, adminIdx
+      FROM Admin
+      WHERE adminIdx = ?;
+      `;
+  const adminResult = await connection.query(selectAdminEmailQuery, [adminIdx]);
+  return adminResult;
+};
+
 //admin 비밀번호 조회
 const selectAdminPassword = async (connection, email) => {
   const selectUserPasswordQuery = `
@@ -25,7 +35,7 @@ const selectAdminAccount = async (connection, email) => {
   const selectAdminAccountQuery = `
       SELECT status, adminIdx
       FROM Admin
-      WHERE AdminEmail = ?;
+      WHERE adminEmail = ?;
 
   `;
   const selectAdminAccountRow = await connection.query(selectAdminAccountQuery, email);
@@ -47,5 +57,6 @@ module.exports = {
   selectAdminEmail,
   insertAdminInfo,
   selectAdminPassword,
-  selectAdminAccount
+  selectAdminAccount,
+  selectAdminAccountByIdx
 };

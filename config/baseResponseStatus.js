@@ -82,6 +82,33 @@ module.exports = {
   GROUP_GROUPIDX_EMPTY: { isSuccess: false, code: 4007, message: "groupIdx를 입력해주세요." },
   GROUP_GROUPIDX_LENGTH: { isSuccess: false, code: 4008, message: "groupIdx를 0보다 큰 값을 입력해주세요." },
 
+  //finAccount's Request Error
+  FINACCOUNT_ADMINIDX_EMPTY: { isSuccess: false, code: 5001, message: "admin 인덱스를 입력해주세요." },
+  FINACCOUNT_CATEGORY_EMPTY: { isSuccess: false, code: 5002, message: "finAccount 카테고리를 입력해주세요." },
+  FINACCOUNT_ISPROFIT_EMPTY: { isSuccess: false, code: 5003, message: "isProfit을 입력해주세요." },
+  FINACCOUNT_ITEM_EMPTY: { isSuccess: false, code: 5004, message: "finAccount 항목을 입력해주세요." },
+  FINACCOUNT_COST_EMPTY: { isSuccess: false, code: 5005, message: "finAccount 비용을 입력해주세요." },
+  FINACCOUNT_DATE_EMPTY: { isSuccess: false, code: 5006, message: "finAccount 날짜를 입력해주세요." },
+  FINACCOUNT_ISPROFIT_WRONG: { isSuccess: false, code: 5007, message: "isProfit을 0이나 1로 입력해주세요." },
+  FINACCOUNT_COST_NOT_NUMBER: { isSuccess: false, code: 5008, message: "cost를 숫자로 입력해주세요." },
+  FINACCOUNT_DATE_WRONG: { isSuccess: false, code: 5009, message: "Date를 'yyyy-mm-dd' 형식에 맞춰 입력해주세요." },
+  FINACCOUNT_ITEM_LENGTH_WRONG: { isSuccess: false, code: 5010, message: "항목 이름의 길이를 35자 이하로 작성해주세요." },
+  FINACCOUNT_ETC_LENGTH_WRONG: { isSuccess: false, code: 5011, message: "etc 이름의 길이를 180자 이하로 작성해주세요." },
+  FINACCOUNT_CATEGORY_NAME_EMPTY: { isSuccess: false, code: 5012, message: "카테고리 이름을 적어주세요." },
+  FINACCOUNT_CATEGORY_LENGTH_WRONG: { isSuccess: false, code: 5013, message: "카테고리 35자 이하로 적어주세요." },
+  FINACCOUNT_YEAR_EMPTY: { isSuccess: false, code: 5014, message: "날짜의 year을 적어주세요." },
+  FINACCOUNT_MONTH_EMPTY: { isSuccess: false, code: 5015, message: "날짜의 month를 적어주세요." },
+  FINACCOUNT_DAY_EMPTY: { isSuccess: false, code: 5016, message: "날짜의 day을 적어주세요." },
+  FINACCOUNT_CATEGORYIDX_EMPTY: { isSuccess: false, code: 5017, message: "카테고리 idx을 적어주세요." },
+  FINACCOUNT_CATEGORYNAME_EMPTY: { isSuccess: false, code: 5018, message: "카테고리 이름을 적어주세요." },
+  FINACCOUNT_ACCOUNTIDX_EMPTY: { isSuccess: false, code: 5019, message: "회계 항목 idx를 적어주세요." },
+  //finAccount's Response Error
+  FINACCOUNT_CATEGORY_INACTIVE: { isSuccess: false, code: 6001, message: "비활성화 된 카테고리입니다." },
+  FINACCOUNT_CATEGORY_DELETED: { isSuccess: false, code: 6002, message: "삭제된 카테고리입니다." },
+  FINACCOUNT_CATEGORY_EXIST: { isSuccess: false, code: 6003, message: "이미 존재하는 카테고리입니다." },
+  FINACCOUNT_NOT_EXIST: { isSuccess: false, code: 6004, message: "존재하지 않는 회계항목입니다." },
+  FINACCOUNT_ALREADY_DELETED: { isSuccess: false, code: 6005, message: "이미 삭제된 회계항목입니다." },
+
   //DB Error
   DB_ERRORS: { isSuccess: false, code: 5000, message: "데이터베이스 에러" }
 };

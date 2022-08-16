@@ -47,7 +47,7 @@ const retrieveFinAccount = async (connection, adminIdx) => {
         ORDER BY finAccountDate DESC
         LIMIT 4
             ) f
-        WHERE (c.finAccountCategoryIdx = f.finAccountCategoryIdx) and c.status = "ACTIVE"
+        WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx
   `;
   const getFinAccountQueryResult = await connection.query(getFinAccountQuery, adminIdx);
   return getFinAccountQueryResult;
@@ -77,45 +77,6 @@ const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day
   return retrieveFinAccountByDayQueryResult;
 };
 
-const selectCategory = async (connection, idx) => {
-  const categoryInfoQuery = `
-        SELECT categoryName 
-        FROM FinAccountCategory
-        WHERE finAccountCategoryIdx = ?; 
-  `;
-  const categoryInfoResult = await connection.query(categoryInfoQuery, [idx]);
-  return categoryInfoResult;
-};
-
-const selectCategoryByName = async (connection, adminIdx, categoryName) => {
-  const categoryInfoQuery = `
-        SELECT finAccountCategoryIdx
-        FROM FinAccountCategory
-        WHERE (adminIdx = ? and categoryName=?) and status = "ACTIVE"; 
-  `;
-  const categoryInfoResult = await connection.query(categoryInfoQuery, [adminIdx, categoryName]);
-  return categoryInfoResult;
-};
-const deleteFinAccount = async (connection, finAccountInfo) => {
-  const FinAccountDeleteQuery = `
-  UPDATE FinancialAccount
-  SET status = "DELETED"
-  WHERE finAccountIdx = ?;
-  `;
-  const FinAccountDeleteResult = await connection.query(FinAccountDeleteQuery, finAccountInfo);
-  return FinAccountDeleteResult;
-};
-
-const selectAdminAccountByIdx = async (connection, accountIdx) => {
-  const categoryInfoQuery = `
-        SELECT finAccountIdx, status
-        FROM FinancialAccount
-        WHERE finAccountIdx = ?; 
-  `;
-  const categoryInfoResult = await connection.query(categoryInfoQuery, [accountIdx]);
-  return categoryInfoResult;
-};
-
 module.exports = {
   insertFinAccount,
   insertFinAccCategory,
@@ -123,9 +84,5 @@ module.exports = {
   modifyFinAccCategory,
   retrieveFinAccount,
   retrieveFinAccountByMonth,
-  retrieveFinAccountByDay,
-  selectCategory,
-  selectCategoryByName,
-  deleteFinAccount,
-  selectAdminAccountByIdx
+  retrieveFinAccountByDay
 };

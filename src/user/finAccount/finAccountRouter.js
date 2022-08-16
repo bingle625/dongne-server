@@ -1,6 +1,6 @@
 import express from "express";
 const finAccount = require("./finAccountController");
-const adminfinAccountRouter = express.Router();
+const userfinAccountRouter = express.Router();
 
 /**
  * @swagger
@@ -59,26 +59,26 @@ const adminfinAccountRouter = express.Router();
  *       "1000":
  *         description: 그룹 추가 API 성공
  */
-adminfinAccountRouter.post("/", finAccount.createFinAccount);
+userfinAccountRouter.post("/", finAccount.createFinAccount);
 
 // api 7.2 회계 카테고리 생성 api
-adminfinAccountRouter.post("/category", finAccount.createFinAccCategory);
+userfinAccountRouter.post("/category", finAccount.createFinAccCategory);
 
 //api 7.3 최근 회계 4개 조회 api
-adminfinAccountRouter.get("/", finAccount.getFinAccount);
+userfinAccountRouter.get("/", finAccount.getFinAccount);
 
 //api 7.4 월별 회계 조회 api
-adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
+userfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
 
 //api 7.5 일자별 회계 조회 api
-adminfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
+userfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
 
 //api 7.6 회계 카테고리 수정
-adminfinAccountRouter.patch("/category/:cId", finAccount.patchCategory);
+userfinAccountRouter.patch("/category/:cId", finAccount.patchCategory);
 
 //api 7.7 회계 항목 수정
-adminfinAccountRouter.patch("/:fId", finAccount.patchFinAccount);
+userfinAccountRouter.patch("/:fId", finAccount.patchFinAccount);
 
 //api 7.7 회계 항목 삭제
-adminfinAccountRouter.patch("/status/:fId", finAccount.deleteFinAccount);
-export default adminfinAccountRouter;
+
+export default userfinAccountRouter;

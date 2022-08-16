@@ -13,6 +13,7 @@ import memberRouter from "../src/admin/Member/memberRoute";
 import adminAuthRouter from "../src/admin/Auth/authRouter";
 import userAuthRouter from "../src/user/Auth/authRouter";
 import adminfinAccountRouter from "../src/admin/FinAccount/finAccountRouter";
+import userfinAccountRouter from "../src/user/finAccount/finAccountRouter";
 
 module.exports = function () {
   const app = express();
@@ -51,7 +52,7 @@ module.exports = function () {
 
   //4. 회계 api
   app.use("/admin/finAccount", adminfinAccountRouter);
-
+  app.use("/use/finAccount", userfinAccountRouter);
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 

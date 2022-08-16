@@ -31,3 +31,10 @@ exports.statusCheck = async (email) => {
   connection.release();
   return userAcountResult[0];
 };
+
+exports.statusCheckByIdx = async (adminIdx) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userAcountResult = await authDao.selectAdminAccountByIdx(connection, adminIdx);
+  connection.release();
+  return userAcountResult[0];
+};
