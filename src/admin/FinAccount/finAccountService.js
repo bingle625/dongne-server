@@ -102,6 +102,12 @@ export const updateFinAccount = async (accountIdx, adminIdx, finAccountCategoryI
     if (finAccountInfoRows[0].status === "DELETED") return errResponse(baseResponse.FINACCOUNT_ALREADY_DELETED);
 
     //todo: 카테고리 idx 존재하는 지 확인
+    const categoryInfoRows = await accountProvider.categoryStatusCheck(finAccountCategoryIdx);
+    if (categoryInfoRows[0].status === "INACTIVE") {
+      return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
+    } else if (categoryInfoRows[0].status === "DELETED") {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_DELETED);
+    }
     const updateFinAccountResult = await accountDao.modifyFinAccount(connection, finAccountInfo);
     connection.release();
     return response(baseResponse.SUCCESS, updateFinAccountResult[0].insertId);

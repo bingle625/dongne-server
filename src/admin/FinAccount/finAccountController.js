@@ -151,6 +151,7 @@ export const patchCategory = async (req, res) => {
   */
   const adminIdx = req.get("adminIdx");
   const categroyIdx = req.params.cId;
+  console.log(categroyIdx);
   const { categoryName } = req.body;
   if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
   if (!categroyIdx) return res.send(errResponse(baseResponse.FINACCOUNT_CATEGORYIDX_EMPTY));
@@ -180,6 +181,7 @@ export const patchFinAccount = async (req, res) => {
   const { finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc } = req.body;
   const adminIdx = req.get("adminIdx");
   const accountIdx = req.params.fId;
+  console.log(accountIdx);
   //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
   if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
   if (!finAccountCategoryIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_CATEGORY_EMPTY));

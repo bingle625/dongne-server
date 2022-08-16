@@ -13,7 +13,16 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition: swaggerDefinition,
-  apis: ["./src/admin/Testinit/*.js", "./src/admin/Attendance/*.js", "./src/admin/Schedule/*.js", "./src/admin/Group/*.js", "./src/admin/Member/*.js", "./src/admin/Auth/*.js", "./src/user/Auth/*.js"]
+  apis: [
+    "./src/admin/Testinit/*.js",
+    "./src/admin/Attendance/*.js",
+    "./src/admin/Schedule/*.js",
+    "./src/admin/Group/*.js",
+    "./src/admin/Member/*.js",
+    "./src/admin/Auth/*.js",
+    "./src/user/Auth/*.js",
+    "./src/admin/FinAccount/*.js"
+  ]
 };
 
 const specs = swaggerJsdoc(options);
