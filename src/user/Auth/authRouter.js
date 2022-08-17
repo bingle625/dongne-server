@@ -5,7 +5,7 @@ const userAuthRouter = express.Router();
 /**
  * @swagger
  * paths:
- *  user/auth/login:
+ *  /user/auth/login:
  *   post:
  *     tags: [user 계정 관리]
  *     summary: user 로그인 api

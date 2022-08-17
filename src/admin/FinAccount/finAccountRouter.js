@@ -1,6 +1,7 @@
 import express from "express";
 const finAccount = require("./finAccountController");
 const adminfinAccountRouter = express.Router();
+import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
 
 //api 7.1 회계 생성 api
 /**

@@ -5,7 +5,7 @@ const adminAuthRouter = express.Router();
 /**
  * @swagger
  * paths:
- *  /user/auth/login:
+ *  /admin/auth/login:
  *   post:
  *     tags: [admin 계정 관리]
  *     summary: admin 로그인 api
@@ -22,11 +22,11 @@ const adminAuthRouter = express.Router();
  *              - adminPwd
  *            properties:
  *                  adminEmail:
- *                        default: umcbingle@gmail.com
+ *                        default: dongdong@gmail.com
  *                        description: admin 이메일
  *                        type: string
  *                  adminPwd:
- *                        default: umc12345678
+ *                        default: dong12345
  *                        description: admin 비밀번호
  *                        type: string
  *     responses:

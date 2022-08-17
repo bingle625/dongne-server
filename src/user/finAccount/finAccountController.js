@@ -1,8 +1,10 @@
+import baseResponseStatus from "../../../config/baseResponseStatus";
+
 const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 const accountProvider = require("./finAccountProvider");
 const accountService = require("./finAccountService");
-
+const regexDate = /\d{4}-\d{2}-\d{2}/;
 /**
  * API No. 7.1
  * API Name : 회계 생성 api
@@ -22,19 +24,28 @@ export const createFinAccount = async (req, res) => {
   */
   const { adminIdx, finAccountCategoryIdx, isProfit, finAccountItem, finAccountCost, finAccountDate, etc } = req.body;
 
-  //todo: admin 상태 확인
-
   //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
+  if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!finAccountCategoryIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_CATEGORY_EMPTY));
+  if (!isProfit) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ISPROFIT_EMPTY));
+  if (!finAccountItem) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ITEM_EMPTY));
+  if (!finAccountCost) return res.send(errResponse(baseResponseStatus.FINACCOUNT_COST_EMPTY));
+  if (!finAccountDate) return res.send(errResponse(baseResponseStatus.FINACCOUNT_DATE_EMPTY));
 
   //todo: isProfit 0과 1중 하나 맞는지 확인
-
-  //todo: finAccountCost 범위 확인
+  if (isProfit !== "0" && isProfit !== "1") return res.send(errResponse(baseResponseStatus.FINACCOUNT_ISPROFIT_WRONG));
+  //todo: finAccountCost 숫자인지 확인
+  if (isNaN(finAccountCost)) return res.send(errResponse(baseResponseStatus.FINACCOUNT_COST_NOT_NUMBER));
 
   //todo: finAccountDate 형식 yyyy-mm-dd 맞는 지 확인
-
+  if (!regexDate.test(finAccountDate)) return res.send(errResponse(baseResponseStatus.FINACCOUNT_DATE_WRONG));
   //todo: finAccountItem 길이 확인
+  if (finAccountItem.length >= 35) return res.send(errResponse(baseResponse.FINACCOUNT_ITEM_LENGTH_WRONG));
 
-  const createFinAccountResult = await accountService.createFinAccount(adminIdx, finAccountCategoryIdx, isProfit, finAccountItem, finAccountCost, finAccountDate, etc);
+  //etc 길이 확인
+  if (etc.length >= 180) return res.send(errResponse(baseResponse.FINACCOUNT_ETC_LENGTH_WRONG));
+  const isProfitNum = parseInt(isProfit);
+  const createFinAccountResult = await accountService.createFinAccount(adminIdx, finAccountCategoryIdx, isProfitNum, finAccountItem, finAccountCost, finAccountDate, etc);
   return res.send(createFinAccountResult);
 };
 
@@ -51,6 +62,10 @@ export const createFinAccCategory = async (req, res) => {
       - adminIdx
   */
   const { categoryName, adminIdx } = req.body;
+  if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!categoryName) return res.send(errResponse(baseResponseStatus.FINACCOUNT_CATEGORY_NAME_EMPTY));
+
+  if (categoryName.length >= 35) return res.send(errResponse(baseResponse.FINACCOUNT_ITEM_LENGTH_WRONG));
   const createFinAccCategorytResult = await accountService.createFinAccCategory(categoryName, adminIdx);
   return res.send(createFinAccCategorytResult);
 };
@@ -63,6 +78,7 @@ export const createFinAccCategory = async (req, res) => {
 
 export const getFinAccount = async (req, res) => {
   const adminIdx = req.get("adminIdx");
+  if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
   const adminIdxNum = Number(adminIdx);
   const getFinAccountResult = await accountProvider.getRecentFinAccount(adminIdxNum);
   return res.send(getFinAccountResult);
@@ -84,12 +100,13 @@ export const getFinAccountMonthly = async (req, res) => {
   const year = req.query.year;
   const month = req.query.month;
 
+  if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!year) return res.send(errResponse(baseResponse.FINACCOUNT_YEAR_EMPTY));
+  if (!month) return res.send(errResponse(baseResponse.FINACCOUNT_MONTH_EMPTY));
+
   const adminIdxNum = Number(adminIdx);
   const getFinAccountResult = await accountProvider.getFinAccountByMonth(adminIdxNum, year, month);
   return res.send(getFinAccountResult);
-  // console.log(req);
-  // console.log(req.query);
-  // return res.send(response(baseResponse.SUCCESS));
 };
 
 /**
@@ -109,12 +126,14 @@ export const getFinAccountDaily = async (req, res) => {
   const month = req.query.month;
   const day = req.query.day;
 
+  if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!year) return res.send(errResponse(baseResponse.FINACCOUNT_YEAR_EMPTY));
+  if (!month) return res.send(errResponse(baseResponse.FINACCOUNT_MONTH_EMPTY));
+  if (!day) return res.send(errResponse(baseResponse.FINACCOUNT_DAY_EMPTY));
+
   const adminIdxNum = Number(adminIdx);
   const getFinAccountResult = await accountProvider.getFinAccountByDay(adminIdxNum, year, month, day);
   return res.send(getFinAccountResult);
-  // console.log(req);
-  // console.log(req.query);
-  // return res.send(response(baseResponse.SUCCESS));
 };
 
 /**
@@ -132,15 +151,20 @@ export const patchCategory = async (req, res) => {
   */
   const adminIdx = req.get("adminIdx");
   const categroyIdx = req.params.cId;
+  console.log(categroyIdx);
   const { categoryName } = req.body;
+  if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!categroyIdx) return res.send(errResponse(baseResponse.FINACCOUNT_CATEGORYIDX_EMPTY));
+  if (!categoryName) return res.send(errResponse(baseResponse.FINACCOUNT_CATEGORYNAME_EMPTY));
+
   const patchCategoryResult = await accountService.updateFinCategory(adminIdx, categroyIdx, categoryName);
   return res.send(patchCategoryResult);
 };
 
 /**
  * API No. 7.5
- * API Name : 회계 카테고리 수정 api
- * [PATCH] admin/finAccount/category/{cid}
+ * API Name : 회계 항목 수정 api
+ * [PATCH] admin/finAccount/{fId}
  */
 export const patchFinAccount = async (req, res) => {
   /*
@@ -154,20 +178,54 @@ export const patchFinAccount = async (req, res) => {
         - finAccountDate : DATE
         - etc : VARCHAR(200)
   */
+  const { finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc } = req.body;
   const adminIdx = req.get("adminIdx");
   const accountIdx = req.params.fId;
-  const { finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc } = req.body;
-  //todo: admin 상태 확인
-
+  console.log(accountIdx);
   //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
-
+  if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!finAccountCategoryIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_CATEGORY_EMPTY));
+  if (!isProfit) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ISPROFIT_EMPTY));
+  if (!finAccountItem) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ITEM_EMPTY));
+  if (!finAccountCost) return res.send(errResponse(baseResponseStatus.FINACCOUNT_COST_EMPTY));
+  if (!finAccountDate) return res.send(errResponse(baseResponseStatus.FINACCOUNT_DATE_EMPTY));
+  console.log(isProfit);
   //todo: isProfit 0과 1중 하나 맞는지 확인
-
-  //todo: finAccountCost 범위 확인
+  if (isProfit !== "0" && isProfit !== "1") return res.send(errResponse(baseResponseStatus.FINACCOUNT_ISPROFIT_WRONG));
+  //todo: finAccountCost 숫자인지 확인
+  if (isNaN(finAccountCost)) return res.send(errResponse(baseResponseStatus.FINACCOUNT_COST_NOT_NUMBER));
 
   //todo: finAccountDate 형식 yyyy-mm-dd 맞는 지 확인
-
+  if (!regexDate.test(finAccountDate)) return res.send(errResponse(baseResponseStatus.FINACCOUNT_DATE_WRONG));
   //todo: finAccountItem 길이 확인
-  const patchFinAccountResult = await accountService.updateFinAccount(accountIdx, adminIdx, finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc);
+  if (finAccountItem.length >= 35) return res.send(errResponse(baseResponse.FINACCOUNT_ITEM_LENGTH_WRONG));
+
+  //etc 길이 확인
+  if (etc.length >= 180) return res.send(errResponse(baseResponse.FINACCOUNT_ETC_LENGTH_WRONG));
+
+  const isProfitNum = parseInt(isProfit);
+  const patchFinAccountResult = await accountService.updateFinAccount(accountIdx, adminIdx, finAccountCategoryIdx, finAccountItem, isProfitNum, finAccountCost, finAccountDate, etc);
+  return res.send(patchFinAccountResult);
+};
+
+export const deleteFinAccount = async (req, res) => {
+  /*
+      header variable = adminIdx
+      
+      body:
+        - finAccountCategoryIdx
+        - finAccountItem
+        - isProfit : 0: 비용(negative), 1: 수입(profit)
+        - finAccountCost
+        - finAccountDate : DATE
+        - etc : VARCHAR(200)
+  */
+  const adminIdx = req.get("adminIdx");
+  const accountIdx = req.params.fId;
+  //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
+  if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!accountIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ACCOUNTIDX_EMPTY));
+
+  const patchFinAccountResult = await accountService.deleteFinAccount(accountIdx, adminIdx);
   return res.send(patchFinAccountResult);
 };

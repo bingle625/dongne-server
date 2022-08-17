@@ -40,7 +40,7 @@ exports.postSignIn = async (email, password) => {
       {
         adminId: userInfoRows[0].userIdx
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET_USER,
       {
         expiresIn: "365d",
         subject: "Admin"

@@ -2,83 +2,118 @@ import express from "express";
 const finAccount = require("./finAccountController");
 const userfinAccountRouter = express.Router();
 
+//api 7.3 최근 회계 4개 조회 api
 /**
  * @swagger
  * paths:
- *  /admin/finAccount:
- *   post:
- *     tags: [admin 회계 관리]
- *     summary: admin 회계 생성 api
- *     consumes:
- *       - application/json
+ *  /user/finAccount:
+ *   get:
+ *     tags: [user 회계 관리]
+ *     summary: 최근 회계항목 4개 조회 api
  *     parameters:
- *       - in: body
- *         name: finAccountInfo
- *         description: 회계 정보 파라미터
- *         schema:
- *            type: object
- *            required:
- *              - adminIdx
- *              - finAccountCategoryIdx
- *              - finAccountItem
- *              - isProfit
- *              - finAccountCost
- *              - finAccountDate
- *              - etc
- *
- *            properties:
- *                  adminIdx:
- *                        default: 1
- *                        description: admin 인덱스
- *                        type: int
- *                  finAccountCategoryIdx:
- *                        default: 1
- *                        description: 카테고리 인덱스
- *                        type: int
- *                  finAccountItem:
- *                        default: 동아리 지원금
- *                        description: 회계 항목명
- *                        type: string
- *                  isProfit:
- *                        default: 1
- *                        description: 0: 비용(negative), 1: 수입(profit)
- *                        type: int
- *                  finAccountCost:
- *                        default: 200000
- *                        description: 회계 항목 금액
- *                        type: number
- *                  finAccountDate:
- *                        default: 2022-08-15
- *                        description: 회계 항목 날짜
- *                        type: string
- *                  etc:
- *                        default: 테스트테스트 아아
- *                        description: 회계 항목 비고
- *                        type: string
+ *         - name: adminIdx
+ *           in: header
+ *           description: an authorization header
+ *           default: 1
+ *           required: true
+ *           type: integer
  *     responses:
  *       "1000":
- *         description: 그룹 추가 API 성공
+ *         description: 최근 회계 4개 조회 api 성공
+ *       "5001":
+ *         description: admin Idx 비어있음.
+ *
  */
-userfinAccountRouter.post("/", finAccount.createFinAccount);
-
-// api 7.2 회계 카테고리 생성 api
-userfinAccountRouter.post("/category", finAccount.createFinAccCategory);
-
-//api 7.3 최근 회계 4개 조회 api
 userfinAccountRouter.get("/", finAccount.getFinAccount);
 
 //api 7.4 월별 회계 조회 api
+/**
+ * @swagger
+ * paths:
+ *  /user/finAccount/month?year={year}&month={month}:
+ *   get:
+ *     tags: [user 회계 관리]
+ *     summary: 월별 회계 조회 api
+ *     parameters:
+ *         - in: header
+ *           name: adminIdx
+ *           description: an authorization header
+ *           default: 1
+ *           required: true
+ *           type: integer
+ *         - in: query
+ *           name: year
+ *           schema:
+ *            type: integer
+ *           description: 조회 년도
+ *           default: 2022
+ *         - in: query
+ *           name: month
+ *           schema:
+ *            type: integer
+ *           description: 조회 월
+ *           default: 8
+ *     responses:
+ *       "1000":
+ *         description: 최근 회계 4개 조회 api 성공
+ *       "5001":
+ *         description: admin Idx 비어있음.
+ *       "5014":
+ *         description: 날짜의 year 비어있음.
+ *       "5015":
+ *         description: 날짜의 month 비어있음.
+ *
+ *
+ */
 userfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
 
 //api 7.5 일자별 회계 조회 api
+/**
+ * @swagger
+ * paths:
+ *  /user/finAccount/day?year={year}&month={month}&day={day}:
+ *   get:
+ *     tags: [user 회계 관리]
+ *     summary: 일자별 회계 조회 api
+ *     parameters:
+ *         - in: header
+ *           name: adminIdx
+ *           description: an authorization header
+ *           default: 1
+ *           required: true
+ *           type: integer
+ *         - in: query
+ *           name: year
+ *           default: 2022
+ *           schema:
+ *            type: integer
+ *           description: 조회 년도
+ *         - in: query
+ *           name: month
+ *           default: 8
+ *           schema:
+ *            type: integer
+ *           description: 조회 월
+ *         - in: query
+ *           name: day
+ *           default: 15
+ *           schema:
+ *            type: integer
+ *           description: 조회 일자
+ *     responses:
+ *       "1000":
+ *         description: 최근 회계 4개 조회 api 성공
+ *       "5001":
+ *         description: admin Idx 비어있음.
+ *       "5014":
+ *         description: 날짜의 year 비어있음.
+ *       "5015":
+ *         description: 날짜의 month 비어있음.
+ *       "5016":
+ *         description: 날짜의 day 비어있음.
+ *
+ *
+ */
 userfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
-
-//api 7.6 회계 카테고리 수정
-userfinAccountRouter.patch("/category/:cId", finAccount.patchCategory);
-
-//api 7.7 회계 항목 수정
-userfinAccountRouter.patch("/:fId", finAccount.patchFinAccount);
-
-//api 7.7 회계 항목 삭제
 
 export default userfinAccountRouter;

@@ -41,4 +41,25 @@ export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
     return errResponse(baseResponse.DB_ERROR);
   }
 };
-getFinAccountByDay;
+
+export const categoryStatusCheck = async (idx) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const categoryResult = await accountDao.selectCategory(connection, idx);
+  connection.release();
+  return categoryResult[0];
+};
+
+export const categoryDupCheck = async (adminIdx, categoryName) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const categoryResult = await accountDao.selectCategoryByName(connection, adminIdx, categoryName);
+  connection.release();
+  console.log(categoryResult[0]);
+  return categoryResult[0];
+};
+
+export const accountStatusCheck = async (accountIdx) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userAcountResult = await accountDao.selectAdminAccountByIdx(connection, accountIdx);
+  connection.release();
+  return userAcountResult[0];
+};
