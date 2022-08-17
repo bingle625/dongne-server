@@ -11,9 +11,9 @@ memberRouter.get("/db", member.getDatabaseTest);
 /**
  * @swagger
  * paths:
- *  /user/member?adminIdx={adminIdx}:
+ *  /user/member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [회원 명단]
+ *     tags: [USER: 회원 명단]
  *     summary: 단체 모든 회원명단 리스트 조회 API
  *     parameters:
  *         - in: query
@@ -23,6 +23,20 @@ memberRouter.get("/db", member.getDatabaseTest);
  *           example: 1
  *           required: true
  *           description: 단체 인덱스
+ *         - in: query
+ *           name: page
+ *           securitySchemes:
+ *              type: integer
+ *           example: 1
+ *           required: true
+ *           description: 조회할 페이지 쪽 수
+ *         - in: query
+ *           name: pageSize
+ *           securitySchemes:
+ *              type: integer
+ *           example: 5
+ *           required: true
+ *           description: 한 페이지에서 조회할 데이터 수
  *     responses:
  *       "1000":
  *         description: 단체 모든 회원명단 리스트 조회 API 성공
@@ -45,7 +59,7 @@ memberRouter.get("/", member.getClubMemberList);
  * paths:
  *  /user/member/info?userIdx={userIdx}:
  *   get:
- *     tags: [회원 명단]
+ *     tags: [USER: 회원 명단]
  *     summary: 회원 상세 조회 API
  *     parameters:
  *         - in: query

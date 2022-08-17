@@ -10,22 +10,26 @@ const selectUserPosts = async (connection) => {
     return testResult;
   };
 
-// 단체 모든 회원명단 리스트 조회 (SELECT) - API NO. 3.1
-const selectClub = async (connection, adminIdx) => {
+// 단체 모든 회원명단 리스트 조회 (SELECT) - API NO. 4.1
+const selectClub = async (connection, clubMemberParams) => {
     const selectClubMemberQuery = `
-        SELECT name, userImgUrl
-        FROM ClubMembers
-        JOIN User
-        ON ClubMembers.userIdx = User.userIdx
-        WHERE adminIdx = ? and User.status = "ACTIVE";       
+    SELECT name, userImgUrl,
+    teamName
+    FROM ClubMembers
+    JOIN User
+    ON ClubMembers.userIdx = User.userIdx
+    JOIN ClubTeamList
+    ON ClubMembers.clubTeamListIdx = ClubTeamList.clubTeamListIdx
+    WHERE ClubMembers.adminIdx = ? and User.status = "ACTIVE" and ClubMembers.status = "ACTIVE"
+    LIMIT ?, ?;
         `;
 
-    const [clubMemberRows] = await connection.query(selectClubMemberQuery, adminIdx);
+    const [clubMemberRows] = await connection.query(selectClubMemberQuery, clubMemberParams);
   
     return clubMemberRows;
   };
 
-// API NO. 3.1 - Admin status (SELECT)
+// API NO. 4.1 - Admin status (SELECT)
 const selectClubStatus = async (connection, adminIdx) => {
   const selectClubStatusQuery = `
       SELECT status
@@ -38,7 +42,20 @@ const selectClubStatus = async (connection, adminIdx) => {
   return clubStatusRows;
 };
 
-// 회원 상세 조회 - API NO. 3.3
+// API NO. 4.1 - Paging's Total Data Count
+const selectTotalDataCount = async (connection, adminIdx) => {
+  const selectTotalDataCountQuery = `
+    SELECT COUNT(adminIdx) as totalDataCount
+    FROM ClubMembers
+    WHERE adminIdx = ?;
+      `;
+
+  const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, adminIdx);
+
+  return totalDataCountRows;
+};
+
+// 회원 상세 조회 - API NO. 4.2
 const selectMemberInfo = async (connection, userIdx) => {
   const selectMemberInfoQuery = `
   SELECT name as 이름,
@@ -48,7 +65,7 @@ const selectMemberInfo = async (connection, userIdx) => {
   address as 주소,
   introduction as 소개
   FROM User
-  WHERE userIdx = ?
+  WHERE userIdx = ? and status = "ACTIVE"
       `;
 
   const [memberInfoRows] = await connection.query(selectMemberInfoQuery, userIdx);
@@ -56,7 +73,7 @@ const selectMemberInfo = async (connection, userIdx) => {
   return memberInfoRows;
 };
 
-// API NO. 3.3 - User Status Check
+// API NO. 4.2 - User Status Check
 const selectUserStatus = async (connection, userIdx) => {
   const selectUserStatusQuery = `
       SELECT status
@@ -76,6 +93,7 @@ const selectUserStatus = async (connection, userIdx) => {
     selectClubStatus,
     selectMemberInfo,
     selectUserStatus,
+    selectTotalDataCount,
 
 
     

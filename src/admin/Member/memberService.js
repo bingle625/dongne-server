@@ -60,3 +60,56 @@ exports.deleteMember = async function (userIdx, JWT_Token_adminIdx){
         connection.release(); 
     }
 }
+
+// 동아리의 회원 팀/조 카테고리 추가 - API NO. 3.4
+exports.createClubTeam = async function (adminIdx, teamName){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌deleteGroup DB Error: ${error.message}`);
+
+    try {
+        const createClubTeamParams = [adminIdx, teamName];
+        const createClubTeamResult = await memberDao.createClubTeam(connection, createClubTeamParams);
+        return response(baseResponseStatus.SUCCESS);
+
+    } catch (error) {
+        handleError(error);
+        return errResponse(baseResponseStatus.DB_ERRORS);
+    } finally {
+        connection.release(); 
+    }
+}
+
+// 동아리 소속회원 팀/조 카테고리 적용 - API NO. 3.5
+exports.updateMemberClubTeam = async function (clubTeamListIdx, userIdx, adminIdx){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌deleteGroup DB Error: ${error.message}`);
+
+    try {
+        //Validation (middle)
+        const checkMemberStatusResult = await memberProvider.checkMemberStatus(userIdx, adminIdx);
+        if (checkMemberStatusResult[0]?.status != "ACTIVE" || checkMemberStatusResult[0]?.UserStatus != "ACTIVE"){
+            return errResponse(baseResponseStatus.USER_USERIDX_STATUS);
+        }
+
+        const checkClubTeamListIdxStatusResult = await memberProvider.checkClubTeamListIdxStatus(clubTeamListIdx, adminIdx);
+        if (checkClubTeamListIdxStatusResult[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.ADMIN_CLUBTEAMLISTIDX_STATUS);
+        }
+
+        //Validation Check's User Stauts
+        /*
+        프엔 휴먼에러를 막기위해선 필요함. -> memberStatus와 합치면 괜찮을 듯.
+        */
+
+        // 팀/조 카테고리 적용
+        const updateMemberClubTeamParams = [clubTeamListIdx, userIdx, adminIdx];
+        const updateMemberClubTeamResult = await memberDao.updateMemberClubTeam(connection, updateMemberClubTeamParams);
+        return response(baseResponseStatus.SUCCESS);
+
+    } catch (error) {
+        handleError(error);
+        return errResponse(baseResponseStatus.DB_ERRORS);
+    } finally {
+        connection.release(); 
+    }
+}

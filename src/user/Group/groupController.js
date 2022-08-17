@@ -52,10 +52,17 @@ export const getGroupList = async (req, res) => {
     + JWT Token's userIdx and req.adminIdx by ClubMembers Table is status "ACTIVE" ? (WHERE ID)
   */
 
+  //paging ✅
+  const page = parseInt(req.query.page);
+  const pageSize = parseInt(req.query.pageSize);
+  if(!page || !pageSize){
+      return res.send(errResponse(baseResponse.PAGING_PARAMS_EMPTY));
+  }
+
 
   // JWT Token's userIdx filltering the not adminIdx's groupIdx by groupMembers Table (status = ACTIVE) ❌   
   // 그룹 리스트 조회
-  const groupListResult = await groupProvider.retrieveGroupList(adminIdx);
+  const groupListResult = await groupService.retrievePagingGroupList(adminIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, groupListResult));
 };
@@ -76,7 +83,7 @@ export const getGroupList = async (req, res) => {
 */
 export const getGroupInfo = async (req, res) => {
   /*
-      Query String: group
+      Query String: groupidx
   */
   const groupIdx = req.query.groupIdx;
 
@@ -127,8 +134,16 @@ export const getGroupMembers = async (req, res) => {
     + JWT Token's groupIdx include req.groupIdx ?
   */
 
+  //paging
+  const page = parseInt(req.query.page);
+  const pageSize = parseInt(req.query.pageSize);
+  if(!page || !pageSize){
+      return res.send(errResponse(baseResponse.PAGING_PARAMS_EMPTY));
+  }
+
+
   // 그룹 소속회원 조회
-  const groupMembersResult = await groupProvider.retrieveGroupMembers(groupIdx);
+  const groupMembersResult = await groupService.retrievePagingGroupMembers(groupIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, groupMembersResult));
 };

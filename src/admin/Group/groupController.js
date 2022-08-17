@@ -36,7 +36,7 @@ export const postGroup = async (req, res) => {
     /*
         Body : adminIdx, groupName, groupIntroduction, userIdx
     */
-  const {adminIdx, groupName, groupIntroduction, userIdx} = req.body;
+  const {adminIdx, groupName, groupIntroduction, groupCategory, userIdx} = req.body;
   const JWT_Token_adminIdx = req.verifiedToken.adminId;
 
   // Group Create's Body Data Validation (basic) ✅
@@ -58,6 +58,12 @@ export const postGroup = async (req, res) => {
     return res.send(errResponse(baseResponse.GROUP_GROUPINTRODUCTION_LENGTH));
   }
 
+  if (!groupCategory){
+    return res.send(errResponse(baseResponse.GROUP_GROUPCATEGORY_EMPTY));
+  } else if (groupCategory.length > 30){
+    return res.send(errResponse(baseResponse.GROUP_GROUPCATEGORY_LENGTH));
+  }
+
   // Group Create's Body Data Validation (middle) ✅
   /*
     JWT's Token's adminIdx include req.adminIdx?
@@ -68,12 +74,13 @@ export const postGroup = async (req, res) => {
     return res.send(errResponse(baseResponse.JWT_GROUP_DIFFERENT))
   }
 
-  // Group Create ➕ Transcation 추가필요
+  // Group Create ➕ Transcation 적용완료
   // createGroupResponse = groupIdx
   const createGroupResponse = await groupService.createGroup(
       adminIdx,
       groupName,
-      groupIntroduction
+      groupIntroduction,
+      groupCategory
   );
   
 
@@ -97,7 +104,7 @@ export const postGroup = async (req, res) => {
   }
 
   
-  // Group Members add ➕ Transcation 추가필요
+  // Group Members add ➕ Transcation 적용완료
   const createGroupMembersResponse = await groupService.createGroupMembers(userIdx, createGroupResponse);
 
   return res.send(createGroupMembersResponse);
@@ -109,11 +116,11 @@ export const postGroup = async (req, res) => {
 /*
     API No. 4.2
     API Nanme: 그룹 리스트 조회
-    [GET] /user/group?adminIdx=
+    [GET] /group?adminIdx=&page=&pageSize=
 */
 export const getGroupList = async (req, res) => {
   /*
-      Query String: adminIdx
+      Query String: adminIdx, page, pageSize
   */
   const adminIdx = req.query.adminIdx;
   const JWT_Token_adminIdx = req.verifiedToken.adminId;
@@ -131,12 +138,20 @@ export const getGroupList = async (req, res) => {
     + adminIdx's Status valid with GroupList Table ? - Dao에서 status = "ACTIVE" 분류 조회함. (필요성이 없음)
     + Token's adminIdx same req.adminIdx ?
   */
- if(adminIdx != JWT_Token_adminIdx){
-   return res.send(errResponse(baseResponse.JWT_GROUPLIST_DIFFERENT));
- }
+  if(adminIdx != JWT_Token_adminIdx){
+      return res.send(errResponse(baseResponse.JWT_GROUPLIST_DIFFERENT));
+  }
+
+  //paging ✅
+  const page = parseInt(req.query.page);
+  const pageSize = parseInt(req.query.pageSize);
+  if(!page || !pageSize){
+      return res.send(errResponse(baseResponse.PAGING_PARAMS_EMPTY));
+  }
+
  
   // 그룹 리스트 조회
-  const groupListResult = await groupProvider.retrieveGroupList(adminIdx);
+  const groupListResult = await groupService.retrievePagingGroupList(adminIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, groupListResult));
 };
@@ -151,7 +166,7 @@ export const getGroupList = async (req, res) => {
 
 /*
     API No. 4.3 - Part 1
-    API Nanme: 그룹 이름, 내용조회
+    API Nanme: 그룹 이름, 내용, 그룹 카테고리 조회
     [GET] /group/Info?groupIdx=
 */
 export const getGroupInfo = async (req, res) => {
@@ -184,11 +199,11 @@ export const getGroupInfo = async (req, res) => {
 /*
     API No. 4.3 - Part 2
     API Nanme: 그룹 소속회원 조회
-    [GET] /group/members?groupIdx=
+    [GET] /group/members?groupIdx=&page=&pageSize=
 */
 export const getGroupMembers = async (req, res) => {
   /*
-      Query String: groupIdx
+      Query String: groupIdx, page, pageSize
   */
   const groupIdx = req.query.groupIdx;
 
@@ -207,8 +222,15 @@ export const getGroupMembers = async (req, res) => {
     + JWT Token's groupIdx include req.groupIdx ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
   */
 
+  //paging
+  const page = parseInt(req.query.page);
+  const pageSize = parseInt(req.query.pageSize);
+  if(!page || !pageSize){
+      return res.send(errResponse(baseResponse.PAGING_PARAMS_EMPTY));
+  }
+
   // 그룹 소속회원 조회
-  const groupMembersResult = await groupProvider.retrieveGroupMembers(groupIdx);
+  const groupMembersResult = await groupService.retrievePagingGroupMembers(groupIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, groupMembersResult));
 };
@@ -225,7 +247,7 @@ export const getGroupMembers = async (req, res) => {
 
 /*
     API No. 4.4 - Part 1
-    API Nanme: 그룹 이름, 내용 수정
+    API Nanme: 그룹 이름, 내용, 그룹 카테고리 수정
     [PATCH] /group/info/:groupIdx
 */
 export const patchGroupInfo = async (req, res) => {
@@ -234,7 +256,7 @@ export const patchGroupInfo = async (req, res) => {
       Path Variable: groupIdx
   */
   const groupIdx = req.params.groupIdx;
-  const {groupName, groupIntroduction} = req.body;
+  const {groupName, groupIntroduction, groupCategory} = req.body;
   
   // Validation (basic) ✅
   if (!groupIdx){
@@ -255,6 +277,12 @@ export const patchGroupInfo = async (req, res) => {
     return res.send(errResponse(baseResponse.GROUP_GROUPINTRODUCTION_LENGTH));
   }
 
+  if (!groupCategory){
+    return res.send(errResponse(baseResponse.GROUP_GROUPCATEGORY_EMPTY));
+  } else if (groupCategory.length > 30){
+    return res.send(errResponse(baseResponse.GROUP_GROUPCATEGORY_LENGTH));
+  }
+
   // Validation (Middle) ❌ 
   /*
     + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
@@ -262,8 +290,8 @@ export const patchGroupInfo = async (req, res) => {
   */
 
   
-  // 그룹 이름, 정보 수정
-  const editGroupInfoResponse = await groupService.editGroupInfo(groupIdx, groupName, groupIntroduction);
+  // 그룹 이름, 내용, 그룹 카테고리 수정
+  const editGroupInfoResponse = await groupService.editGroupInfo(groupIdx, groupName, groupIntroduction, groupCategory);
 
   return res.send(editGroupInfoResponse);
 }
@@ -307,7 +335,7 @@ export const patchGroupMembers = async (req, res) => {
     + userIdx's Status in GroupMembers Table is ACTIVE ? - 프론트진에서 필요한 지 생각 후 Validation
   */
 
-  // 그룹 소속회원 삭제
+  // 그룹 소속회원 삭제 - transcation 적용완료
   const editGroupMembersResponse = await groupService.editGroupMembers(groupIdx, userIdx);
 
   return res.send(editGroupMembersResponse);
@@ -353,7 +381,7 @@ export const postGroupMembers = async (req, res) => {
     + userIdx's Status in ClubMembers Table is ACTIVE ? - 프론트진에서 필요한 지 생각 후 Validation
   */
 
-  // 그룹 소속회원 추가
+  // 그룹 소속회원 추가 - transcation 적용완료
   const createGroupMembersResponse = await groupService.insertGroupMembers(groupIdx, userIdx);
 
   return res.send(createGroupMembersResponse);

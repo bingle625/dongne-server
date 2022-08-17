@@ -1,6 +1,7 @@
 const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 const memberProvider = require("./memberProvider");
+const memberService = require("./memberService");
 
 
 
@@ -46,8 +47,16 @@ export const getClubMemberList = async (req, res) => {
       return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_STATUS));
   }
 
+  //paging
+  const page = parseInt(req.query.page);
+  const pageSize = parseInt(req.query.pageSize);
+  if(!page || !pageSize){
+      return res.send(errResponse(baseResponse.PAGING_PARAMS_EMPTY));
+  }
+
+
   // 단체 모든 회원명단 리스트 조회
-  const clubMemberListResult = await memberProvider.retrieveClubMemberList(adminIdx);
+  const clubMemberListResult = await memberService.retrievePagingClubMemberList(adminIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, clubMemberListResult));
 };
@@ -56,7 +65,7 @@ export const getClubMemberList = async (req, res) => {
 /*
     API No. 4.2
     API Nanme: 회원 상세 조회 API
-    [GET] /member?userIdx
+    [GET] /member/info?userIdx
 */
 export const getMemberInfo = async (req, res) => {
     /*
