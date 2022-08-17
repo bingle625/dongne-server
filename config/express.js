@@ -52,7 +52,7 @@ module.exports = function () {
 
   //4. 회계 api
   app.use("/admin/finAccount", adminfinAccountRouter);
-  app.use("/use/finAccount", userfinAccountRouter);
+  app.use("/user/finAccount", userfinAccountRouter);
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 

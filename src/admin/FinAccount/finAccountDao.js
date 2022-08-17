@@ -65,9 +65,9 @@ const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) =
 
 const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day) => {
   const retrieveFinAccountByDayQuery = `
-        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
+        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc
         FROM FinAccountCategory as c, (
-              SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx
+              SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc
               FROM FinancialAccount
               WHERE adminIdx = ? AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?) AND DAY(finAccountDate) = ?)
             ) f

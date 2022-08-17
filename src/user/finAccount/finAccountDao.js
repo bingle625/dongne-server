@@ -1,42 +1,3 @@
-//admin 이메일 조회
-const insertFinAccount = async (connection, finAccountInfoParams) => {
-  const insertFinAccountQuery = `
-        INSERT INTO FinancialAccount(adminIdx, finAccountCategoryIdx, isProfit,finAccountItem, finAccountCost, finAccountDate, etc)
-        VALUES (?, ?, ?, ?, ?, ?, ?);
-  `;
-  const createFinAccResult = await connection.query(insertFinAccountQuery, finAccountInfoParams);
-  return createFinAccResult;
-};
-
-const insertFinAccCategory = async (connection, finAccCategoryParams) => {
-  const insertFinAccCategoryQuery = `
-        INSERT INTO FinAccountCategory(categoryName, adminIdx)
-        VALUES (?, ?);
-  `;
-  const createFinAccResult = await connection.query(insertFinAccCategoryQuery, finAccCategoryParams);
-  return createFinAccResult;
-};
-
-const modifyFinAccCategory = async (connection, finAccCategoryParams) => {
-  const modifyFinAccCategoryQuery = `
-        UPDATE FinAccountCategory
-        SET categoryName = ?
-        WHERE finAccountCategoryIdx = ?;
-  `;
-  const modifyFinAccResult = await connection.query(modifyFinAccCategoryQuery, finAccCategoryParams);
-  return modifyFinAccResult;
-};
-
-const modifyFinAccount = async (connection, finAccCategoryParams) => {
-  const modifyFinAccCategoryQuery = `
-        UPDATE FinancialAccount
-        SET finAccountCategoryIdx = ? , finAccountItem = ?, isProfit = ? , finAccountCost = ? , finAccountDate = ? , etc = ?
-        WHERE finAccountIdx = ?;
-  `;
-  const modifyFinAccResult = await connection.query(modifyFinAccCategoryQuery, finAccCategoryParams);
-  return modifyFinAccResult;
-};
-
 const retrieveFinAccount = async (connection, adminIdx) => {
   const getFinAccountQuery = `
         SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
@@ -65,9 +26,9 @@ const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) =
 
 const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day) => {
   const retrieveFinAccountByDayQuery = `
-        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
+        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost, f.etc
         FROM FinAccountCategory as c, (
-              SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx
+              SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc
               FROM FinancialAccount
               WHERE adminIdx = ? AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?) AND DAY(finAccountDate) = ?)
             ) f
@@ -96,15 +57,6 @@ const selectCategoryByName = async (connection, adminIdx, categoryName) => {
   const categoryInfoResult = await connection.query(categoryInfoQuery, [adminIdx, categoryName]);
   return categoryInfoResult;
 };
-const deleteFinAccount = async (connection, finAccountInfo) => {
-  const FinAccountDeleteQuery = `
-  UPDATE FinancialAccount
-  SET status = "DELETED"
-  WHERE finAccountIdx = ?;
-  `;
-  const FinAccountDeleteResult = await connection.query(FinAccountDeleteQuery, finAccountInfo);
-  return FinAccountDeleteResult;
-};
 
 const selectAdminAccountByIdx = async (connection, accountIdx) => {
   const categoryInfoQuery = `
@@ -117,15 +69,10 @@ const selectAdminAccountByIdx = async (connection, accountIdx) => {
 };
 
 module.exports = {
-  insertFinAccount,
-  insertFinAccCategory,
-  modifyFinAccount,
-  modifyFinAccCategory,
   retrieveFinAccount,
   retrieveFinAccountByMonth,
   retrieveFinAccountByDay,
   selectCategory,
   selectCategoryByName,
-  deleteFinAccount,
   selectAdminAccountByIdx
 };

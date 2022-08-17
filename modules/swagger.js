@@ -21,7 +21,8 @@ const options = {
     "./src/admin/Member/*.js",
     "./src/admin/Auth/*.js",
     "./src/user/Auth/*.js",
-    "./src/admin/FinAccount/*.js"
+    "./src/admin/FinAccount/*.js",
+    "./src/user/FinAccount/*.js"
   ]
 };
 
