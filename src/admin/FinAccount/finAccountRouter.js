@@ -186,7 +186,7 @@ adminfinAccountRouter.get("/", finAccount.getFinAccount);
  *           default: 8
  *     responses:
  *       "1000":
- *         description: 최근 회계 4개 조회 api 성공
+ *         description: 월별 회계 조회 api 성공
  *       "5001":
  *         description: admin Idx 비어있음.
  *       "5014":
@@ -233,7 +233,7 @@ adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
  *           description: 조회 일자
  *     responses:
  *       "1000":
- *         description: 최근 회계 4개 조회 api 성공
+ *         description: 일자별 회계 조회 api 성공
  *       "5001":
  *         description: admin Idx 비어있음.
  *       "5014":

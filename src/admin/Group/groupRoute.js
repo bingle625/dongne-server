@@ -1,7 +1,7 @@
 import express from "express";
 // import { getDatabaseTest } from "./groupController";
 const group = require("./groupController");
-const jwtMiddleWare = require("../../../config/jwtMiddleWare");
+const adminJwtMiddleWare = require("../../../config/adminJwtMiddleWare");
 
 const groupRouter = express.Router();
 
@@ -84,7 +84,7 @@ groupRouter.get("/db", group.getDatabaseTest);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.post("/", jwtMiddleWare ,group.postGroup);
+groupRouter.post("/", adminJwtMiddleWare ,group.postGroup);
 
 
 
@@ -141,7 +141,7 @@ groupRouter.post("/", jwtMiddleWare ,group.postGroup);
  *         description: 데이터 베이스 에러
  * 
  */
-groupRouter.get("/", jwtMiddleWare ,group.getGroupList);
+groupRouter.get("/", adminJwtMiddleWare ,group.getGroupList);
 
 
 
@@ -186,7 +186,7 @@ groupRouter.get("/", jwtMiddleWare ,group.getGroupList);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.get("/info", jwtMiddleWare ,group.getGroupInfo);
+groupRouter.get("/info", adminJwtMiddleWare ,group.getGroupInfo);
 
 // 그룹 소속회원 조회 - part 2
 // Query String
@@ -241,7 +241,7 @@ groupRouter.get("/info", jwtMiddleWare ,group.getGroupInfo);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.get("/members", jwtMiddleWare ,group.getGroupMembers);
+groupRouter.get("/members", adminJwtMiddleWare ,group.getGroupMembers);
 
 
 // 4.4 그룹 수정
@@ -318,7 +318,7 @@ groupRouter.get("/members", jwtMiddleWare ,group.getGroupMembers);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
+groupRouter.patch("/info/:groupIdx", adminJwtMiddleWare ,group.patchGroupInfo);
 
 
 // 그룹 회원삭제
@@ -377,7 +377,7 @@ groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/deleteMembers/:groupIdx", jwtMiddleWare ,group.patchGroupMembers);
+groupRouter.patch("/deleteMembers/:groupIdx", adminJwtMiddleWare ,group.patchGroupMembers);
 
 // 그룹 회원추가
 // Path Variable & Body
@@ -435,7 +435,7 @@ groupRouter.patch("/deleteMembers/:groupIdx", jwtMiddleWare ,group.patchGroupMem
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.post("/insertMembers/:groupIdx", jwtMiddleWare ,group.postGroupMembers);
+groupRouter.post("/insertMembers/:groupIdx", adminJwtMiddleWare ,group.postGroupMembers);
 
 // 4.5 그룹 삭제
 // TO DO : 6
@@ -477,6 +477,6 @@ groupRouter.post("/insertMembers/:groupIdx", jwtMiddleWare ,group.postGroupMembe
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/delete/:groupIdx", jwtMiddleWare ,group.patchGroup);
+groupRouter.patch("/delete/:groupIdx", adminJwtMiddleWare ,group.patchGroup);
 
 export default groupRouter;
