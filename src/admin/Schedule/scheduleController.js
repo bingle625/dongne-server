@@ -7,10 +7,10 @@ const moment = require("moment");
 /**
  * API No. 5.1
  * API Name : 스케줄 생성 API
- * [POST] /schedule
+ * [POST] admin/schedule
  */
 exports.postSchedule = async function (req, res) {
-  // body : groupIdx, date, init_time, end_time, introduction, place, scheduleName
+  // body : groupIdx, date, init_time, end_time, introduction, place, scheduleName, adminIdx
   const {
     groupIdx,
     scheduleDate,
@@ -19,6 +19,7 @@ exports.postSchedule = async function (req, res) {
     introduction,
     place,
     scheduleName,
+    adminIdx,
   } = req.body;
 
   if (
@@ -28,9 +29,21 @@ exports.postSchedule = async function (req, res) {
     !end_time ||
     !introduction ||
     !place ||
-    !scheduleName
+    !scheduleName ||
+    !adminIdx
   ) {
     return res.send(response(baseResponse.SCHEDULE_POST_PARAMS_EMPTY));
+  }
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
   }
 
   // groupIdx validation
@@ -104,11 +117,23 @@ exports.postSchedule = async function (req, res) {
 /**
  * API No. 5.2
  * API Name : 스케줄 리스트 조회 API
- * [GET] /schedule/list/:groupIdx
+ * [GET] admin/schedule/list?adminIdx=#&groupIdx=#&curPage=#
  */
 exports.getSchedule = async function (req, res) {
-  // Path Variable: groupIdx
-  const groupIdx = req.params.groupIdx;
+  // query parameters
+  const { adminIdx, groupIdx, curPage } = req.query;
+
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validation
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // groupIdx validation
   if (!groupIdx) {
@@ -116,9 +141,14 @@ exports.getSchedule = async function (req, res) {
   } else if (groupIdx <= 0) {
     return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
+  // curPage validation
+  if (curPage <= 0) {
+    curPage = 1;
+  }
 
   const scheduleListResponse = await scheduleProvider.retrieveScheduleList(
-    groupIdx
+    groupIdx,
+    curPage
   );
   return res.send(scheduleListResponse);
 };
@@ -126,12 +156,24 @@ exports.getSchedule = async function (req, res) {
 /**
  * API No. 5.3
  * API Name : 스케줄 상세 조회 API
- * [GET] /schedule/:scheduleIdx
+ * [GET] admin/schedule?scheduleIdx=#&adminIdx=#:
  */
 
 exports.getScheduleInfo = async function (req, res) {
-  // Path Variable: scheduleIdx
-  const scheduleIdx = req.params.scheduleIdx;
+  // Query Variable: scheduleIdx, adminIdx
+  const { scheduleIdx, adminIdx } = req.query;
+
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // scheduleIdx validation
   if (!scheduleIdx) {
@@ -150,7 +192,7 @@ exports.getScheduleInfo = async function (req, res) {
 /**
  * API No. 5.4
  * API Name : 스케줄 수정 API
- * [PATCH] /schedule/:scheduleIdx
+ * [PATCH] admin/schedule/:scheduleIdx
  */
 exports.patchSchedule = async function (req, res) {
   // path variable
@@ -163,8 +205,19 @@ exports.patchSchedule = async function (req, res) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
-  // body : scheduleDate, init_time, end_time, introduction, place, scheduleName
+  // body : scheduleDate, init_time, end_time, introduction, place, scheduleName, adminIdx
   const editScheduleParams = req.body;
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!editScheduleParams.adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (editScheduleParams.adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (editScheduleParams.adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // scheduleDate valid
   if (
@@ -234,11 +287,24 @@ exports.patchSchedule = async function (req, res) {
 /**
  * API No. 5.5
  * API Name : 스케줄 삭제 API
- * [PATCH] /schedule/:scheduleIdx/status
+ * [PATCH] admin/schedule/:scheduleIdx/status
  */
 exports.patchScheduleStatus = async function (req, res) {
   // Path Variable: scheduleIdx
   const scheduleIdx = req.params.scheduleIdx;
+  // body: adminIdx
+  const { adminIdx } = req.body;
+  // jwt : adminId
+  const adminIdxFromJWT = req.verifiedToken.adminId;
+
+  // adminIdx validaiton
+  if (!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } else if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  } else if (adminIdx != adminIdxFromJWT) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+  }
 
   // scheduleIdx validation
   if (!scheduleIdx) {
