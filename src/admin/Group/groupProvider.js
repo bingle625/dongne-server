@@ -5,6 +5,26 @@ const { logger } = require("../../../config/winston");
 
 const groupDao = require("./groupDao");
 
+
+// API NO. 4.1 Validation Check's members Status
+exports.checkMembersStatus = async function (userIdx, adminIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const handleError = (error) => logger.error(`❌checkUserStatus DB Error: ${error.message}`);
+
+  //Try문 예외처리
+  try {
+    const membersStatusParams = [userIdx, adminIdx];
+    const membersStatusResult = await groupDao.selectMembersStatus(connection, membersStatusParams);
+    connection.release();
+    return membersStatusResult;
+
+  } catch (error) {
+    handleError(error);
+    connection.release();
+    return errResponse(baseResponseStatus.DB_ERRORS);
+  }
+};
+
 // 그룹 리스트 조회 - API 4.2
 exports.retrieveGroupList = async function (adminIdx, start, pageSize) {
   const connection = await pool.getConnection(async (conn) => conn);

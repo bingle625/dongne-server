@@ -74,17 +74,6 @@ export const postGroup = async (req, res) => {
     return res.send(errResponse(baseResponse.JWT_GROUP_DIFFERENT))
   }
 
-  // Group Create ➕ Transcation 적용완료
-  // createGroupResponse = groupIdx
-  const createGroupResponse = await groupService.createGroup(
-      adminIdx,
-      groupName,
-      groupIntroduction,
-      groupCategory
-  );
-  
-
-  
   // Group Members add's Body Data Validation (basic) ✅
   var groupUserIdx;
   for (groupUserIdx of userIdx){
@@ -103,14 +92,26 @@ export const postGroup = async (req, res) => {
 
   }
 
-  
+  // Group Create ➕ Transcation 적용완료
+  // createGroupResponse = groupIdx
+  const createGroupResponse = await groupService.createGroup(
+    adminIdx,
+    groupName,
+    groupIntroduction,
+    groupCategory,
+    userIdx
+ );
+
+  /*
   // Group Members add ➕ Transcation 적용완료
   const createGroupMembersResponse = await groupService.createGroupMembers(userIdx, createGroupResponse);
+  */
 
-  return res.send(createGroupMembersResponse);
-
+  return res.send(createGroupResponse);
 
 };
+
+
 
 
 /*

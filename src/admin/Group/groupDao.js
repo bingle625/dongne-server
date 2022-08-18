@@ -34,6 +34,23 @@ async function insertGroupMembers(connection, insertGroupMemberParams){
   return insertGroupMemberRow;
 };
 
+// API NO. 4.1 - Validation Check's members Status
+const selectMembersStatus = async (connection, membersStatusParams) => {
+  const selectMembersStatusQuery = `
+    SELECT
+    ClubMembers.status,
+    User.status as UserStatus
+    FROM ClubMembers
+    JOIN User
+    ON User.userIdx = ClubMembers.userIdx
+    WHERE ClubMembers.userIdx = ? and adminIdx = ?;
+      `;
+
+  const [membersStatusRows] = await connection.query(selectMembersStatusQuery, membersStatusParams);
+
+  return membersStatusRows;
+};
+
 // 그룹 리스트 조회 - API NO. 4.2
 const selectGroupList = async (connection, groupListPagingParams) => {
   const selectGroupListQuery = `
@@ -180,6 +197,7 @@ const editGroup = async (connection, groupIdx) => {
     editGroupMembers,
     editGroup,
     selectAdminIdx,
+    selectMembersStatus,
 
 
 

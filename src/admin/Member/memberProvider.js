@@ -84,13 +84,7 @@ exports.retrieveMemberInfo = async function (userIdx, JWT_Token_adminIdx) {
 
   
   try {
-    // User Table is ACTIVE?
-    const userStatus = await memberDao.selectUserStatus(connection, userIdx);
-    if (userStatus[0]?.status != "ACTIVE"){
-      return errResponse(baseResponseStatus.USER_USERIDX_STATUS);
-    }
-
-    // Validation Check's member Status is ACTIVE?
+    // Validation Check's member Status is ACTIVE? || User Table is ACTIVE?
     const membersStatusParams = [userIdx, JWT_Token_adminIdx];
     const membersStatus = await memberDao.selectMemberStatus(connection, membersStatusParams);
     if (membersStatus[0]?.status != "ACTIVE" || membersStatus[0].UserStatus != "ACTIVE"){
@@ -147,7 +141,7 @@ exports.checkTokenUserStatus = async function (userIdx, JWT_Token_adminIdx) {
   }
 };
 
-// API NO. 3.5 - Validation Check's member Status
+// API NO. 3.5, API NO. 3.3 - Validation Check's member Status
 exports.checkMemberStatus = async function (userIdx, adminIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌checkUserStatus DB Error: ${error.message}`);

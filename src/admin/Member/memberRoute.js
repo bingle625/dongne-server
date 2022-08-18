@@ -139,7 +139,7 @@ memberRouter.get("/info",adminJwtMiddleWare ,member.getMemberInfo);
 /**
  * @swagger
  * paths:
- *  /admin/member?userIdx={userIdx}:
+ *  /admin/member?userIdx={userIdx}&adminIdx={adminIdx}:
  *   patch:
  *     tags: [ADMIN 회원 명단]
  *     summary: 회원 삭제 API
@@ -151,6 +151,13 @@ memberRouter.get("/info",adminJwtMiddleWare ,member.getMemberInfo);
  *           example: 2
  *           required: true
  *           description: 유저 인덱스
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           example: 11
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요

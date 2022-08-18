@@ -8,12 +8,22 @@ const groupDao = require("./groupDao");
 
 
 // 그룹 추가 / Group Create - API 4.1
-exports.createGroup = async function(adminIdx, groupName, groupIntroduction, groupCategory){
+exports.createGroup = async function(adminIdx, groupName, groupIntroduction, groupCategory, userIdx){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌createGroup DB Error: ${error.message}`);
 
 
     try {
+        // Validation Member Status || User Status (middle)
+        var groupUserIdx;
+        for (groupUserIdx of userIdx){
+            const membersStatus = await groupProvider.checkMembersStatus(groupUserIdx, adminIdx);
+            if (membersStatus[0]?.status != "ACTIVE" || membersStatus[0]?.UserStatus != "ACTIVE"){
+                return errResponse(baseResponseStatus.USER_USERIDX_STATUS);
+            }
+        }
+
+        // 그룹 생성
         const insertGroupParams = [adminIdx, groupName, groupIntroduction, groupCategory];
         // transcation Start
         await connection.beginTransaction();
@@ -21,8 +31,17 @@ exports.createGroup = async function(adminIdx, groupName, groupIntroduction, gro
         await connection.commit()
         // Create Group's groupIdx
         const groupIdx = groupResult[0].insertId;
-        return groupIdx;
-        
+
+        // 그룹 멤버 추가
+        var groupUserIdx;
+        for (groupUserIdx of userIdx){
+            const insertGroupMemberParams = [groupUserIdx, groupIdx];
+            await connection.beginTransaction();
+            const groupMembersResult = await groupDao.insertGroupMembers(connection, insertGroupMemberParams);
+            await connection.commit();          
+        }
+        return response(baseResponseStatus.SUCCESS, {addedGroup: groupIdx});
+
     } catch (error) {
         await connection.rollback();
         handleError(error);
@@ -32,6 +51,7 @@ exports.createGroup = async function(adminIdx, groupName, groupIntroduction, gro
     }
 }
 
+/*
 // 그룹 추가 / Group Members add - API 4.1
 exports.createGroupMembers = async function(userIdx, createGroupResponse){
     const connection = await pool.getConnection(async (conn) => conn);
@@ -41,11 +61,12 @@ exports.createGroupMembers = async function(userIdx, createGroupResponse){
     try {
         // One UserIdx INSERT
         var groupUserIdx;
+        // 그룹의 회원 추가
         for (groupUserIdx of userIdx){
             const insertGroupMemberParams = [groupUserIdx, createGroupResponse];
             await connection.beginTransaction();
             const groupMembersResult = await groupDao.insertGroupMembers(connection, insertGroupMemberParams);
-            await connection.commit()
+            await connection.commit();          
         }
 
         return response(baseResponseStatus.SUCCESS, {addedGroup: createGroupResponse});
@@ -58,6 +79,7 @@ exports.createGroupMembers = async function(userIdx, createGroupResponse){
         connection.release();
     }
 }
+*/
 
 // API 4.2 - Paging
 exports.retrievePagingGroupList = async function (adminIdx, page, pageSize){
