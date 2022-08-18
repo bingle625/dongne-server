@@ -1,7 +1,7 @@
 import express from "express";
 // import  {getDatabaseTest, getClubMemberList} from "./memberController";
 const member = require("./memberController");
-const jwtMiddleWare = require("../../../config/jwtMiddleWare");
+const adminJwtMiddleWare = require("../../../config/adminJwtMiddleWare");
 
 const memberRouter = express.Router();
 
@@ -78,7 +78,7 @@ memberRouter.get("/db", member.getDatabaseTest);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/",jwtMiddleWare ,member.getClubMemberList);
+memberRouter.get("/",adminJwtMiddleWare ,member.getClubMemberList);
 
 
 // 3.2 회원 상세 조회 API
@@ -128,7 +128,7 @@ memberRouter.get("/",jwtMiddleWare ,member.getClubMemberList);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/info",jwtMiddleWare ,member.getMemberInfo);
+memberRouter.get("/info",adminJwtMiddleWare ,member.getMemberInfo);
 
 
 
@@ -175,7 +175,7 @@ memberRouter.get("/info",jwtMiddleWare ,member.getMemberInfo);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.patch("/",jwtMiddleWare ,member.patchMember);
+memberRouter.patch("/",adminJwtMiddleWare ,member.patchMember);
 
 
 
@@ -234,7 +234,7 @@ memberRouter.patch("/",jwtMiddleWare ,member.patchMember);
  *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *
  */
-memberRouter.post("/update/:adminIdx", jwtMiddleWare, member.postClubTeam);
+memberRouter.post("/update/:adminIdx", adminJwtMiddleWare, member.postClubTeam);
 export default memberRouter;
 
 // 3.5 동아리 소속회원 팀/조 카테고리 적용하기
@@ -307,4 +307,4 @@ export default memberRouter;
  *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *
  */
-memberRouter.patch("/update", jwtMiddleWare, member.patchMemberClubTeam);
+memberRouter.patch("/update", adminJwtMiddleWare, member.patchMemberClubTeam);
