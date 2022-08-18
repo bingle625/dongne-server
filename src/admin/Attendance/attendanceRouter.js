@@ -2,7 +2,7 @@ import express from "express";
 
 const attendanceRouter = express.Router();
 const attendance = require("./attendanceController");
-const jwtMiddleware = require("../../../config/jwtMiddleWare");
+const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
 
 // 6.1 출석한 회원 리스트 조회 API
 /**
