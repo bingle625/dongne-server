@@ -5,24 +5,22 @@ const swaggerDefinition = {
   info: {
     title: "Dong-Ne API",
     version: "1.0.0",
-    description: "test",
+    description: "test"
   },
   host: "localhost:3000",
-  basePath: "/",
+  basePath: "/"
 };
 
 const options = {
   swaggerDefinition: swaggerDefinition,
-  apis: [
-    "./src/app/Testinit/*.js",
-    "./src/app/Group/*.js",
-    "./src/app/Member/*.js"
-  ],
+  apis: ["./src/admin/Testinit/*.js", "./src/admin/Attendance/*.js", "./src/admin/Schedule/*.js", "./src/admin/Group/*.js", "./src/admin/Member/*.js", "./src/admin/Auth/*.js", "./src/admin/Admin/*.js",
+  "./src/user/Group/*.js", "./src/user/Member/*.js"
+]
 };
 
 const specs = swaggerJsdoc(options);
 
 module.exports = {
   swaggerUi,
-  specs,
+  specs
 };

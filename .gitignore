@@ -193,6 +193,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
 # Macbook's auto file
 *.DS_Store
 
