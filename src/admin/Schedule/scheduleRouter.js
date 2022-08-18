@@ -2,7 +2,7 @@ import express from "express";
 
 const scheduleRouter = express.Router();
 const schedule = require("./scheduleController");
-const jwtMiddleware = require("../../../config/jwtMiddleWare");
+const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
 
 // 5.1 스케줄 생성 API
 /**

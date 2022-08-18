@@ -11,6 +11,9 @@ exports.getSchedule = async function (req, res) {
   // query parameters
   const { groupIdx, userIdx, curPage } = req.query;
 
+  // jwt: adminId
+  const userIdxFromJWT = req.verifiedToken.adminId;
+
   // groupIdx validation
   if (!groupIdx) {
     return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
@@ -22,7 +25,10 @@ exports.getSchedule = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
   } else if (userIdx <= 0) {
     return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+  } else if (userIdx != userIdxFromJWT) {
+    return res.send(errResponse(baseResponse.USER_USERIDX_NOT_MATCH));
   }
+
   // curPage
   if (curPage <= 0) {
     curPage = 1;
@@ -46,6 +52,9 @@ exports.getScheduleInfo = async function (req, res) {
   // query parameters
   const { scheduleIdx, userIdx } = req.query;
 
+  // jwt: adminId
+  const userIdxFromJWT = req.verifiedToken.adminId;
+
   // scheduleIdx validation
   if (!scheduleIdx) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
@@ -57,6 +66,8 @@ exports.getScheduleInfo = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
   } else if (userIdx <= 0) {
     return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+  } else if (userIdx != userIdxFromJWT) {
+    return res.send(errResponse(baseResponse.USER_USERIDX_NOT_MATCH));
   }
 
   // Response
