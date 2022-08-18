@@ -9,40 +9,18 @@ const selectUserPosts = async (connection) => {
   
     return testResult;
   };
+
   
-// 그룹 추가 / Group Create - API NO. 4.1
-async function insertGroup(connection, insertGroupParams){
-  const insertGroupQuery = `
-  INSERT INTO GroupList(adminIdx, groupName, groupIntroduction, groupCategory)
-  VALUES (?, ?, ?, ?);
-  `;
 
-  const insertGroupRow = await connection.query(insertGroupQuery, insertGroupParams);
-
-  return insertGroupRow;
-};
-
-// 그룹 추가 / Group Members add - API NO. 4.1 , API NO. 4.3 -> Part 3
-async function insertGroupMembers(connection, insertGroupMemberParams){
-  const insertGroupMemberQuery = `
-  INSERT INTO GroupMembers(userIdx, groupIdx)
-  VALUES (?, ?);
-  `;
-
-  const insertGroupMemberRow = await connection.query(insertGroupMemberQuery, insertGroupMemberParams);
-
-  return insertGroupMemberRow;
-};
-
-// 그룹 리스트 조회 - API NO. 4.2
+// 그룹 리스트 조회 - API NO. 5.1
 const selectGroupList = async (connection, groupListPagingParams) => {
   const selectGroupListQuery = `
-  SELECT 
-  groupName as "단체에 생성된 출결그룹",
-  groupCategory as "그룹 카테고리"
-  FROM GroupList
-  WHERE adminIdx = ? and status = "ACTIVE"
-  LIMIT ?, ?;
+    SELECT
+    groupName as "회원의 출결그룹",
+    groupCategory as "그룹 카테고리"
+    FROM GroupList
+    WHERE adminIdx = ? and status = "ACTIVE"
+    LIMIT ?, ?      
       `;
 
   const [groupListRows] = await connection.query(selectGroupListQuery, groupListPagingParams);
@@ -50,7 +28,7 @@ const selectGroupList = async (connection, groupListPagingParams) => {
   return groupListRows;
 };
 
-// API NO. 4.2 - Paging's Total Data Count with GroupList
+// API NO. 5.1 - Paging's Total Data Count with GroupList
 const selectTotalDataCount = async (connection, adminIdx) => {
   const selectTotalDataCountQuery = `
     SELECT COUNT(adminIdx) as totalDataCount
@@ -63,7 +41,7 @@ const selectTotalDataCount = async (connection, adminIdx) => {
   return totalDataCountRows;
 };
 
-// 그룹 이름, 내용 조회 - API NO. 4.3 -> Part 1
+// 그룹 이름, 내용 조회 - API NO. 5.2 -> Part 1
 const selectGroupInfo = async (connection, groupIdx) => {
   const selectGroupInfoQuery = `
     SELECT 
@@ -80,7 +58,7 @@ const selectGroupInfo = async (connection, groupIdx) => {
 };
 
 
-// 그룹 소속회원 조회 - API NO. 4.3 -> Part 2
+// 그룹 소속회원 조회 - API NO. 5.2 -> Part 2
 const selectGroupMembers = async (connection, groupMembersPagingParams) => {
 
   const selectGroupMembersQuery = `
@@ -100,7 +78,7 @@ const selectGroupMembers = async (connection, groupMembersPagingParams) => {
   return groupMembersRows;
 };
 
-// API NO. 4.3 -> Part 2 - Paging's Total Data Count with GroupMembers
+// API NO. 5.2 - Paging's Total Data Count with GroupMembers
 const selectGroupMembersTotalDataCount = async (connection, groupIdx) => {
   const selectTotalDataCountQuery = `
   SELECT COUNT(groupIdx) as totalDataCount
@@ -113,7 +91,7 @@ const selectGroupMembersTotalDataCount = async (connection, groupIdx) => {
   return totalDataCountRows;
 };
 
-// API NO. 4.3 -> Part 2 - select AdminIdx
+// API NO. 5.2 - select AdminIdx
 const selectAdminIdx = async (connection, groupIdx) => {
   const selectAdminIdxQuery = `
     SELECT 
@@ -127,59 +105,16 @@ const selectAdminIdx = async (connection, groupIdx) => {
   return groupInfoRows;
 };
 
-// 그룹 이름, 내용 수정 - API NO. 4.4 -> Part 1
-const editGroupInfo = async (connection, editGroupInfoParams) => {
-
-  const updateGroupInfoQuery = `
-    UPDATE GroupList
-    SET groupName = ? , groupIntroduction = ? , groupCategory = ?
-    WHERE groupIdx = ?;
-      `;
-
-  const [updateGroupInfoRows] = await connection.query(updateGroupInfoQuery, editGroupInfoParams);
-  return updateGroupInfoRows;
-};
-
-// 그룹 소속회원 삭제 - API NO. 4.4 -> Part 2
-const editGroupMembers = async (connection, editGroupMembersParams) => {
-
-  const updateGroupMembersQuery = `
-    UPDATE GroupMembers
-    SET status = "DELETED"
-    WHERE groupIdx = ? and userIdx = ?;
-      `;
-
-  const [updateGroupMembersRows] = await connection.query(updateGroupMembersQuery, editGroupMembersParams);
-  return updateGroupMembersRows;
-};
-
-// 그룹 삭제 - API NO. 4.5
-const editGroup = async (connection, groupIdx) => {
-
-  const updateGroupQuery = `
-    UPDATE GroupList
-    SET status = "DELETED"
-    WHERE groupIdx = ?;
-      `;
-
-  const [updateGroupRows] = await connection.query(updateGroupQuery, groupIdx);
-  return updateGroupRows;
-};
 
 
   module.exports = { 
     selectUserPosts,
-    insertGroup,
-    insertGroupMembers,
     selectGroupList,
-    selectTotalDataCount,
     selectGroupInfo,
     selectGroupMembers,
     selectGroupMembersTotalDataCount,
-    editGroupInfo,
-    editGroupMembers,
-    editGroup,
     selectAdminIdx,
+    selectTotalDataCount,
 
 
 

@@ -5,7 +5,7 @@ const { logger } = require("../../../config/winston");
 
 const groupDao = require("./groupDao");
 
-// 그룹 리스트 조회 - API 4.2
+// 그룹 리스트 조회 - API 5.1
 exports.retrieveGroupList = async function (adminIdx, start, pageSize) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveGroupInfo DB Error: ${error.message}`);
@@ -23,7 +23,7 @@ exports.retrieveGroupList = async function (adminIdx, start, pageSize) {
   }
 };
 
-// API 4.2 - Paging's totalDataCount (4.2에서 조회하는 Data 갯수 조회)
+// API 5.1 - Paging's totalDataCount (5.1에서 조회하는 Data 갯수 조회)
 exports.retrieveTotalDataCount = async function (adminIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveTotalDataCount DB Error: ${error.message}`);
@@ -42,7 +42,7 @@ exports.retrieveTotalDataCount = async function (adminIdx) {
 };
 
 
-// 그룹 이름, 내용 조회 - API 4.3 -> Part 1
+// 그룹 이름, 내용 조회 - API 5.2 -> Part 1
 exports.retrieveGroupInfo = async function (groupIdx) {
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌retrieveGroupInfo DB Error: ${error.message}`);
@@ -60,7 +60,7 @@ exports.retrieveGroupInfo = async function (groupIdx) {
     }
   };
 
-// 그룹 소속회원 조회 - API 4.3 -> Part 2
+// 그룹 소속회원 조회 - API 5.2 -> Part 2
 exports.retrieveGroupMembers = async function (groupIdx, start, pageSize) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveGroupMembers DB Error: ${error.message}`);
@@ -68,7 +68,7 @@ exports.retrieveGroupMembers = async function (groupIdx, start, pageSize) {
   //Try문 예외처리
   try {
     const adminIdx = await groupDao.selectAdminIdx(connection, groupIdx);
-    const groupMembersPagingParams = [groupIdx, adminIdx[0].adminIdx, start, pageSize];
+    const groupMembersPagingParams = [groupIdx, adminIdx[0].adminIdx, start, pageSize]; 
     const groupMembersResult = await groupDao.selectGroupMembers(connection, groupMembersPagingParams);
     connection.release();
     return groupMembersResult;
@@ -81,7 +81,7 @@ exports.retrieveGroupMembers = async function (groupIdx, start, pageSize) {
   
 };
 
-// API 4.3 - Paging's totalDataCount (4.3에서 조회하는 Data 갯수 조회)
+// API 5.2 - Paging's totalDataCount (5.2에서 조회하는 Data 갯수 조회)
 exports.retrieveGroupMembersTotalDataCount = async function (groupIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveTotalDataCount DB Error: ${error.message}`);

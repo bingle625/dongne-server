@@ -1,33 +1,33 @@
 import express from "express";
 const auth = require("./authController");
-const adminAuthRouter = express.Router();
+const userAuthRouter = express.Router();
 
 /**
  * @swagger
  * paths:
- *  /admin/auth/login:
+ *  /user/auth/login:
  *   post:
- *     tags: [admin 계정 관리]
- *     summary: admin 로그인 api
+ *     tags: [user 계정 관리]
+ *     summary: user 로그인 api
  *     consumes:
  *       - application/json
  *     parameters:
  *       - in: body
- *         name: adminInfo
- *         description: admin 로그인 정보  파라미터
+ *         name: userInfo
+ *         description: user 로그인 정보  파라미터
  *         schema:
  *            type: object
  *            required:
- *              - adminEmail
- *              - adminPwd
+ *              - userEmail
+ *              - password
  *            properties:
- *                  adminEmail:
- *                        default: dongdong@gmail.com
- *                        description: admin 이메일
+ *                  userEmail:
+ *                        default: gkstjdwo8899@naver.com
+ *                        description: user 이메일
  *                        type: string
- *                  adminPwd:
+ *                  password:
  *                        default: dong12345
- *                        description: admin 비밀번호
+ *                        description: user 비밀번호
  *                        type: string
  *     responses:
  *       "1000":
@@ -52,59 +52,64 @@ const adminAuthRouter = express.Router();
  *         description: 데이터 베이스 에러
  *
  */
-adminAuthRouter.post("/login", auth.login);
+userAuthRouter.post("/login", auth.login);
 
 /**
  * @swagger
  * paths:
- *  /admin/auth/register:
+ *  /user/auth/register:
  *   post:
- *     tags: [admin 계정 관리]
- *     summary: admin 회원가입 api
+ *     tags: [user 계정 관리]
+ *     summary: user 회원가입 api
  *     consumes:
  *       - application/json
  *     parameters:
  *       - in: body
- *         name: adminInfo
- *         description: admin 회원가입 정보  파라미터
+ *         name: userInfo
+ *         description: user 회원가입 정보  파라미터
  *         schema:
  *            type: object
  *            required:
- *              - clubName
- *              - adminEmail
- *              - adminPwd
- *              - clubImgUrl
+ *              - name
+ *              - phoneNum
+ *              - school
+ *              - birth
+ *              - address
+ *              - userEmail
+ *              - password
  *            properties:
- *                  clubName:
- *                        default: 빙글빙글
- *                        description: 동아리 이름
+ *                  name:
+ *                        default: 한성재
+ *                        description: user 이름
  *                        type: string
- *                  adminEmail:
- *                        default: dongdong@gmail.com
- *                        description: admin 이메일
+ *                  userEmail:
+ *                        default: gkstjdwo8899@naver.com
+ *                        description: user 이메일
  *                        type: string
- *                  adminPwd:
+ *                  password:
  *                        default: dong12345
- *                        description: admin 비밀번호
+ *                        description: user 비밀번호
  *                        type: string
- *                  establishmentYear:
- *                        default: 2022-08-10
- *                        description: 동아리 설립년도 YYYY-MM-DD format
+ *                  phoneNum:
+ *                        default: 01012345678
+ *                        description: 전화번호
  *                        type: string
- *                  clubRegion:
- *                        default: 서울,경기
- *                        description: 동아리 활동 지역
+ *                  school:
+ *                        default: 중앙대학교
+ *                        description: 소재 대학교
  *                        type: string
- *                  clubIntroduction:
- *                        default: 동그라미를 그리는 동아리입니다.
- *                        description: 동아리 소개
+ *                  birth:
+ *                        default: 2001-08-04
+ *                        description: user 생년월일 YYYY-MM-DD
  *                        type: string
- *                  clubWebLink:
- *                        default: https://www.naver.com
- *                        description: 동아리 웹사이트 링크
+ *                  address:
+ *                        description: user 주소
  *                        type: string
- *                  clubImgUrl:
- *                        description: 동아리 사진
+ *                  introduction:
+ *                        description: user 소개
+ *                        type: string
+ *                  userImgUrl:
+ *                        description: userHiImg.jpg
  *                        type: string
  *
  *
@@ -132,6 +137,6 @@ adminAuthRouter.post("/login", auth.login);
  *
  */
 
-adminAuthRouter.post("/register", auth.registerAdmin);
+userAuthRouter.post("/register", auth.registerUser);
 
-export default adminAuthRouter;
+export default userAuthRouter;

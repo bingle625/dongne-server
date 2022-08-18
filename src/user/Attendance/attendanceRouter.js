@@ -2,6 +2,7 @@ import express from "express";
 
 const userAttendanceRouter = express.Router();
 const attendance = require("./attendanceController");
+const jwtMiddleware = require("../../../config/userJwtMiddleWare");
 
 // 7.1 출석코드 인증 API
 /**
@@ -60,6 +61,10 @@ const attendance = require("./attendanceController");
  *         description: 데이터 베이스 에러
  *
  */
-userAttendanceRouter.post("/code", attendance.postAttendanceCode);
+userAttendanceRouter.post(
+  "/code",
+  jwtMiddleware,
+  attendance.postAttendanceCode
+);
 
 export default userAttendanceRouter;
