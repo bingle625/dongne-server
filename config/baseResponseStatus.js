@@ -247,26 +247,18 @@ module.exports = {
   },
 
   // ADMIN's errResponse
-  ADMIN_ADMINIDX_EMPTY: {
-    isSuccess: false,
-    code: 2001,
-    message: "adminIdx를 입력해주세요.",
-  },
-  ADMIN_ADMINIDX_LENGTH: {
-    isSuccess: false,
-    code: 2002,
-    message: "adminIdx를 0보다 큰 값을 입력해주세요.",
-  },
-  ADMIN_ADMINIDX_STATUS: {
-    isSuccess: false,
-    code: 2003,
-    message: "유효하지 않는 adminIdx입니다.",
-  },
-  ADMIN_ADMINIDX_NOT_MATCH: {
-    isSuccess: false,
-    code: 2020,
-    message: "adminIdx값을 확인해주세요.",
-  },
+
+  ADMIN_ADMINIDX_EMPTY: { isSuccess: false, code: 2001, message: "adminIdx를 입력해주세요." },
+  ADMIN_ADMINIDX_LENGTH: { isSuccess: false, code: 2002, message: "adminIdx를 0보다 큰 값을 입력해주세요." },
+  ADMIN_ADMINIDX_STATUS: { isSuccess: false, code: 2003, message: "유효하지 않는 adminIdx입니다." },
+  ADMIN_TEAMNAME_EMPTY: { isSuccess: false, code: 2004, message: "teamName을 입력해주세요." },
+  ADMIN_TEAMNAME_LENGTH: { isSuccess: false, code: 2005, message: "teamName을 40자 이내로 입력해주세요." },
+  ADMIN_CLUBTEAMLISTIDX_EMPTY: { isSuccess: false, code: 2006, message: "clubTeamListIdx를 입력해주세요." },
+  ADMIN_CLUBTEAMLISTIDX_LENGTH: { isSuccess: false, code: 2007, message: "clubTeamListIdx를 0보다 큰 값을 입력해주세요." },
+  ADMIN_CLUBTEAMLISTIDX_STATUS: { isSuccess: false, code: 2008, message: "유효하지 않은 clubTeamListIdx입니다." },
+ 
+
+
 
   //USER's errResponse
   USER_USERIDX_EMPTY: {
@@ -285,53 +277,31 @@ module.exports = {
     message: "유효하지 않는 userIdx입니다.",
   },
 
-  //GROUP's errReponse
-  GROUP_GROUPNAME_EMPTY: {
-    isSuccess: false,
-    code: 4001,
-    message: "groupName을 입력해주세요.",
-  },
-  GROUP_GROUPNAME_LENGTH: {
-    isSuccess: false,
-    code: 4002,
-    message: "groupName를 45자 이내로 입력해주세요.",
-  },
-  GROUP_GROUPINTRODUCTION_EMPTY: {
-    isSuccess: false,
-    code: 4003,
-    message: "groupIntroduction을 입력해주세요.",
-  },
-  GROUP_GROUPINTRODUCTION_LENGTH: {
-    isSuccess: false,
-    code: 4004,
-    message: "groupIntroduction을 200자 이내로 입력해주세요.",
-  },
-  GROUP_USERIDX_EMPTY: {
-    isSuccess: false,
-    code: 4005,
-    message: "group에 추가/삭제할 userIdx를 입력해주세요.",
-  },
-  GROUP_USERIDX_LENGTH: {
-    isSuccess: false,
-    code: 4006,
-    message: "group에 추가/삭제할 userIdx를 0보다 큰 값을 입력해주세요.",
-  },
-  GROUP_GROUPIDX_EMPTY: {
-    isSuccess: false,
-    code: 4007,
-    message: "groupIdx를 입력해주세요.",
-  },
-  GROUP_GROUPIDX_LENGTH: {
-    isSuccess: false,
-    code: 4008,
-    message: "groupIdx를 0보다 큰 값을 입력해주세요.",
-  },
-  GROUP_USERIDX_EXIST: {
-    isSuccess: false,
-    code: 4009,
-    message: "user가 group에 속해있지 않습니다.",
-  },
+
+  GROUP_GROUPNAME_EMPTY: { isSuccess: false, code: 4001, message: "groupName을 입력해주세요." },
+  GROUP_GROUPNAME_LENGTH: { isSuccess: false, code: 4002, message: "groupName를 45자 이내로 입력해주세요." },
+  GROUP_GROUPINTRODUCTION_EMPTY: { isSuccess: false, code: 4003, message: "groupIntroduction을 입력해주세요." },
+  GROUP_GROUPINTRODUCTION_LENGTH: { isSuccess: false, code: 4004, message: "groupIntroduction을 200자 이내로 입력해주세요." },
+  GROUP_USERIDX_EMPTY: { isSuccess: false, code: 4005, message: "group에 추가/삭제할 userIdx를 입력해주세요." },
+  GROUP_USERIDX_LENGTH: { isSuccess: false, code: 4006, message: "group에 추가/삭제할 userIdx를 0보다 큰 값을 입력해주세요." },
+  GROUP_GROUPIDX_EMPTY: { isSuccess: false, code: 4007, message: "groupIdx를 입력해주세요." },
+  GROUP_GROUPIDX_LENGTH: { isSuccess: false, code: 4008, message: "groupIdx를 0보다 큰 값을 입력해주세요." },
+  GROUP_GROUPCATEGORY_EMPTY: { isSuccess: false, code: 4009, message: "groupCategory를 입력해주세요." },
+  GROUP_GROUPCATEGORY_LENGTH: { isSuccess: false, code: 4010, message: "groupCategory를 30자 이내로 입력해주세요." },
 
   //DB Error
   DB_ERRORS: { isSuccess: false, code: 5000, message: "데이터베이스 에러" },
+
+  // JWT token errResponse
+  JWT_TOKEN_DIFFERENT: {isSuccess: false, code: 6000, message: "접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요." },
+  JWT_GROUP_DIFFERENT: {isSuccess: false, code: 6001, message: "본인 동아리에서 대해서만 작업을 수행할 수 있습니다." },
+  JWT_GROUPLIST_DIFFERENT: {isSuccess: false, code: 6002, message: "본인 동아리에 대해서만 그룹리스트를 조회할 수 있습니다." },
+
+
+  // Paging's errResponse
+  PAGING_PARAMS_EMPTY: {isSuccess: false, code: 7000, message: "paging 파라미터를 입력해주세요."},
+  PAGING_PAGE_WRONG: {isSuccess: false, code: 7001, message: "조회할 수 없는 page 번호입니다."},
+
+
+
 };

@@ -11,7 +11,7 @@ import { logger } from "../../../config/winston";
 
 // const secret_config = require("../../../config/secret");
 
-exports.postSignIn = async (email, password) => {
+export const postSignIn = async function (email, password){
   try {
     const emailRows = await adminProvider.emailCheck(email);
     if (emailRows.length < 1) {
@@ -61,4 +61,4 @@ exports.postSignIn = async (email, password) => {
 
     return errResponse(baseResponse.DB_ERROR);
   }
-};
+}

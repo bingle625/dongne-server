@@ -3,6 +3,7 @@ const compression = require("compression");
 const methodOverride = require("method-override");
 const cors = require("cors");
 
+// admin Side's Router
 import testRouter from "../src/admin/TestInit/TestRouter";
 import scheduleRouter from "../src/admin/Schedule/scheduleRouter";
 import userScheduleRouter from "../src/user/Schedule/scheduleRouter";
@@ -14,6 +15,10 @@ import groupRouter from "../src/admin/Group/groupRoute";
 import memberRouter from "../src/admin/Member/memberRoute";
 import authRouter from "../src/admin/Auth/authRouter";
 import adminRouter from "../src/admin/Admin/adminRouter";
+
+// User Side's Router
+import UserGroupRouter from "../src/user/Group/groupRouter";
+import UserMemberRouter from "../src/user/Member/memberRouter";
 
 module.exports = function () {
   const app = express();
@@ -35,6 +40,7 @@ module.exports = function () {
     해당 줄부터 도메인 추가
    */
 
+  // admin Side's API
   // 0. test API
   app.use("/test", testRouter);
   // 5. 스케줄 API (admin)
@@ -58,6 +64,12 @@ module.exports = function () {
 
   // 4. Admin API
   app.use("/admin", adminRouter);
+
+
+  // user Side's API
+
+  app.use("/user/member", UserMemberRouter);
+  app.use("/user/group", UserGroupRouter);
 
   return app;
 };
