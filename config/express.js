@@ -11,20 +11,18 @@ import attendanceRouter from "../src/admin/Attendance/attendanceRouter";
 import userAttendanceRouter from "../src/user/Attendance/attendanceRouter";
 const { swaggerUi, specs } = require("../modules/swagger");
 const bodyParser = require("body-parser");
-import groupRouter from "../src/admin/Group/groupRoute";
-import memberRouter from "../src/admin/Member/memberRoute";
+import adminGroupRouter from "../src/admin/Group/groupRoute";
+import adminMemberRouter from "../src/admin/Member/memberRoute";
 import adminAuthRouter from "../src/admin/Auth/authRouter";
 import userAuthRouter from "../src/user/Auth/authRouter";
 import adminfinAccountRouter from "../src/admin/FinAccount/finAccountRouter";
 import userfinAccountRouter from "../src/user/finAccount/finAccountRouter";
 
 // User Side's Router
-import UserGroupRouter from "../src/user/Group/groupRouter";
-import UserMemberRouter from "../src/user/Member/memberRouter";
+import userGroupRouter from "../src/user/Group/groupRouter";
+import userMemberRouter from "../src/user/Member/memberRouter";
 
-// User Side's Router
-import UserGroupRouter from "../src/user/Group/groupRouter";
-import UserMemberRouter from "../src/user/Member/memberRouter";
+
 
 module.exports = function () {
   const app = express();
@@ -59,10 +57,12 @@ module.exports = function () {
   app.use("/user/attendance", userAttendanceRouter);
 
   // 1. 회원 명단 API
-  app.use("/member", memberRouter);
+  app.use("/admin/member", adminMemberRouter);
+  app.use("/user/member", userMemberRouter);
 
   // 2. 출결 그룹 API
-  app.use("/group", groupRouter);
+  app.use("/admin/group", adminGroupRouter);
+  app.use("/user/group", userGroupRouter);
 
   // 3. 인증 도메인
   app.use("/admin/auth", adminAuthRouter);
@@ -74,10 +74,6 @@ module.exports = function () {
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-  // user Side's API
-
-  app.use("/user/member", UserMemberRouter);
-  app.use("/user/group", UserGroupRouter);
 
   return app;
 };
