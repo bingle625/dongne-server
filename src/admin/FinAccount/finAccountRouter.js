@@ -14,6 +14,12 @@ import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
  *     consumes:
  *       - application/json
  *     parameters:
+ *       - name: x-access-token
+ *         in: header
+ *         description: an authorization header
+ *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *         required: true
+ *         type: string
  *       - in: body
  *         name: finAccountInfo
  *         description: 회계 정보 파라미터
@@ -90,7 +96,7 @@ import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
  *         description: 삭제된 카테고리입니다.
  *
  */
-adminfinAccountRouter.post("/", finAccount.createFinAccount);
+adminfinAccountRouter.post("/", adminJwtMiddleWare, finAccount.createFinAccount);
 
 //api 7.2 회계 카테고리 생성 api
 /**
@@ -103,6 +109,12 @@ adminfinAccountRouter.post("/", finAccount.createFinAccount);
  *     consumes:
  *       - application/json
  *     parameters:
+ *       - name: x-access-token
+ *         in: header
+ *         description: an authorization header
+ *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *         required: true
+ *         type: string
  *       - in: body
  *         name: finAccountInfo
  *         description: 회계 카테고리 정보 파라미터
@@ -131,7 +143,7 @@ adminfinAccountRouter.post("/", finAccount.createFinAccount);
  *       "6003":
  *         description: 이미 존재하는 카테고리 이름입니다.
  */
-adminfinAccountRouter.post("/category", finAccount.createFinAccCategory);
+adminfinAccountRouter.post("/category", adminJwtMiddleWare, finAccount.createFinAccCategory);
 
 //api 7.3 최근 회계 4개 조회 api
 /**
@@ -142,6 +154,12 @@ adminfinAccountRouter.post("/category", finAccount.createFinAccCategory);
  *     tags: [admin 회계 관리]
  *     summary: 최근 회계항목 4개 조회 api
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           required: true
+ *           type: string
  *         - name: adminIdx
  *           in: header
  *           description: an authorization header
@@ -155,7 +173,7 @@ adminfinAccountRouter.post("/category", finAccount.createFinAccCategory);
  *         description: admin Idx 비어있음.
  *
  */
-adminfinAccountRouter.get("/", finAccount.getFinAccount);
+adminfinAccountRouter.get("/", adminJwtMiddleWare, finAccount.getFinAccount);
 
 //api 7.4 월별 회계 조회 api
 /**
@@ -166,6 +184,12 @@ adminfinAccountRouter.get("/", finAccount.getFinAccount);
  *     tags: [admin 회계 관리]
  *     summary: 월별 회계 조회 api
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           required: true
+ *           type: string
  *         - in: header
  *           name: adminIdx
  *           description: an authorization header
@@ -196,7 +220,7 @@ adminfinAccountRouter.get("/", finAccount.getFinAccount);
  *
  *
  */
-adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
+adminfinAccountRouter.get("/month", adminJwtMiddleWare, finAccount.getFinAccountMonthly);
 
 //api 7.5 일자별 회계 조회 api
 /**
@@ -207,6 +231,12 @@ adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
  *     tags: [admin 회계 관리]
  *     summary: 일자별 회계 조회 api
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           required: true
+ *           type: string
  *         - in: header
  *           name: adminIdx
  *           description: an authorization header
@@ -245,7 +275,7 @@ adminfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
  *
  *
  */
-adminfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
+adminfinAccountRouter.get("/day", adminJwtMiddleWare, finAccount.getFinAccountDaily);
 
 //api 7.6 회계 카테고리 수정
 /**
@@ -257,6 +287,12 @@ adminfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
  *     tags: [admin 회계 관리]
  *     summary: 회계 카테고리 수정 API
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           required: true
+ *           type: string
  *         - in: path
  *           name: cId
  *           schema:
@@ -299,7 +335,7 @@ adminfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
  *         description: 이미 존재하는 카테고리 이름입니다.
  
  */
-adminfinAccountRouter.patch("/category/:cId", finAccount.patchCategory);
+adminfinAccountRouter.patch("/category/:cId", adminJwtMiddleWare, finAccount.patchCategory);
 
 //api 7.7 회계 항목 수정
 /**
@@ -311,6 +347,12 @@ adminfinAccountRouter.patch("/category/:cId", finAccount.patchCategory);
  *     tags: [admin 회계 관리]
  *     summary: 회계 항목 수정 API
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           required: true
+ *           type: string
  *         - in: path
  *           name: fId
  *           schema:
@@ -398,7 +440,7 @@ adminfinAccountRouter.patch("/category/:cId", finAccount.patchCategory);
  *         description: 이미 삭제된 회계항목입니다.
  *
  */
-adminfinAccountRouter.patch("/:fId", finAccount.patchFinAccount);
+adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAccount);
 
 //api 7.7 회계 항목 삭제
 /**
@@ -410,6 +452,12 @@ adminfinAccountRouter.patch("/:fId", finAccount.patchFinAccount);
  *     tags: [admin 회계 관리]
  *     summary: 회계 항목 삭제 API
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           required: true
+ *           type: string
  *         - in: path
  *           name: fId
  *           schema:
@@ -440,5 +488,5 @@ adminfinAccountRouter.patch("/:fId", finAccount.patchFinAccount);
  *          "6005":
  *            description: 이미 삭제된 회계항목입니다.
  */
-adminfinAccountRouter.patch("/status/:fId", finAccount.deleteFinAccount);
+adminfinAccountRouter.patch("/status/:fId", adminJwtMiddleWare, finAccount.deleteFinAccount);
 export default adminfinAccountRouter;
