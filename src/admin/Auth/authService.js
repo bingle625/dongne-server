@@ -10,17 +10,14 @@ import { logger } from "../../../config/winston";
 
 // const secret_config = require("../../../config/secret");
 
-export const postSignIn = async function (email, password){
+export const postSignIn = async function (email, password) {
   try {
     const emailRows = await authProvider.emailCheck(email);
     if (emailRows.length < 1) {
       return errResponse(baseResponse.SIGNIN_EMAIL_WRONG);
     }
 
-    const hashedPassword = await crypto
-      .createHash("sha512")
-      .update(password)
-      .digest("hex");
+    const hashedPassword = await crypto.createHash("sha512").update(password).digest("hex");
 
     const passwordRows = await authProvider.passwordCheck(email);
 
@@ -41,25 +38,27 @@ export const postSignIn = async function (email, password){
     let token = jwt.sign(
       // 토큰의 내용 (payload)
       {
-        adminId: userInfoRows[0].adminIdx,
+        adminId: userInfoRows[0].adminIdx
       },
       process.env.JWT_SECRET_ADMIN,
       {
         expiresIn: "365d",
-        subject: "Admin",
+        subject: "Admin"
       }
     );
 
     // const token = "i have to make this";
     return response(baseResponse.SUCCESS, {
       userId: userInfoRows[0].adminIdx,
-      jwt: token,
+      jwt: token
     });
   } catch (err) {
     logger.error(`App - postSignIn Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
-  } 
+
+  }
+
 };
 
 export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
@@ -73,7 +72,7 @@ export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentY
     if (emailStatus[0].length > 0) {
       return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
     }
-  
+
     const createAdminResult = await authDao.insertAdminInfo(connection, adminInfo);
     connection.release();
     return response(baseResponse.SUCCESS, createAdminResult[0].insertId);
@@ -82,4 +81,6 @@ export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentY
 
     return errResponse(baseResponse.DB_ERROR);
   }
+
 };
+
