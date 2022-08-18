@@ -45,10 +45,10 @@ module.exports = function () {
   app.use("/attendance", attendanceRouter);
 
   // 1. 회원 명단 API
-  app.use("/member", memberRouter);
+  app.use("/admin/member", memberRouter);
 
   // 2. 출결 그룹 API
-  app.use("/group", groupRouter);
+  app.use("/admin/group", groupRouter);
 
   // 3. 인증 도메인
   app.use("/auth", authRouter);
