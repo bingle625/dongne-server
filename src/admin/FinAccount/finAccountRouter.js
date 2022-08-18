@@ -17,7 +17,7 @@ import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
  *       - name: x-access-token
  *         in: header
  *         description: an authorization header
- *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *         required: true
  *         type: string
  *       - in: body
@@ -112,7 +112,7 @@ adminfinAccountRouter.post("/", adminJwtMiddleWare, finAccount.createFinAccount)
  *       - name: x-access-token
  *         in: header
  *         description: an authorization header
- *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *         required: true
  *         type: string
  *       - in: body
@@ -157,7 +157,7 @@ adminfinAccountRouter.post("/category", adminJwtMiddleWare, finAccount.createFin
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - name: adminIdx
@@ -187,7 +187,7 @@ adminfinAccountRouter.get("/", adminJwtMiddleWare, finAccount.getFinAccount);
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - in: header
@@ -234,7 +234,7 @@ adminfinAccountRouter.get("/month", adminJwtMiddleWare, finAccount.getFinAccount
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - in: header
@@ -290,7 +290,7 @@ adminfinAccountRouter.get("/day", adminJwtMiddleWare, finAccount.getFinAccountDa
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - in: path
@@ -350,7 +350,7 @@ adminfinAccountRouter.patch("/category/:cId", adminJwtMiddleWare, finAccount.pat
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - in: path
@@ -455,7 +455,7 @@ adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAcco
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM1MzUyLCJleHAiOjE2OTIzNzEzNTIsInN1YiI6IkFkbWluIn0.59lAxYVELzb5BVpXiw4pFifx-YgUYUK6qXEcQyvysl8
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - in: path

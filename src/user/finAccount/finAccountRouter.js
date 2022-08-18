@@ -15,7 +15,7 @@ import userJwtMiddleWare from "../../../config/userJwtMiddleWare";
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM1ODA3LCJleHAiOjE2OTIzNzE4MDcsInN1YiI6IkFkbWluIn0.L_TL0aAC4E0WuirSn8GqXlW7WLkkGHktMs2cORWyaho
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
  *           required: true
  *           type: string
  *         - name: adminIdx
@@ -45,7 +45,7 @@ userfinAccountRouter.get("/", userJwtMiddleWare, finAccount.getFinAccount);
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM1ODA3LCJleHAiOjE2OTIzNzE4MDcsInN1YiI6IkFkbWluIn0.L_TL0aAC4E0WuirSn8GqXlW7WLkkGHktMs2cORWyaho
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
  *           required: true
  *           type: string
  *         - in: header
@@ -68,7 +68,7 @@ userfinAccountRouter.get("/", userJwtMiddleWare, finAccount.getFinAccount);
  *           default: 8
  *     responses:
  *       "1000":
- *         description: 최근 회계 4개 조회 api 성공
+ *         description: 월별 회계 조회 api 성공
  *       "5001":
  *         description: admin Idx 비어있음.
  *       "5014":
@@ -92,7 +92,7 @@ userfinAccountRouter.get("/month", userJwtMiddleWare, finAccount.getFinAccountMo
  *         - name: x-access-token
  *           in: header
  *           description: an authorization header
- *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM1ODA3LCJleHAiOjE2OTIzNzE4MDcsInN1YiI6IkFkbWluIn0.L_TL0aAC4E0WuirSn8GqXlW7WLkkGHktMs2cORWyaho
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
  *           required: true
  *           type: string
  *         - in: header
@@ -121,7 +121,7 @@ userfinAccountRouter.get("/month", userJwtMiddleWare, finAccount.getFinAccountMo
  *           description: 조회 일자
  *     responses:
  *       "1000":
- *         description: 최근 회계 4개 조회 api 성공
+ *         description: 일자별 회계 조회 api 성공
  *       "5001":
  *         description: admin Idx 비어있음.
  *       "5014":
