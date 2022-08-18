@@ -13,20 +13,29 @@ const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
  *     tags: [ADMIN 출석]
  *     summary: 출석한 회원 리스트 조회 API
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: query
  *           name: scheduleIdx
+ *           default: 1
  *           description: 스케줄 index
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: adminIdx
+ *           default: 1
  *           description: 단체 회원 인덱스
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: curPage
+ *           default: 1
  *           description: 현재 페이지
  *           required: true
  *           schema:
@@ -60,20 +69,29 @@ attendanceRouter.get("/", jwtMiddleware, attendance.getAttendance);
  *     tags: [ADMIN 출석]
  *     summary: 결석한 회원 리스트 조회 API
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: query
  *           name: scheduleIdx
+ *           default: 1
  *           description: 스케줄 index
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: adminIdx
+ *           default: 1
  *           description: 단체 회원 인덱스
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: curPage
+ *           default: 1
  *           description: 현재 페이지
  *           required: true
  *           schema:
@@ -107,14 +125,22 @@ attendanceRouter.get("/absence", jwtMiddleware, attendance.getAbsence);
  *     tags: [ADMIN 출석]
  *     summary: 출석코드 API 조회
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: query
  *           name: scheduleIdx
+ *           default: 1
  *           description: 스케줄 index
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: adminIdx
+ *           default: 1
  *           description: 단체 회원 인덱스
  *           required: true
  *           schema:
@@ -150,20 +176,29 @@ attendanceRouter.get("/code", jwtMiddleware, attendance.getAttendCode);
  *     tags: [ADMIN 출석]
  *     summary: 회원 출석 처리 API
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: query
  *           name: scheduleIdx
+ *           default: 1
  *           description: 스케줄 index
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: adminIdx
+ *           default: 1
  *           description: 단체 회원 인덱스
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: userIdx
+ *           default: 1
  *           description: 유저 인덱스
  *           required: true
  *           schema:
@@ -201,20 +236,29 @@ attendanceRouter.patch("/", jwtMiddleware, attendance.patchAttendacne);
  *     tags: [ADMIN 출석]
  *     summary: 회원 결석 처리 API
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: query
  *           name: scheduleIdx
+ *           default: 1
  *           description: 스케줄 index
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: adminIdx
+ *           default: 1
  *           description: 단체 회원 인덱스
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: userIdx
+ *           default: 1
  *           description: 유저 인덱스
  *           required: true
  *           schema:

@@ -15,6 +15,12 @@ const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
  *     consumes:
  *         - application/json
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: body
  *           name: schedule
  *           description: 스케줄 파라미터
@@ -51,12 +57,15 @@ const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
  *                      format: LocalDate
  *                  introduction:
  *                      description: 스케줄 소개
+ *                      default: 스케줄 소개
  *                      type: string
  *                  place:
  *                      description: 장소
+ *                      default: 장소
  *                      type: string
  *                  scheduleName:
  *                      description: 스케줄 이름
+ *                      default: 스케줄 이름
  *                      type: string
  *                  adminIdx:
  *                      default: 1
@@ -104,20 +113,29 @@ scheduleRouter.post("/", jwtMiddleware, schedule.postSchedule);
  *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 리스트 조회 API
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: query
  *           name: adminIdx
+ *           default: 1
  *           description: 단체 회원 인덱스
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: groupIdx
+ *           default: 1
  *           description: 그룹 인덱스
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: curPage
+ *           default: 1
  *           description: 현재 페이지
  *           required: true
  *           schema:
@@ -151,14 +169,22 @@ scheduleRouter.get("/list", jwtMiddleware, schedule.getSchedule);
  *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 상세 조회 API
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: query
  *           name: scheduleIdx
+ *           default: 1
  *           description: 스케줄 인덱스
  *           required: true
  *           schema:
  *              type: integer
  *         - in: query
  *           name: adminIdx
+ *           default: 1
  *           description: 단체 회원 인덱스
  *           required: true
  *           schema:
@@ -196,8 +222,15 @@ scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
  *     consumes:
  *         - application/json
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: path
  *           name: scheduleIdx
+ *           default: 1
  *           schema :
  *              type: integer
  *           example: 3
@@ -215,12 +248,12 @@ scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
  *                      type: string
  *                      format: date
  *                  init_time:
- *                      default: 2022-08-10 14:00:00
+ *                      default: 2022-08-10 15:00:00
  *                      description: DateTime in YYYY-MM-DD HH:mm:ss or YYYY/MM/DD HH:mm:ss format
  *                      type: string
  *                      format: LocalDate
  *                  end_time:
- *                      default: 2022-08-10 15:00:00
+ *                      default: 2022-08-10 16:00:00
  *                      description: DateTime in YYYY-MM-DD HH:mm:ss or YYYY/MM/DD HH:mm:ss format
  *                      type: string
  *                      format: LocalDate
@@ -234,6 +267,7 @@ scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
  *                      description: 스케줄 이름
  *                      type: string
  *                  adminIdx:
+ *                      default: 1
  *                      description: 단체 회원 인덱스
  *                      type: integer
  *     responses:
@@ -279,11 +313,17 @@ scheduleRouter.patch("/:scheduleIdx", jwtMiddleware, schedule.patchSchedule);
  *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 삭제 API
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: path
  *           name: scheduleIdx
  *           schema :
  *              type: integer
- *           example: 3
+ *           default: 3
  *           required: true
  *           description: 스케줄 인덱스
  *         - in: body

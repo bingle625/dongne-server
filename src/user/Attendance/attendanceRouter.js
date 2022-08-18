@@ -15,6 +15,12 @@ const jwtMiddleware = require("../../../config/userJwtMiddleWare");
  *     consumes:
  *         - application/json
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: body
  *           name: attendance
  *           description: 출석 인증 파라미터
@@ -35,7 +41,7 @@ const jwtMiddleware = require("../../../config/userJwtMiddleWare");
  *                      type: integer
  *                      format: date
  *                  attendanceCode:
- *                      default: "code"
+ *                      default: "aaaa"
  *                      description: 출석 인증 코드
  *                      type: string
  *     responses:
