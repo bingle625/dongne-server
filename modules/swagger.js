@@ -9,14 +9,28 @@ const swaggerDefinition = {
   },
   host: "localhost:3000",
   basePath: "/",
+  securityDefinitions: {
+    jwt: {
+      type: "apiKey",
+      name: "x-access-token",
+      in: "header",
+    },
+  },
+  security: [{ jwt: [] }],
 };
 
 const options = {
   swaggerDefinition: swaggerDefinition,
   apis: [
-    "./src/app/Testinit/*.js",
-    "./src/app/Attendance/*.js",
-    "./src/app/Schedule/*.js",
+    "./src/admin/Testinit/*.js",
+    "./src/admin/Attendance/*.js",
+    "./src/admin/Schedule/*.js",
+    "./src/admin/Group/*.js",
+    "./src/admin/Member/*.js",
+    "./src/admin/Auth/*.js",
+    "./src/admin/Admin/*.js",
+    "./src/user/Schedule/*.js",
+    "./src/user/Attendance/*.js",
   ],
 };
 
