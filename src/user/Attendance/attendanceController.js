@@ -11,6 +11,9 @@ exports.postAttendanceCode = async function (req, res) {
   // body : scheduleIdx, userIdx, attendanceCode
   const { scheduleIdx, userIdx, attendanceCode } = req.body;
 
+  // jwt: adminId
+  const userIdxFromJWT = req.verifiedToken.adminId;
+
   // validation
   if (!scheduleIdx) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_EMPTY));
@@ -18,13 +21,14 @@ exports.postAttendanceCode = async function (req, res) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
+  // userIdx validation
   if (!userIdx) {
     return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
-  }
-  if (userIdx <= 0) {
+  } else if (userIdx <= 0) {
     return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+  } else if (userIdx != userIdxFromJWT) {
+    return res.send(errResponse(baseResponse.USER_USERIDX_NOT_MATCH));
   }
-
   if (!attendanceCode) {
     return res.send(errResponse(baseResponse.ATTENDANCE_CODE_EMPTY));
   }
