@@ -125,7 +125,7 @@ module.exports = {
     code: 3003,
     message: "출결코드가 틀렸습니다.",
   },
-=======
+
   SCHEDULE_SCHEDULEIDX_EMPTY: { isSuccess: false, code: 2001, message: "scheduleIdx를 입력해주세요." },
   SCHEDULE_SCHEDULEIDX_LENGTH: { isSuccess: false, code: 2002, message: "scheduleIdx는 0보다 큰 값으로 입력해주세요." },
   SCHEDULE_POST_PARAMS_EMPTY: { isSuccess: false, code: 2003, message: "파라미터를 모두 입력하세요." },
@@ -147,7 +147,6 @@ module.exports = {
 
   // Reponse ERROR
   SCHEDULE_STATUS_INACTIVE: { isSuccess: false, code: 3001, message: "이미 삭제된 스케줄입니다." },
->>>>>>> feature/finAccount
 
   //Connection, Transaction 등의 서버 오류
   DB_ERROR: { isSuccess: false, code: 4000, message: "데이터 베이스 에러" },

@@ -43,8 +43,9 @@ module.exports = function () {
   /*
     해당 줄부터 도메인 추가
    */
-
+  
   // admin Side's API
+  
   // 0. test API
   app.use("/test", testRouter);
   // 5. 스케줄 API (admin)
@@ -55,6 +56,8 @@ module.exports = function () {
   app.use("/user/schedule", userScheduleRouter);
   // 출결 API (user)
   app.use("/user/attendance", userAttendanceRouter);
+  
+  
 
   // 1. 회원 명단 API
   app.use("/admin/member", adminMemberRouter);
@@ -64,6 +67,7 @@ module.exports = function () {
   app.use("/admin/group", adminGroupRouter);
   app.use("/user/group", userGroupRouter);
 
+  
   // 3. 인증 도메인
   app.use("/admin/auth", adminAuthRouter);
   app.use("/user/auth", userAuthRouter);
@@ -71,9 +75,10 @@ module.exports = function () {
   //4. 회계 api
   app.use("/admin/finAccount", adminfinAccountRouter);
   app.use("/user/finAccount", userfinAccountRouter);
+  
+
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-
 
   return app;
 };

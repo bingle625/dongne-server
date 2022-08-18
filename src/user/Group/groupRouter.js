@@ -14,7 +14,7 @@ groupRouter.get("/db", group.getDatabaseTest);
  * paths:
  *  /user/group?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [USER: 출석 그룹]
+ *     tags: [USER 출석 그룹]
  *     summary: 유저가 속한 그룹 리스트 조회 API
  *     parameters:
  *         - in: query
@@ -62,7 +62,7 @@ groupRouter.get("/", group.getGroupList);
  * paths:
  *  /user/group/info?groupIdx={groupIdx}:
  *   get:
- *     tags: [USER: 출석 그룹]
+ *     tags: [USER 출석 그룹]
  *     summary: 그룹 정보(그룹 이름, 내용) 조회 API
  *     parameters:
  *         - in: query
@@ -92,7 +92,7 @@ groupRouter.get("/info", group.getGroupInfo);
  * paths:
  *  /user/group/members?groupIdx={groupIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [USER: 출석 그룹]
+ *     tags: [USER 출석 그룹]
  *     summary: 그룹 소속회원 조회 API
  *     parameters:
  *         - in: query

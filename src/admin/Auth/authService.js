@@ -59,10 +59,7 @@ export const postSignIn = async function (email, password){
     logger.error(`App - postSignIn Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
-  }
-HEAD<<<<<<< 
-}
-=======
+  } 
 };
 
 export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
@@ -76,51 +73,7 @@ export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentY
     if (emailStatus[0].length > 0) {
       return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
     }
-
-    const createAdminResult = await authDao.insertAdminInfo(connection, adminInfo);
-    connection.release();
-    return response(baseResponse.SUCCESS, createAdminResult[0].insertId);
-  } catch (err) {
-    logger.error(`App - createAdmin Service error: ${err.message}`);
-
-    return errResponse(baseResponse.DB_ERROR);
-  }
-};
-
-export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
-  try {
-    const hashedPassword = await crypto.createHash("sha512").update(adminPwd).digest("hex");
-    const adminInfo = [clubName, adminEmail, hashedPassword, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl];
-    const connection = await pool.getConnection(async (conn) => conn);
-
-    //이메일 중복 확인
-    const emailStatus = await authDao.selectAdminEmail(connection, adminEmail);
-    if (emailStatus[0].length > 0) {
-      return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
-    }
-
-    const createAdminResult = await authDao.insertAdminInfo(connection, adminInfo);
-    connection.release();
-    return response(baseResponse.SUCCESS, createAdminResult[0].insertId);
-  } catch (err) {
-    logger.error(`App - createAdmin Service error: ${err.message}`);
-
-    return errResponse(baseResponse.DB_ERROR);
-  }
-};
-
-export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
-  try {
-    const hashedPassword = await crypto.createHash("sha512").update(adminPwd).digest("hex");
-    const adminInfo = [clubName, adminEmail, hashedPassword, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl];
-    const connection = await pool.getConnection(async (conn) => conn);
-
-    //이메일 중복 확인
-    const emailStatus = await authDao.selectAdminEmail(connection, adminEmail);
-    if (emailStatus[0].length > 0) {
-      return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
-    }
-
+  
     const createAdminResult = await authDao.insertAdminInfo(connection, adminInfo);
     connection.release();
     return response(baseResponse.SUCCESS, createAdminResult[0].insertId);

@@ -1,7 +1,7 @@
 import express from "express";
 // import  {getDatabaseTest, getClubMemberList} from "./memberController";
 const member = require("./memberController");
-const jwtMiddleWare = require("../../../config/jwtMiddleWare");
+const adminJwtMiddleWare = require("../../../config/adminJwtMiddleWare");
 
 const memberRouter = express.Router();
 
@@ -28,9 +28,9 @@ memberRouter.get("/db", member.getDatabaseTest);
 /**
  * @swagger
  * paths:
- *  /member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
+ *  /admin/member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 단체 모든 회원명단 리스트 조회 API
  *     parameters:
  *         - in: query
@@ -78,16 +78,16 @@ memberRouter.get("/db", member.getDatabaseTest);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/",jwtMiddleWare ,member.getClubMemberList);
+memberRouter.get("/",adminJwtMiddleWare ,member.getClubMemberList);
 
 
 // 3.2 회원 상세 조회 API
 /**
  * @swagger
  * paths:
- *  /member/info?userIdx={userIdx}&adminIdx={adminIdx}:
+ *  /admin/member/info?userIdx={userIdx}&adminIdx={adminIdx}:
  *   get:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 회원 상세 조회 API
  *     parameters:
  *         - in: query
@@ -128,7 +128,7 @@ memberRouter.get("/",jwtMiddleWare ,member.getClubMemberList);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/info",jwtMiddleWare ,member.getMemberInfo);
+memberRouter.get("/info",adminJwtMiddleWare ,member.getMemberInfo);
 
 
 
@@ -139,9 +139,9 @@ memberRouter.get("/info",jwtMiddleWare ,member.getMemberInfo);
 /**
  * @swagger
  * paths:
- *  /member?userIdx={userIdx}:
+ *  /admin/member?userIdx={userIdx}:
  *   patch:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 회원 삭제 API
  *     parameters:
  *         - in: query
@@ -175,7 +175,7 @@ memberRouter.get("/info",jwtMiddleWare ,member.getMemberInfo);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.patch("/",jwtMiddleWare ,member.patchMember);
+memberRouter.patch("/",adminJwtMiddleWare ,member.patchMember);
 
 
 
@@ -183,9 +183,9 @@ memberRouter.patch("/",jwtMiddleWare ,member.patchMember);
 /**
  * @swagger
  * paths:
- *  /member/update/{adminIdx}:
+ *  /admin/member/update/{adminIdx}:
  *   post:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 동아리의 회원 팀/조 카테고리 추가 API
  *     parameters:
  *         - in: path
@@ -234,16 +234,16 @@ memberRouter.patch("/",jwtMiddleWare ,member.patchMember);
  *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *
  */
-memberRouter.post("/update/:adminIdx", jwtMiddleWare, member.postClubTeam);
+memberRouter.post("/update/:adminIdx", adminJwtMiddleWare, member.postClubTeam);
 export default memberRouter;
 
 // 3.5 동아리 소속회원 팀/조 카테고리 적용하기
 /**
  * @swagger
  * paths:
- *  /member/update?userIdx={userIdx}&adminIdx={adminIdx}:
+ *  /admin/member/update?userIdx={userIdx}&adminIdx={adminIdx}:
  *   patch:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 동아리의 회원 팀/조 카테고리 추가 API
  *     parameters:
  *         - in: query
@@ -307,4 +307,4 @@ export default memberRouter;
  *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *
  */
-memberRouter.patch("/update", jwtMiddleWare, member.patchMemberClubTeam);
+memberRouter.patch("/update", adminJwtMiddleWare, member.patchMemberClubTeam);

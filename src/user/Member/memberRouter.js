@@ -13,7 +13,7 @@ memberRouter.get("/db", member.getDatabaseTest);
  * paths:
  *  /user/member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [USER: 회원 명단]
+ *     tags: [USER 회원 명단]
  *     summary: 단체 모든 회원명단 리스트 조회 API
  *     parameters:
  *         - in: query
@@ -59,7 +59,7 @@ memberRouter.get("/", member.getClubMemberList);
  * paths:
  *  /user/member/info?userIdx={userIdx}:
  *   get:
- *     tags: [USER: 회원 명단]
+ *     tags: [USER 회원 명단]
  *     summary: 회원 상세 조회 API
  *     parameters:
  *         - in: query

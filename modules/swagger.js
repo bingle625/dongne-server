@@ -33,7 +33,9 @@ const options = {
     "./src/admin/FinAccount/*.js",
     "./src/user/FinAccount/*.js",
     "./src/user/Schedule/*.js",
-    "./src/user/Attendance/*.js"
+    "./src/user/Attendance/*.js",
+    "./src/user/Group/*.js",
+    "./src/user/Member/*.js"
   ]
 };
 
