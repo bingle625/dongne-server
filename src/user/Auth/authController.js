@@ -12,30 +12,30 @@ const regexPwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 export const login = async (req, res) => {
   /*
-    body: email, password
+    body: userEmail, password
   */
-  const { adminEmail, adminPwd } = req.body;
+  const { userEmail, password } = req.body;
 
-  //AdminEmail validation
-  if (!adminEmail) {
+  //UserEmail validation
+  if (!userEmail) {
     return res.send(errResponse(baseResponse.SIGNIN_EMAIL_EMPTY));
-  } else if (adminEmail.length > 255) {
+  } else if (userEmail.length > 255) {
     return res.send(errResponse(baseResponse.SIGNIN_EMAIL_LENGTH));
-  } else if (!regexEmail.test(adminEmail)) {
+  } else if (!regexEmail.test(userEmail)) {
     return res.send(errResponse(baseResponse.SIGNIN_EMAIL_ERROR_TYPE));
   }
 
   //adminPwd validation
-  if (!adminPwd) {
+  if (!password) {
     return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_EMPTY));
-  } else if (adminPwd.length < 8) {
+  } else if (password.length < 8) {
     return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_LENGTH));
   }
-  // } else if (!regexPwd.test(adminPwd)) {
+  // } else if (!regexPwd.test(password)) {
   //   return res.send(errResponse(baseResponse.SIGNIN_PASSWORD_WRONG));
   // }
 
-  const signInResponse = await authService.postSignIn(adminEmail, adminPwd);
+  const signInResponse = await authService.postSignIn(userEmail, password);
   return res.send(signInResponse);
 };
 
@@ -44,31 +44,31 @@ export const login = async (req, res) => {
  * API Name : 회원가입 API
  * [POST] admin/auth/login
  */
-export const registerAdmin = async (req, res) => {
-  const { clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl } = req.body;
-  console.log(clubWebLink);
+export const registerUser = async (req, res) => {
+  const { name, userEmail, password, phoneNum, school, birth, address, introduction, userImgUrl } = req.body;
   //빈 값 체크
 
-  if (!adminEmail) {
+  if (!userEmail) {
     return res.send(errResponse(baseResponse.SIGNUP_EMAIL_EMPTY));
-  } else if (adminEmail.length > 255) {
+  } else if (userEmail.length > 255) {
     return res.send(errResponse(baseResponse.SIGNUP_EMAIL_LENGTH));
-  } else if (!regexEmail.test(adminEmail)) {
+  } else if (!regexEmail.test(userEmail)) {
     return res.send(errResponse(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
   }
 
   //password validation
-  if (!adminPwd) {
+  if (!password) {
     return res.send(errResponse(baseResponse.SIGNUP_PASSWORD_EMPTY));
-  } else if (adminPwd.length < 8) {
+  } else if (password.length < 8) {
     return res.send(errResponse(baseResponse.SIGNUP_PASSWORD_LENGTH));
   }
 
-  if (!clubName) return res.send(response(baseResponse.SIGNUP_CLUBNAME_EMPTY));
-  // if (!clubIntroduction) return res.send(response(baseResponse.SIGNUP_BIRTHDATE_EMPTY));
-  // if (!establishmentYear) return res.send(response(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
-  // if (!clubRegion) return res.send(response(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
+  if (!name) return res.send(response(baseResponse.SIGNUP_USERNAME_EMPTY));
+  if (!birth) return res.send(response(baseResponse.SIGNUP_BIRTHDATE_EMPTY));
+  if (!school) return res.send(response(baseResponse.SIGNUP_SCHOOL_EMPTY));
+  if (!phoneNum) return res.send(response(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
+  if (!address) return res.send(response(baseResponse.SIGNUP_ADDRESS_EMPTY));
 
-  const createAdminResult = await authService.createAdmin(clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl);
-  return res.send(createAdminResult);
+  const createUserResult = await authService.createUser(name, userEmail, password, phoneNum, school, birth, address, introduction, userImgUrl);
+  return res.send(createUserResult);
 };
