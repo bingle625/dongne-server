@@ -9,8 +9,8 @@ import scheduleRouter from "../src/admin/Schedule/scheduleRouter";
 import attendanceRouter from "../src/admin/Attendance/attendanceRouter";
 const { swaggerUi, specs } = require("../modules/swagger");
 const bodyParser = require("body-parser");
-import groupRouter from "../src/admin/Group/groupRoute";
-import memberRouter from "../src/admin/Member/memberRoute";
+import adminGroupRouter from "../src/admin/Group/groupRoute";
+import adminMemberRouter from "../src/admin/Member/memberRoute";
 import authRouter from "../src/admin/Auth/authRouter";
 import adminRouter from "../src/admin/Admin/adminRouter";
 
@@ -45,10 +45,10 @@ module.exports = function () {
   app.use("/attendance", attendanceRouter);
 
   // 1. 회원 명단 API
-  app.use("/admin/member", memberRouter);
+  app.use("/admin/member", adminMemberRouter);
 
   // 2. 출결 그룹 API
-  app.use("/admin/group", groupRouter);
+  app.use("/admin/group", adminGroupRouter);
 
   // 3. 인증 도메인
   app.use("/auth", authRouter);
