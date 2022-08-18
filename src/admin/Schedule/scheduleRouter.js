@@ -2,14 +2,15 @@ import express from "express";
 
 const scheduleRouter = express.Router();
 const schedule = require("./scheduleController");
+const jwtMiddleware = require("../../../config/jwtMiddleWare");
 
 // 5.1 스케줄 생성 API
 /**
  * @swagger
  * paths:
- *  /schedule:
+ *  /admin/schedule:
  *   post:
- *     tags: [스케줄]
+ *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 생성 API
  *     consumes:
  *         - application/json
@@ -25,6 +26,7 @@ const schedule = require("./scheduleController");
  *              - introduction
  *              - place
  *              - scheduleName
+ *              - adminIdx
  *           schema:
  *              type: object
  *              properties:
@@ -56,11 +58,21 @@ const schedule = require("./scheduleController");
  *                  scheduleName:
  *                      description: 스케줄 이름
  *                      type: string
+ *                  adminIdx:
+ *                      default: 1
+ *                      description: 단체 회원 인덱스
+ *                      type: integer
  *     responses:
  *       "1000":
  *         description: 스케줄 생성 API 성공
+ *       "2001":
+ *         description: adminIdx를 입력해주세요.
+ *       "2002":
+ *         description: adminIdx를 0보다 큰 수로 입력해주세요.
+ *       "2020":
+ *         description: adminIdx를 값을 확인해주세요.
  *       "2003":
- *         description: 파라미터(groupIdx, scheduleDate, init_time, end_time, introduction, place, scheduleName)를 모두 입력하세요.
+ *         description: 파라미터(groupIdx, scheduleDate, init_time, end_time, introduction, place, scheduleName, adminIdx)를 모두 입력하세요.
  *       "2011":
  *         description: 스케줄 소개는 150자 이하로 입력가능합니다.
  *       "2012":
@@ -81,27 +93,44 @@ const schedule = require("./scheduleController");
  *         description: 데이터 베이스 에러
  *
  */
-scheduleRouter.post("/", schedule.postSchedule);
+scheduleRouter.post("/", jwtMiddleware, schedule.postSchedule);
 
 // 5.2 스케줄 리스트 조회 API
 /**
  * @swagger
  * paths:
- *  /schedule/list/{groupIdx}:
+ *  /admin/schedule/list?adminIdx=#&groupIdx=#&curPage=#:
  *   get:
- *     tags: [스케줄]
+ *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 리스트 조회 API
  *     parameters:
- *         - in: path
- *           name: groupIdx
- *           schema :
- *              type: integer
- *           example: 1
+ *         - in: query
+ *           name: adminIdx
+ *           description: 단체 회원 인덱스
  *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: groupIdx
  *           description: 그룹 인덱스
+ *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: curPage
+ *           description: 현재 페이지
+ *           required: true
+ *           schema:
+ *              type: integer
  *     responses:
  *       "1000":
  *         description: 스케줄 리스트 조회 API 성공
+ *       "2001":
+ *         description: adminIdx를 입력해주세요.
+ *       "2002":
+ *         description: adminIdx를 0보다 큰 수로 입력해주세요.
+ *       "2020":
+ *         description: adminIdx를 값을 확인해주세요.
  *       "2017":
  *         description: groupIdx를 입력해주세요.
  *       "2018":
@@ -111,47 +140,58 @@ scheduleRouter.post("/", schedule.postSchedule);
  *
  *
  */
-scheduleRouter.get("/list/:groupIdx", schedule.getSchedule);
+scheduleRouter.get("/list", jwtMiddleware, schedule.getSchedule);
 
 // 5.3 스케줄 상세 조회 API
 /**
  * @swagger
  * paths:
- *  /schedule/{scheduleIdx}:
+ *  /admin/schedule?scheduleIdx=#&adminIdx=#:
  *   get:
- *     tags: [스케줄]
+ *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 상세 조회 API
  *     parameters:
- *         - in: path
+ *         - in: query
  *           name: scheduleIdx
- *           schema :
- *              type: integer
- *           example: 3
- *           required: true
  *           description: 스케줄 인덱스
+ *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: adminIdx
+ *           description: 단체 회원 인덱스
+ *           required: true
+ *           schema:
+ *              type: integer
  *     responses:
  *       "1000":
  *         description: 스케줄 상세 조회 API 성공
  *       "2001":
- *         description: 스케줄 인덱스를 입력해주세요.
+ *         description: adminIdx를 입력해주세요.
  *       "2002":
+ *         description: adminIdx를 0보다 큰 수로 입력해주세요.
+ *       "2020":
+ *         description: adminIdx를 값을 확인해주세요.
+ *       "2021":
+ *         description: 스케줄 인덱스를 입력해주세요.
+ *       "2022":
  *         description: scheduleIdx는 0보다 큰 값으로 입력해주세요.
- *       "3001":
+ *       "3004":
  *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
  *
  *
  */
-scheduleRouter.get("/:scheduleIdx", schedule.getScheduleInfo);
+scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
 
 // 5.4 스케줄 수정 API
 /**
  * @swagger
  * paths:
- *  /schedule/{scheduleIdx}:
+ *  /admin/schedule/{scheduleIdx}:
  *   patch:
- *     tags: [스케줄]
+ *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 수정 API
  *     consumes:
  *         - application/json
@@ -193,13 +233,21 @@ scheduleRouter.get("/:scheduleIdx", schedule.getScheduleInfo);
  *                  scheduleName:
  *                      description: 스케줄 이름
  *                      type: string
- *
+ *                  adminIdx:
+ *                      description: 단체 회원 인덱스
+ *                      type: integer
  *     responses:
  *       "1000":
  *         description: 스케줄 수정 API 성공
  *       "2001":
- *         description: 스케줄 인덱스를 입력해주세요.
+ *         description: adminIdx를 입력해주세요.
  *       "2002":
+ *         description: adminIdx를 0보다 큰 수로 입력해주세요.
+ *       "2020":
+ *         description: adminIdx를 값을 확인해주세요.
+ *       "2021":
+ *         description: 스케줄 인덱스를 입력해주세요.
+ *       "2022":
  *         description: scheduleIdx는 0보다 큰 값으로 입력해주세요.
  *       "2011":
  *         description: 스케줄 소개는 150자 이하로 입력가능합니다.
@@ -213,22 +261,22 @@ scheduleRouter.get("/:scheduleIdx", schedule.getScheduleInfo);
  *         description: 스케줄 시작시간을 YYYY/MM/DD HH:mm:ss 또는 YYYY-MM-DD HH:mm:ss 형식으로 입력하세요.
  *       "2016":
  *         description: 스케줄 종료시간을 YYYY/MM/DD HH:mm:ss 또는 YYYY-MM-DD HH:mm:ss 형식으로 입력하세요.
- *       "3001":
+ *       "3004":
  *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
  *
  *
  */
-scheduleRouter.patch("/:scheduleIdx", schedule.patchSchedule);
+scheduleRouter.patch("/:scheduleIdx", jwtMiddleware, schedule.patchSchedule);
 
 // 5.5 스케줄 삭제 API
 /**
  * @swagger
  * paths:
- *  /schedule/{scheduleIdx}/status:
+ *  /admin/schedule/{scheduleIdx}/status:
  *   patch:
- *     tags: [스케줄]
+ *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 삭제 API
  *     parameters:
  *         - in: path
@@ -238,19 +286,41 @@ scheduleRouter.patch("/:scheduleIdx", schedule.patchSchedule);
  *           example: 3
  *           required: true
  *           description: 스케줄 인덱스
+ *         - in: body
+ *           name: adminIdx
+ *           description: 단체 회원 인덱스
+ *           required:
+ *              - adminIdx
+ *           schema:
+ *              type: object
+ *              properties:
+ *                  adminIdx:
+ *                      default: 1
+ *                      description: 단체 회원 인덱스
+ *                      type: integer
  *     responses:
  *       "1000":
  *         description: 스케줄 삭제 API 성공
  *       "2001":
- *         description: 스케줄 인덱스를 입력해주세요.
+ *         description: adminIdx를 입력해주세요.
  *       "2002":
+ *         description: adminIdx를 0보다 큰 수로 입력해주세요.
+ *       "2020":
+ *         description: adminIdx를 값을 확인해주세요.
+ *       "2021":
+ *         description: 스케줄 인덱스를 입력해주세요.
+ *       "2022":
  *         description: scheduleIdx는 0보다 큰 값으로 입력해주세요.
- *       "3001":
+ *       "3004":
  *         description: 이미 삭제된 스케줄입니다.
  *       "4000":
  *         description: 데이터 베이스 에러
  *
  */
-scheduleRouter.patch("/:scheduleIdx/status", schedule.patchScheduleStatus);
+scheduleRouter.patch(
+  "/:scheduleIdx/status",
+  jwtMiddleware,
+  schedule.patchScheduleStatus
+);
 
 export default scheduleRouter;
