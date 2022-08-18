@@ -13,8 +13,14 @@ const { swaggerUi, specs } = require("../modules/swagger");
 const bodyParser = require("body-parser");
 import groupRouter from "../src/admin/Group/groupRoute";
 import memberRouter from "../src/admin/Member/memberRoute";
-import authRouter from "../src/admin/Auth/authRouter";
-import adminRouter from "../src/admin/Admin/adminRouter";
+import adminAuthRouter from "../src/admin/Auth/authRouter";
+import userAuthRouter from "../src/user/Auth/authRouter";
+import adminfinAccountRouter from "../src/admin/FinAccount/finAccountRouter";
+import userfinAccountRouter from "../src/user/finAccount/finAccountRouter";
+
+// User Side's Router
+import UserGroupRouter from "../src/user/Group/groupRouter";
+import UserMemberRouter from "../src/user/Member/memberRouter";
 
 // User Side's Router
 import UserGroupRouter from "../src/user/Group/groupRouter";
@@ -51,6 +57,7 @@ module.exports = function () {
   app.use("/user/schedule", userScheduleRouter);
   // 출결 API (user)
   app.use("/user/attendance", userAttendanceRouter);
+
   // 1. 회원 명단 API
   app.use("/member", memberRouter);
 
@@ -58,13 +65,14 @@ module.exports = function () {
   app.use("/group", groupRouter);
 
   // 3. 인증 도메인
-  app.use("/auth", authRouter);
+  app.use("/admin/auth", adminAuthRouter);
+  app.use("/user/auth", userAuthRouter);
+
+  //4. 회계 api
+  app.use("/admin/finAccount", adminfinAccountRouter);
+  app.use("/user/finAccount", userfinAccountRouter);
   // swagger
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-
-  // 4. Admin API
-  app.use("/admin", adminRouter);
-
 
   // user Side's API
 
