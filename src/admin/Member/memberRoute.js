@@ -28,30 +28,30 @@ memberRouter.get("/db", member.getDatabaseTest);
 /**
  * @swagger
  * paths:
- *  /member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
+ *  /admin/member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 단체 모든 회원명단 리스트 조회 API
  *     parameters:
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
- *           description: 단체 인덱스
+ *           description: 동아리 인덱스
  *         - in: query
  *           name: page
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
  *           description: 조회할 페이지 쪽 수
  *         - in: query
  *           name: pageSize
  *           securitySchemes:
  *              type: integer
- *           example: 5
+ *           default: 10
  *           required: true
  *           description: 한 페이지에 조회할 데이터 수
  *         - in: header
@@ -85,23 +85,23 @@ memberRouter.get("/",adminJwtMiddleWare ,member.getClubMemberList);
 /**
  * @swagger
  * paths:
- *  /member/info?userIdx={userIdx}&adminIdx={adminIdx}:
+ *  /admin/member/info?userIdx={userIdx}&adminIdx={adminIdx}:
  *   get:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 회원 상세 조회 API
  *     parameters:
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           example: 2
+ *           default: 3
  *           required: true
  *           description: 유저 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 11
+ *           default: 1
  *           required: true
  *           description: 동아리 인덱스
  *         - in: header
@@ -139,18 +139,25 @@ memberRouter.get("/info",adminJwtMiddleWare ,member.getMemberInfo);
 /**
  * @swagger
  * paths:
- *  /member?userIdx={userIdx}:
+ *  /admin/member?userIdx={userIdx}&adminIdx={adminIdx}:
  *   patch:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 회원 삭제 API
  *     parameters:
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           example: 2
+ *           default: 3
  *           required: true
  *           description: 유저 인덱스
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
@@ -183,16 +190,16 @@ memberRouter.patch("/",adminJwtMiddleWare ,member.patchMember);
 /**
  * @swagger
  * paths:
- *  /member/update/{adminIdx}:
+ *  /admin/member/update/{adminIdx}:
  *   post:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 동아리의 회원 팀/조 카테고리 추가 API
  *     parameters:
  *         - in: path
  *           name: adminIdx
  *           Schemes:
  *              type: integer
- *           example: 11
+ *           default: 1
  *           required: true
  *           description: 동아리 인덱스
  *         - in: body
@@ -241,23 +248,23 @@ export default memberRouter;
 /**
  * @swagger
  * paths:
- *  /member/update?userIdx={userIdx}&adminIdx={adminIdx}:
+ *  /admin/member/update?userIdx={userIdx}&adminIdx={adminIdx}:
  *   patch:
- *     tags: [회원 명단]
+ *     tags: [ADMIN 회원 명단]
  *     summary: 동아리의 회원 팀/조 카테고리 추가 API
  *     parameters:
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 3
  *           required: true
  *           description: 유저 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 11
+ *           default: 1
  *           required: true
  *           description: 동아리 인덱스
  *         - in: body

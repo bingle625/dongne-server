@@ -224,6 +224,7 @@ module.exports = {
   },
 
   // Reponse ERROR
+
   SCHEDULE_STATUS_INACTIVE: {
     isSuccess: false,
     code: 3001,
@@ -433,11 +434,30 @@ module.exports = {
     code: 2008,
     message: "유효하지 않은 clubTeamListIdx입니다.",
   },
+  ADMIN_GROUPIDX_STATUS: {
+    isSuccess: false,
+    code: 2009,
+    message: "유효하지 않은 groupIdx입니다."
+  },
+
+  ADMIN_DELETE_GROUPUSERIDX_STATUS: {
+    isSuccess: false,
+    code: 2010,
+    message: "본인 동아리내의 그룹에서 삭제를 수행할 수 없는 userIdx입니다."
+  },
+
+  ADMIN_INSERT_GROUPUSERIDX_STATUS: {
+    isSuccess: false,
+    code: 2011,
+    message: "본인 동아리내의 그룹에서 추가를 수행할 수 없는 userIdx입니다."
+  },
+
   ADMIN_ADMINIDX_NOT_MATCH: {
     isSuccess: false,
     code: 2020,
     message: "adminIdx를 입력해주세요.",
   },
+
 
   //USER's errResponse
   USER_USERIDX_EMPTY: {
@@ -454,6 +474,41 @@ module.exports = {
     isSuccess: false,
     code: 3002,
     message: "유효하지 않는 userIdx입니다.",
+  },
+  USER_ADMINIDX_STATUS: {
+    isSuccess: false,
+    code: 3003,
+    message: "본인 유저의 동아리에 대해서만 접근하세요. 본인이 속하지 않는 동아리에 대한 접근시도였습니다."
+  },
+  USER_RETRIEVEUSERIDX_EMPTY: {
+    isSuccess: false,
+    code: 3004,
+    message: "상세 조회할 userIdx를 입력해주세요."
+  },
+  USER_RETRIEVEUSERIDX_LENGTH: {
+    isSuccess: false,
+    code: 3004,
+    message: "상세 조회할 userIdx를 0보다 큰 값으로 입력해주세요."
+  },
+  USER_ADMINIDX_EMPTY: {
+    isSuccess: false,
+    code: 3005,
+    message: "본인 유저가 속하고 있는 adminIdx를 입력해주세요."
+  },
+  USER_ADMINIDX_LENGTH: {
+    isSuccess: false,
+    code: 3005,
+    message: "본인 유저가 속하고 있는 adminIdx를 0보다 큰 값으로 입력해주세요."
+  },
+  USER_RETRIEVEUSERIDX_STATUS: {
+    isSuccess: false,
+    code: 3006,
+    message: "상세 조회할 userIdx가 유효하지 않습니다. 본인유저의 동아리에 소속된 userIdx를 입력해주세요."
+  },
+  USER_GROUPIDX_STATUS: {
+    isSuccess: false,
+    code: 3007,
+    message: "(본인) 유저가 속한 동아리에서 유효하지 않은 groupIdx입니다.",
   },
   USER_USERIDX_NOT_MATCH: {
     isSuccess: false,
@@ -654,6 +709,14 @@ module.exports = {
     code: 6002,
     message: "본인 동아리에 대해서만 그룹리스트를 조회할 수 있습니다.",
   },
+
+  JWT_USER_TOKEN_DIFFERENT: {
+    isSuccess: false,
+    code: 6003,
+    message: "userIdx가 입력하신 토큰과 다릅니다. 본인의 userIdx에 대해서만 접근하세요.",
+  },
+
+  
 
   // Paging's errResponse
   PAGING_PARAMS_EMPTY: {

@@ -37,6 +37,8 @@ export const getGroupList = async (req, res) => {
       Query String: adminIdx
   */
   const adminIdx = req.query.adminIdx;
+  const userIdx = req.query.userIdx;
+  const JWT_token_userIdx = req.verifiedToken.adminId;
 
   // validation (basic) ✅
   if(!adminIdx) {
@@ -45,6 +47,19 @@ export const getGroupList = async (req, res) => {
   if (adminIdx <= 0) {
       return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
   }
+
+  if(!userIdx) {
+      return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+  } 
+  if (userIdx <= 0) {
+      return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+  }
+
+  if (userIdx != JWT_token_userIdx){
+      return res.send(errResponse(baseResponse.JWT_USER_TOKEN_DIFFERENT));
+  }
+
+  
 
   // Validation (Middle) ❌ 
   /*
@@ -62,7 +77,7 @@ export const getGroupList = async (req, res) => {
 
   // JWT Token's userIdx filltering the not adminIdx's groupIdx by groupMembers Table (status = ACTIVE) ❌   
   // 그룹 리스트 조회
-  const groupListResult = await groupService.retrievePagingGroupList(adminIdx, page, pageSize);
+  const groupListResult = await groupService.retrievePagingGroupList(adminIdx, userIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, groupListResult));
 };
@@ -86,6 +101,9 @@ export const getGroupInfo = async (req, res) => {
       Query String: groupidx
   */
   const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
+  const userIdx = req.query.userIdx;
+  const JWT_token_userIdx = req.verifiedToken.adminId;
 
   // validation (basic) ✅
   if(!groupIdx) {
@@ -95,6 +113,25 @@ export const getGroupInfo = async (req, res) => {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
 
+  if(!adminIdx) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if(!userIdx) {
+      return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+  } 
+  if (userIdx <= 0) {
+      return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+  }
+
+  if (userIdx != JWT_token_userIdx){
+      return res.send(errResponse(baseResponse.JWT_USER_TOKEN_DIFFERENT));
+  }
+  
+
   // Validation (Middle) ❌ 
   /*
     + groupIdx's Status valid with GroupList Table ?
@@ -102,7 +139,7 @@ export const getGroupInfo = async (req, res) => {
   */
 
   // 그룹 이름, 내용 조회
-  const groupInfoResult = await groupProvider.retrieveGroupInfo(groupIdx);
+  const groupInfoResult = await groupProvider.retrieveGroupInfo(groupIdx, adminIdx, userIdx);
 
   return res.send(response(baseResponse.SUCCESS, groupInfoResult));
 };
@@ -118,6 +155,9 @@ export const getGroupMembers = async (req, res) => {
       Query String: groupIdx
   */
   const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
+  const userIdx = req.query.userIdx;
+  const JWT_token_userIdx = req.verifiedToken.adminId;
 
   // validation (basic) ✅
   if(!groupIdx) {
@@ -125,6 +165,24 @@ export const getGroupMembers = async (req, res) => {
   } 
   if (groupIdx <= 0) {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
+
+  if(!adminIdx) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if(!userIdx) {
+      return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+  } 
+  if (userIdx <= 0) {
+      return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+  }
+
+  if (userIdx != JWT_token_userIdx){
+      return res.send(errResponse(baseResponse.JWT_USER_TOKEN_DIFFERENT));
   }
 
 
@@ -143,7 +201,7 @@ export const getGroupMembers = async (req, res) => {
 
 
   // 그룹 소속회원 조회
-  const groupMembersResult = await groupService.retrievePagingGroupMembers(groupIdx, page, pageSize);
+  const groupMembersResult = await groupService.retrievePagingGroupMembers(groupIdx, adminIdx, userIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, groupMembersResult));
 };

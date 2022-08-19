@@ -76,15 +76,48 @@ exports.retrieveTotalDataCount = async function (adminIdx) {
   }
 };
 
+// API NO. 4.1 - Validation Check's adminIdx Status
+exports.checkAdminIdxStatus = async function (adminIdx, userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const handleError = (error) => logger.error(`❌checkClubStatus DB Error: ${error.message}`);
+
+  //Try문 예외처리
+  try {
+    const adminIdxStatusParams = [adminIdx, userIdx];
+    const adminIdxStatus = await memberDao.selectAdminIdxStatus(connection, adminIdxStatusParams);
+    connection.release();
+    return adminIdxStatus;
+
+  } catch (error) {
+    handleError(error);
+    connection.release();
+    return errResponse(baseResponseStatus.DB_ERRORS);
+  }
+};
+
 
 // 회원 상세 조회 - API NO. 4.2
-exports.retrieveMemberInfo = async function (userIdx) {
+exports.retrieveMemberInfo = async function (retrieveUserIdx, adminIdx, userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveMemberInfo DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
-    const memberInfo = await memberDao.selectMemberInfo(connection, userIdx);
+    // Validation Check's adminIdx Status (middle)
+    const adminIdxStatusParams = [adminIdx, userIdx]
+    const adminIdxStatus = await memberDao.selectAdminIdxStatus(connection, adminIdxStatusParams);
+    if (adminIdxStatus[0]?.status != "ACTIVE"){
+      return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS);
+    }
+
+    // Validation Check's retrieveUserIdx Status (middle)
+    const retrieveUserIdxStatusParams = [adminIdx, retrieveUserIdx];
+    const retrieveUserIdxStatus = await memberDao.selectRetrieveUserIdxStatus(connection, retrieveUserIdxStatusParams);
+    if (retrieveUserIdxStatus[0]?.status != "ACTIVE"){
+      return errResponse(baseResponseStatus.USER_RETRIEVEUSERIDX_STATUS);
+    }
+
+    const memberInfo = await memberDao.selectMemberInfo(connection, retrieveUserIdx);
     connection.release();
     return memberInfo;
 

@@ -56,7 +56,9 @@ export const postSignIn = async function (email, password) {
     logger.error(`App - postSignIn Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
+
   }
+
 };
 
 export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
@@ -79,4 +81,6 @@ export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentY
 
     return errResponse(baseResponse.DB_ERROR);
   }
+
 };
+

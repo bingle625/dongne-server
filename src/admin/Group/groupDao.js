@@ -34,6 +34,23 @@ async function insertGroupMembers(connection, insertGroupMemberParams){
   return insertGroupMemberRow;
 };
 
+// API NO. 4.1 - Validation Check's members Status
+const selectMembersStatus = async (connection, membersStatusParams) => {
+  const selectMembersStatusQuery = `
+    SELECT
+    ClubMembers.status,
+    User.status as UserStatus
+    FROM ClubMembers
+    JOIN User
+    ON User.userIdx = ClubMembers.userIdx
+    WHERE ClubMembers.userIdx = ? and adminIdx = ?;
+      `;
+
+  const [membersStatusRows] = await connection.query(selectMembersStatusQuery, membersStatusParams);
+
+  return membersStatusRows;
+};
+
 // 그룹 리스트 조회 - API NO. 4.2
 const selectGroupList = async (connection, groupListPagingParams) => {
   const selectGroupListQuery = `
@@ -79,6 +96,20 @@ const selectGroupInfo = async (connection, groupIdx) => {
   return groupInfoRows;
 };
 
+// API NO. 4.3 -> Part 1 - Validation Check's groupIdx Status
+const selectGroupIdxStatus = async (connection, groupIdxStatusParams) => {
+  const selectGroupIdxStatusQuery = `
+    SELECT
+    status
+    FROM GroupList
+    WHERE groupIdx = ? and adminIdx = ?;
+      `;
+
+  const [groupIdxStatusRows] = await connection.query(selectGroupIdxStatusQuery, groupIdxStatusParams);
+
+  return groupIdxStatusRows;
+};
+
 
 // 그룹 소속회원 조회 - API NO. 4.3 -> Part 2
 const selectGroupMembers = async (connection, groupMembersPagingParams) => {
@@ -101,14 +132,16 @@ const selectGroupMembers = async (connection, groupMembersPagingParams) => {
 };
 
 // API NO. 4.3 -> Part 2 - Paging's Total Data Count with GroupMembers
-const selectGroupMembersTotalDataCount = async (connection, groupIdx) => {
+const selectGroupMembersTotalDataCount = async (connection, totalDataCountParams) => {
   const selectTotalDataCountQuery = `
-  SELECT COUNT(groupIdx) as totalDataCount
-  FROM GroupMembers
-  WHERE groupIdx = ?;
+    SELECT COUNT(groupIdx) as totalDataCount
+    FROM GroupMembers
+    JOIN ClubMembers
+    ON GroupMembers.userIdx = ClubMembers.userIdx
+    WHERE groupIdx = ? and GroupMembers.status = "ACTIVE" and ClubMembers.status = "ACTIVE" and adminIdx = ?;
       `;
 
-  const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, groupIdx);
+  const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, totalDataCountParams);
 
   return totalDataCountRows;
 };
@@ -153,6 +186,57 @@ const editGroupMembers = async (connection, editGroupMembersParams) => {
   return updateGroupMembersRows;
 };
 
+// API NO. 4.4 -> Part 2 - Validation Check's groupUserIdx Status
+const selectGroupUserIdxStatus = async (connection, groupUserIdxStatusParams) => {
+
+  const selectGroupUserIdxQuery = `
+    SELECT
+    ClubMembers.status as ClubUserIdxStatus,
+    GroupMembers.status as GroupUserIdxStatus,
+    User.status as UserStatus
+    FROM ClubMembers
+    JOIN GroupMembers
+    ON GroupMembers.userIdx = ClubMembers.userIdx
+    JOIN User
+    ON User.userIdx = GroupMembers.userIdx
+    WHERE GroupMembers.userIdx = ? and GroupMembers.groupIdx = ? and ClubMembers.adminIdx = ?;
+      `;
+
+  const [selectGroupUserIdxRows] = await connection.query(selectGroupUserIdxQuery, groupUserIdxStatusParams);
+  return selectGroupUserIdxRows;
+};
+
+// API NO. 4.4 -> Part 3 - Validation Check's InsertGroupUserIdx Status_1
+const selectInsertGroupUserIdxStatus1 = async (connection, groupUserIdxStatus1Params) => {
+
+  const selectInsertGroupUserIdxQuery = `
+    SELECT
+    ClubMembers.status as ClubUserIdxStatus,
+    User.status as UserStatus
+    FROM ClubMembers
+    JOIN User
+    ON User.userIdx = ClubMembers.userIdx
+    WHERE ClubMembers.userIdx = ? and ClubMembers.adminIdx = ?;
+      `;
+
+  const [selectInsertGroupUserIdxRows] = await connection.query(selectInsertGroupUserIdxQuery, groupUserIdxStatus1Params);
+  return selectInsertGroupUserIdxRows;
+};
+
+// API NO. 4.4 -> Part 3 - Validation Check's InsertGroupUserIdx Status_1
+const selectInsertGroupUserIdxStatus2 = async (connection, groupUserIdxStatus2Params) => {
+
+  const selectInsertGroupUserIdx2Query = `
+    SELECT
+    status as GroupUserIdxStatus
+    FROM GroupMembers
+    WHERE userIdx = ? and groupIdx = ?;
+      `;
+
+  const [selectInsertGroupUserIdx2Rows] = await connection.query(selectInsertGroupUserIdx2Query, groupUserIdxStatus2Params);
+  return selectInsertGroupUserIdx2Rows;
+};
+
 // 그룹 삭제 - API NO. 4.5
 const editGroup = async (connection, groupIdx) => {
 
@@ -180,6 +264,12 @@ const editGroup = async (connection, groupIdx) => {
     editGroupMembers,
     editGroup,
     selectAdminIdx,
+    selectMembersStatus,
+    selectGroupIdxStatus,
+    selectGroupUserIdxStatus,
+    selectInsertGroupUserIdxStatus1,
+    selectInsertGroupUserIdxStatus2,
+    
 
 
 
