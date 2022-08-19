@@ -139,6 +139,55 @@ userAuthRouter.post("/login", auth.login);
 
 userAuthRouter.post("/register", auth.registerUser);
 
+/**
+ * @swagger
+ * paths:
+ *  /user/auth/joinClub:
+ *   post:
+ *     tags: [user 계정 관리]
+ *     summary: user 동아리 가입 api
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: query
+ *         name: userIdx
+ *         securitySchemes:
+ *            type: integer
+ *         default: 16
+ *         required: true
+ *         description: 유저 인덱스
+ *       - in: body
+ *         name: clubCode
+ *         description: user 로그인 정보  파라미터
+ *         schema:
+ *            type: object
+ *            required:
+ *              - clubCode
+ *            properties:
+ *                  clubCode:
+ *                        default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkeCI6MTksImlhdCI6MTY2MDkxMzU5OSwiZXhwIjoxNjkyNDQ5NTk5LCJzdWIiOiJBZG1pbiJ9.MJPU92-xKcYyOQF0lQgIbMZ9A8MpeVWCrEetv39hE0g
+ *                        description: 동아리 가입 코드
+ *                        type: string
+ *     responses:
+ *       "1000":
+ *         description: 그룹 추가 API 성공
+ *       "7001":
+ *         description: 유효한 클럽코드가 아닙니다.
+ *       "7002":
+ *         description: 이미 본 동아리에 가입한 회원입니다.
+ *       "7003":
+ *         description: 존재하지 않는 유저입니다.
+ *       "7004":
+ *         description: 존재하지 않는 클럽입니다.
+ *       "7005":
+ *         description: 유저 인덱스를 입력해주세요.
+ *       "7006":
+ *         description: 클럽 코드를 입력해주세요.
+ *       "4000":
+ *         description: 데이터 베이스 에러
+ *
+ */
+
 userAuthRouter.post("/joinClub", auth.joinClub);
 
 export default userAuthRouter;

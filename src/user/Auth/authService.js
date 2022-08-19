@@ -90,7 +90,6 @@ export const joinClub = async (userIdx, clubCode) => {
       return errResponse(baseResponse.JOIN_CLUB_CODE_INVALID);
     }
     const memberInfo = [userIdx, adminIdx];
-    console.log(userIdx, adminIdx);
     const connection = await pool.getConnection(async (conn) => conn);
 
     //동아리 상태 확인
