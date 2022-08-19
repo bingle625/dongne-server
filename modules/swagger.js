@@ -7,7 +7,11 @@ const swaggerDefinition = {
     version: "1.0.0",
     description: "test"
   },
-  host: "localhost:3000"
+        servers: [{
+            description:"test 중입니다.",
+            url: "http://3.38.55.57:3000"
+            // url: "https://www.google.com"
+        }]
 };
 
 const options = {
