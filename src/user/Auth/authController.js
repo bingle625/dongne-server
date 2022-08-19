@@ -63,12 +63,23 @@ export const registerUser = async (req, res) => {
     return res.send(errResponse(baseResponse.SIGNUP_PASSWORD_LENGTH));
   }
 
-  if (!name) return res.send(response(baseResponse.SIGNUP_USERNAME_EMPTY));
-  if (!birth) return res.send(response(baseResponse.SIGNUP_BIRTHDATE_EMPTY));
-  if (!school) return res.send(response(baseResponse.SIGNUP_SCHOOL_EMPTY));
-  if (!phoneNum) return res.send(response(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
-  if (!address) return res.send(response(baseResponse.SIGNUP_ADDRESS_EMPTY));
+  if (!name) return res.send(errResponse(baseResponse.SIGNUP_USERNAME_EMPTY));
+  if (!birth) return res.send(errResponse(baseResponse.SIGNUP_BIRTHDATE_EMPTY));
+  if (!school) return res.send(errResponse(baseResponse.SIGNUP_SCHOOL_EMPTY));
+  if (!phoneNum) return res.send(errResponse(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
+  if (!address) return res.send(errResponse(baseResponse.SIGNUP_ADDRESS_EMPTY));
 
   const createUserResult = await authService.createUser(name, userEmail, password, phoneNum, school, birth, address, introduction, userImgUrl);
   return res.send(createUserResult);
+};
+
+export const joinClub = async (req, res) => {
+  const userIdx = req.query.userIdx;
+  const { clubCode } = req.body;
+
+  //빈 값 체크
+  if (!userIdx) return res.send(errResponse(baseResponse.JOIN_USERIDX_EMPTY));
+  if (!clubCode) return res.send(errResponse(baseResponse.JOIN_CLUBCODE_EMPTY));
+  const joinClubResult = await authService.joinClub(userIdx, clubCode);
+  return res.send(joinClubResult);
 };

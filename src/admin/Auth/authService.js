@@ -56,14 +56,13 @@ export const postSignIn = async function (email, password) {
     logger.error(`App - postSignIn Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
-
   }
-
 };
 
 export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
   try {
     const hashedPassword = await crypto.createHash("sha512").update(adminPwd).digest("hex");
+
     const adminInfo = [clubName, adminEmail, hashedPassword, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl];
     const connection = await pool.getConnection(async (conn) => conn);
 
@@ -72,15 +71,29 @@ export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentY
     if (emailStatus[0].length > 0) {
       return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
     }
-
+    await connection.beginTransaction();
     const createAdminResult = await authDao.insertAdminInfo(connection, adminInfo);
-    connection.release();
-    return response(baseResponse.SUCCESS, createAdminResult[0].insertId);
-  } catch (err) {
-    logger.error(`App - createAdmin Service error: ${err.message}`);
 
+    let clubCode = jwt.sign(
+      // 토큰의 내용 (payload)
+      {
+        adminIdx: createAdminResult[0].insertId
+      },
+      process.env.JWT_CLUB_CODE_SECRET,
+      {
+        expiresIn: "365d",
+        subject: "Admin"
+      }
+    );
+
+    const updateAdminClubCode = await authDao.updateClubCode(connection, [clubCode, createAdminResult[0].insertId]);
+    await connection.commit();
+    connection.release();
+    return response(baseResponse.SUCCESS, createAdminResult[0].insertId, updateAdminClubCode[0]);
+  } catch (err) {
+    await connection.rollback();
+    connection.release();
+    logger.error(`App - createAdmin Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
   }
-
 };
-
