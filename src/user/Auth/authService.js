@@ -38,7 +38,7 @@ exports.postSignIn = async (email, password) => {
     let token = jwt.sign(
       // 토큰의 내용 (payload)
       {
-        userId: userInfoRows[0].userIdx
+        adminId: userInfoRows[0].userIdx
       },
       process.env.JWT_SECRET_USER,
       {
@@ -76,6 +76,45 @@ export const createUser = async (name, userEmail, password, phoneNum, school, bi
     return response(baseResponse.SUCCESS, createUserResult[0].insertId);
   } catch (err) {
     logger.error(`App - createUser Service error: ${err.message}`);
+
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
+export const joinClub = async (userIdx, clubCode) => {
+  try {
+    let adminIdx = null;
+    try {
+      adminIdx = await jwt.verify(clubCode, process.env.JWT_CLUB_CODE_SECRET).adminIdx;
+    } catch (error) {
+      return errResponse(baseResponse.JOIN_CLUB_CODE_INVALID);
+    }
+    const memberInfo = [userIdx, adminIdx];
+    console.log(userIdx, adminIdx);
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    //동아리 상태 확인
+    const [clubStatus] = await authDao.selectAdminAccountByIdx(connection, adminIdx);
+    if (!clubStatus) {
+      return errResponse(baseResponse.JOIN_CLUB_ERROR);
+    }
+
+    //유저 상태 확인
+    const [userStatus] = await authDao.selectUserStatus(connection, userIdx);
+    if (!userStatus) {
+      return errResponse(baseResponse.JOIN_CLUB_USER_ERROR);
+    }
+
+    // 동아리에 유저 이미 가입했는지 확인
+    const [joinedMemberInfo] = await authDao.selectMember(connection, memberInfo);
+    if (joinedMemberInfo.length !== 0) {
+      return errResponse(baseResponse.JOIN_CLUB_MEMBER_EXIST);
+    }
+    const joinClubResult = await authDao.userJoinClub(connection, memberInfo);
+    connection.release();
+    return response(baseResponse.SUCCESS, joinClubResult[0].insertId);
+  } catch (err) {
+    logger.error(`App - joinClub Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
   }

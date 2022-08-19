@@ -139,4 +139,6 @@ userAuthRouter.post("/login", auth.login);
 
 userAuthRouter.post("/register", auth.registerUser);
 
+userAuthRouter.post("/joinClub", auth.joinClub);
+
 export default userAuthRouter;
