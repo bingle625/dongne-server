@@ -23,14 +23,14 @@ groupRouter.get("/db", group.getDatabaseTest);
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 11
  *           required: true
  *           description: 동아리 인덱스
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           default: 3
+ *           default: 16
  *           required: true
  *           description: (본인)유저 인덱스
  *         - in: query
@@ -51,6 +51,7 @@ groupRouter.get("/db", group.getDatabaseTest);
  *           name: x-access-token
  *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNiwiaWF0IjoxNjYwODYwMzc2LCJleHAiOjE2OTIzOTYzNzYsInN1YiI6IkFkbWluIn0.ebitK_QPLpMABjAiPpFa_IjSm0fcrHQz4l34lYZhtr4
  *           schema:
  *               type: string
  *           examples:
@@ -89,27 +90,28 @@ groupRouter.get("/", userJwtMiddleWare, group.getGroupList);
  *           name: groupIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 60
  *           required: true
  *           description: 그룹 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 11
  *           required: true
  *           description: 동아리 인덱스
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           default: 3
+ *           default: 16
  *           required: true
  *           description: (본인)유저 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNiwiaWF0IjoxNjYwODYwMzc2LCJleHAiOjE2OTIzOTYzNzYsInN1YiI6IkFkbWluIn0.ebitK_QPLpMABjAiPpFa_IjSm0fcrHQz4l34lYZhtr4
  *           schema:
  *               type: string
  *           examples:
@@ -144,21 +146,21 @@ groupRouter.get("/info", userJwtMiddleWare, group.getGroupInfo);
  *           name: groupIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 60
  *           required: true
  *           description: 그룹 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 11
  *           required: true
  *           description: 동아리 인덱스
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           default: 3
+ *           default: 16
  *           required: true
  *           description: (본인) 유저 인덱스
  *         - in: query
@@ -179,6 +181,7 @@ groupRouter.get("/info", userJwtMiddleWare, group.getGroupInfo);
  *           name: x-access-token
  *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNiwiaWF0IjoxNjYwODYwMzc2LCJleHAiOjE2OTIzOTYzNzYsInN1YiI6IkFkbWluIn0.ebitK_QPLpMABjAiPpFa_IjSm0fcrHQz4l34lYZhtr4
  *           schema:
  *               type: string
  *           examples:

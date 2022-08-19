@@ -54,13 +54,13 @@ exports.retrievePagingGroupMembers = async function (groupIdx, adminIdx, userIdx
         // Validation Check's adminIdx Status
         const adminIdxStatus = await groupProvider.checkAdminIdxStatus(adminIdx, userIdx);
         if (adminIdxStatus[0]?.status != "ACTIVE"){
-            return res.send(errResponse(baseResponseStatus.USER_ADMINIDX_STATUS));
+            return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS);
         }
 
         // Validation Check's groupIdx Status
         const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
         if (groupIdxStatus[0]?.status != "ACTIVE"){
-            return res.send(errResponse(baseResponseStatus.USER_GROUPIDX_STATUS))
+            return errResponse(baseResponseStatus.USER_GROUPIDX_STATUS);
         }
         
 
@@ -71,7 +71,7 @@ exports.retrievePagingGroupMembers = async function (groupIdx, adminIdx, userIdx
         } else {
             start = (page - 1) * pageSize;
         }
-        const totalDataCountResult = await groupProvider.retrieveGroupMembersTotalDataCount(groupIdx);
+        const totalDataCountResult = await groupProvider.retrieveGroupMembersTotalDataCount(groupIdx, adminIdx);
         // req.page's valid with retrieveData ?
         const lastPage = Math.ceil(totalDataCountResult[0].totalDataCount/ pageSize);
         if (page > lastPage){

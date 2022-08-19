@@ -194,7 +194,7 @@ exports.checkInsertGroupUserIdxStatus2 = async function (groupUserIdx, groupIdx)
 
   //Try문 예외처리
   try {
-    const groupUserIdxStatus2Params = [groupUserIdx, groupIdx];
+    const groupUserIdxStatus2Params = [groupUserIdx, parseInt(groupIdx)];
     const groupUserIdxStatus2Result = await groupDao.selectInsertGroupUserIdxStatus2(connection, groupUserIdxStatus2Params);
     connection.release();
     return groupUserIdxStatus2Result;

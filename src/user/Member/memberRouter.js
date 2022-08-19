@@ -21,7 +21,7 @@ memberRouter.get("/db", member.getDatabaseTest);
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 11
  *           required: true
  *           description: 동아리 인덱스
  *         - in: query
@@ -42,13 +42,14 @@ memberRouter.get("/db", member.getDatabaseTest);
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 16
  *           required: true
  *           description: 유저 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNiwiaWF0IjoxNjYwODYwMzc2LCJleHAiOjE2OTIzOTYzNzYsInN1YiI6IkFkbWluIn0.ebitK_QPLpMABjAiPpFa_IjSm0fcrHQz4l34lYZhtr4
  *           schema:
  *               type: string
  *           examples:
@@ -85,27 +86,28 @@ memberRouter.get("/", userJwtMiddleWare, member.getClubMemberList);
  *           name: retrieveUserIdx
  *           securitySchemes:
  *              type: integer
- *           default: 3
+ *           default: 1
  *           required: true
  *           description: 상세 조회할 유저 인덱스
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 16
  *           required: true
  *           description: (본인)유저 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 11
  *           required: true
  *           description: 동아리 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNiwiaWF0IjoxNjYwODYwMzc2LCJleHAiOjE2OTIzOTYzNzYsInN1YiI6IkFkbWluIn0.ebitK_QPLpMABjAiPpFa_IjSm0fcrHQz4l34lYZhtr4
  *           schema:
  *               type: string
  *           examples:

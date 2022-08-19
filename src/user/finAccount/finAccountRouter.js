@@ -1,6 +1,7 @@
 import express from "express";
 const finAccount = require("./finAccountController");
 const userfinAccountRouter = express.Router();
+import userJwtMiddleWare from "../../../config/userJwtMiddleWare";
 
 //api 7.3 최근 회계 4개 조회 api
 /**
@@ -11,6 +12,12 @@ const userfinAccountRouter = express.Router();
  *     tags: [user 회계 관리]
  *     summary: 최근 회계항목 4개 조회 api
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
+ *           required: true
+ *           type: string
  *         - name: adminIdx
  *           in: header
  *           description: an authorization header
@@ -24,7 +31,7 @@ const userfinAccountRouter = express.Router();
  *         description: admin Idx 비어있음.
  *
  */
-userfinAccountRouter.get("/", finAccount.getFinAccount);
+userfinAccountRouter.get("/", userJwtMiddleWare, finAccount.getFinAccount);
 
 //api 7.4 월별 회계 조회 api
 /**
@@ -35,6 +42,12 @@ userfinAccountRouter.get("/", finAccount.getFinAccount);
  *     tags: [user 회계 관리]
  *     summary: 월별 회계 조회 api
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
+ *           required: true
+ *           type: string
  *         - in: header
  *           name: adminIdx
  *           description: an authorization header
@@ -55,7 +68,7 @@ userfinAccountRouter.get("/", finAccount.getFinAccount);
  *           default: 8
  *     responses:
  *       "1000":
- *         description: 최근 회계 4개 조회 api 성공
+ *         description: 월별 회계 조회 api 성공
  *       "5001":
  *         description: admin Idx 비어있음.
  *       "5014":
@@ -65,7 +78,7 @@ userfinAccountRouter.get("/", finAccount.getFinAccount);
  *
  *
  */
-userfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
+userfinAccountRouter.get("/month", userJwtMiddleWare, finAccount.getFinAccountMonthly);
 
 //api 7.5 일자별 회계 조회 api
 /**
@@ -76,6 +89,12 @@ userfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
  *     tags: [user 회계 관리]
  *     summary: 일자별 회계 조회 api
  *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: an authorization header
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
+ *           required: true
+ *           type: string
  *         - in: header
  *           name: adminIdx
  *           description: an authorization header
@@ -102,7 +121,7 @@ userfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
  *           description: 조회 일자
  *     responses:
  *       "1000":
- *         description: 최근 회계 4개 조회 api 성공
+ *         description: 일자별 회계 조회 api 성공
  *       "5001":
  *         description: admin Idx 비어있음.
  *       "5014":
@@ -114,6 +133,6 @@ userfinAccountRouter.get("/month", finAccount.getFinAccountMonthly);
  *
  *
  */
-userfinAccountRouter.get("/day", finAccount.getFinAccountDaily);
+userfinAccountRouter.get("/day", userJwtMiddleWare, finAccount.getFinAccountDaily);
 
 export default userfinAccountRouter;

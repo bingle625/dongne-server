@@ -37,7 +37,7 @@ memberRouter.get("/db", member.getDatabaseTest);
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: 동아리 인덱스
  *         - in: query
@@ -58,6 +58,7 @@ memberRouter.get("/db", member.getDatabaseTest);
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
  *           schema:
  *               type: string
  *           examples:
@@ -94,20 +95,21 @@ memberRouter.get("/",adminJwtMiddleWare ,member.getClubMemberList);
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           default: 3
+ *           default: 6
  *           required: true
  *           description: 유저 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: 동아리 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
  *           schema:
  *               type: string
  *           examples:
@@ -155,13 +157,14 @@ memberRouter.get("/info",adminJwtMiddleWare ,member.getMemberInfo);
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: 동아리 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
  *           schema:
  *               type: string
  *           examples:
@@ -199,7 +202,7 @@ memberRouter.patch("/",adminJwtMiddleWare ,member.patchMember);
  *           name: adminIdx
  *           Schemes:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: 동아리 인덱스
  *         - in: body
@@ -217,6 +220,7 @@ memberRouter.patch("/",adminJwtMiddleWare ,member.patchMember);
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
  *           schema:
  *               type: string
  *           examples:
@@ -264,7 +268,7 @@ export default memberRouter;
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: 동아리 인덱스
  *         - in: body
@@ -278,10 +282,12 @@ export default memberRouter;
  *                    clubTeamListIdx:
  *                        description: 팀/조 인덱스
  *                        type: int
+ *                        default: 11
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
  *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
  *           schema:
  *               type: string
  *           examples:
