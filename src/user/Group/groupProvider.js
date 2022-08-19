@@ -117,13 +117,14 @@ exports.retrieveGroupMembers = async function (groupIdx, start, pageSize) {
 };
 
 // API 5.2 - Paging's totalDataCount (5.2에서 조회하는 Data 갯수 조회)
-exports.retrieveGroupMembersTotalDataCount = async function (groupIdx) {
+exports.retrieveGroupMembersTotalDataCount = async function (groupIdx, adminIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveTotalDataCount DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
-    const totalDataCountResult = await groupDao.selectGroupMembersTotalDataCount(connection, groupIdx);
+    const totalDataCountParams = [groupIdx, adminIdx];
+    const totalDataCountResult = await groupDao.selectGroupMembersTotalDataCount(connection, totalDataCountParams);
     connection.release();
     return totalDataCountResult;
 

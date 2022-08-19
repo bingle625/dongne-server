@@ -188,15 +188,15 @@ exports.editGroupMembers = async function (groupIdx, adminIdx, userIdx){
     try {
         // Validation Check's groupIdx Status (middle)
         const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
-        if (groupIdxStatus[0]?.status != "ACTIVE"){
+        if (groupIdxStatus[groupIdxStatus.length - 1]?.status != "ACTIVE"){
             return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
         }
 
         // Validation Check's deleteUserIdx Status (middle)
         var groupUserIdx;
         for (groupUserIdx of userIdx){
-            const groupUserIdxStatus = await groupProvider.checkGroupUserIdxStatus(groupUserIdx, groupIdx, adminIdx);
-            if (groupUserIdxStatus[0]?.ClubUserIdxStatus != "ACTIVE" || groupUserIdxStatus[0]?.GroupUserIdxStatus != "ACTIVE" || groupUserIdxStatus[0]?.UserStatus){
+            const groupUserIdxStatus = await groupProvider.checkGroupUserIdxStatus(groupUserIdx, groupIdx, adminIdx);       
+            if (groupUserIdxStatus[groupUserIdxStatus.length - 1]?.ClubUserIdxStatus != "ACTIVE" || groupUserIdxStatus[groupUserIdxStatus.length - 1]?.GroupUserIdxStatus != "ACTIVE" || groupUserIdxStatus[groupUserIdxStatus.length - 1]?.UserStatus != "ACTIVE"){
                 return errResponse(baseResponseStatus.ADMIN_DELETE_GROUPUSERIDX_STATUS);
             }
         }
@@ -236,12 +236,12 @@ exports.insertGroupMembers = async function (groupIdx, adminIdx, userIdx){
         var groupUserIdx;
         for (groupUserIdx of userIdx){
             const groupUserIdxStatus = await groupProvider.checkInsertGroupUserIdxStatus1(groupUserIdx, adminIdx);
-            if (groupUserIdxStatus[0]?.ClubUserIdxStatus != "ACTIVE" || groupUserIdxStatus[0]?.UserStatus != "ACTIVE"){
+            if (groupUserIdxStatus[groupUserIdxStatus.length - 1]?.ClubUserIdxStatus != "ACTIVE" || groupUserIdxStatus[groupUserIdxStatus.length - 1]?.UserStatus != "ACTIVE"){
                 return errResponse(baseResponseStatus.ADMIN_INSERT_GROUPUSERIDX_STATUS);
             }
 
             const groupUserIdxStatus2 = await groupProvider.checkInsertGroupUserIdxStatus2(groupUserIdx, groupIdx);
-            if (groupUserIdxStatus2[0]?.GroupUserIdxStatus == "ACTIVE"){
+            if (groupUserIdxStatus2[groupUserIdxStatus2.length - 1]?.GroupUserIdxStatus == "ACTIVE"){
                 return errResponse(baseResponseStatus.ADMIN_INSERT_GROUPUSERIDX_STATUS);
             }
         }
@@ -274,7 +274,7 @@ exports.deleteGroup = async function (groupIdx, adminIdx){
     try {
         // Validation Check's groupIdx Status (middle)
         const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
-        if (groupIdxStatus[0]?.status != "ACTIVE"){
+        if (groupIdxStatus[groupIdxStatus.length -1]?.status != "ACTIVE"){
             return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
         }
 

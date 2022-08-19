@@ -280,10 +280,10 @@ export const getGroupMembers = async (req, res) => {
 export const patchGroupInfo = async (req, res) => {
   /*
       Body : groupName, groupIntroduction, groupCategory
-      Path Variable: groupIdx, adminIdx
+      Query String : groupIdx, adminIdx
   */
-  const groupIdx = req.params.groupIdx;
-  const adminIdx = req.params.adminIdx;
+  const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
   const {groupName, groupIntroduction, groupCategory} = req.body;
   const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
@@ -346,10 +346,10 @@ export const patchGroupInfo = async (req, res) => {
 export const patchGroupMembers = async (req, res) => {
   /*
       Body : userIdx [array type]
-      Path Variable: groupIdx, adminIdx
+      Query Variable: groupIdx, adminIdx
   */
-  const groupIdx = req.params.groupIdx;
-  const adminIdx = req.params.adminIdx;
+  const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
   const {userIdx} = req.body;
   const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
@@ -404,10 +404,10 @@ export const patchGroupMembers = async (req, res) => {
 export const postGroupMembers = async (req, res) => {
   /*
       Body : userIdx [array type]
-      Path Variable: groupIdx, adminIdx
+      Query Variable: groupIdx, adminIdx
   */
-  const groupIdx = req.params.groupIdx;
-  const adminIdx = req.params.adminIdx;
+  const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
   const {userIdx} = req.body;
   const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
@@ -464,10 +464,10 @@ export const postGroupMembers = async (req, res) => {
 */
 export const patchGroup = async (req, res) => {
   /*
-      Path Variable: groupIdx
+      Query String: groupIdx, adminIdx
   */
-  const groupIdx = req.params.groupIdx;
-  const adminIdx = req.params.adminIdx;
+  const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
   const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
   // Validation (basic) ✅

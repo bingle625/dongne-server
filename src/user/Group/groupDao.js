@@ -106,14 +106,16 @@ const selectGroupMembers = async (connection, groupMembersPagingParams) => {
 };
 
 // API NO. 5.2 - Paging's Total Data Count with GroupMembers
-const selectGroupMembersTotalDataCount = async (connection, groupIdx) => {
+const selectGroupMembersTotalDataCount = async (connection, totalDataCountParams) => {
   const selectTotalDataCountQuery = `
   SELECT COUNT(groupIdx) as totalDataCount
   FROM GroupMembers
-  WHERE groupIdx = ?;
+  JOIN ClubMembers
+  ON GroupMembers.userIdx = ClubMembers.userIdx
+  WHERE groupIdx = ? and GroupMembers.status = "ACTIVE" and ClubMembers.status = "ACTIVE" and adminIdx = ?;
       `;
 
-  const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, groupIdx);
+  const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, totalDataCountParams);
 
   return totalDataCountRows;
 };
