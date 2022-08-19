@@ -38,7 +38,7 @@ exports.postSignIn = async (email, password) => {
     let token = jwt.sign(
       // 토큰의 내용 (payload)
       {
-        adminId: userInfoRows[0].userIdx
+        userId: userInfoRows[0].userIdx
       },
       process.env.JWT_SECRET_USER,
       {
