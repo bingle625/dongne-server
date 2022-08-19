@@ -8,12 +8,35 @@ const swaggerDefinition = {
     description: "test"
   },
   host: "localhost:3000",
-  basePath: "/"
+  basePath: "/",
+  securityDefinitions: {
+    jwt: {
+      type: "apiKey",
+      name: "x-access-token",
+      in: "header"
+    }
+  },
+  security: [{ jwt: [] }]
 };
 
 const options = {
   swaggerDefinition: swaggerDefinition,
-  apis: ["./src/app/Testinit/*.js", "./src/app/Attendance/*.js", "./src/app/Schedule/*.js", "./src/app/Group/*.js", "./src/app/Member/*.js", "./src/app/Auth/*.js", "./src/app/Admin/*.js"]
+
+  apis: [
+    "./src/admin/Testinit/*.js",
+    "./src/admin/Attendance/*.js",
+    "./src/admin/Schedule/*.js",
+    "./src/admin/Group/*.js",
+    "./src/admin/Member/*.js",
+    "./src/admin/Auth/*.js",
+    "./src/user/Auth/*.js",
+    "./src/admin/FinAccount/*.js",
+    "./src/user/FinAccount/*.js",
+    "./src/user/Schedule/*.js",
+    "./src/user/Attendance/*.js",
+    "./src/user/Group/*.js",
+    "./src/user/Member/*.js"
+  ]
 };
 
 const specs = swaggerJsdoc(options);
