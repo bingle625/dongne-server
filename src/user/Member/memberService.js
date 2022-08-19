@@ -8,13 +8,18 @@ const memberProvider = require("./memberProvider");
 
 
 // API NO. 4.1 - paging
-exports.retrievePagingClubMemberList = async function (adminIdx, page, pageSize){
+exports.retrievePagingClubMemberList = async function (adminIdx, userIdx, page, pageSize){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌retrievePagingClubMemberList DB Error: ${error.message}`);
 
     try {
+        // Validation Check's adminIdx Status
+        const adminIdxStatus = await memberProvider.checkAdminIdxStatus(adminIdx, userIdx);
+        if (adminIdxStatus[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS);
+        }
+
         let start = 0;
-        
         // Paging Validation
         if (page <= 0){
             page = 1;

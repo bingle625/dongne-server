@@ -43,7 +43,7 @@ export const getClubMemberList = async (req, res) => {
     JWT Token's adminIdx include req.adminIdx ?
   */
   if(adminIdx != JWT_Token_adminIdx){
-      return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT))
+      return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
   }
 
 
@@ -91,7 +91,7 @@ export const getMemberInfo = async (req, res) => {
     }
 
     if (adminIdx != JWT_Token_adminIdx){
-        return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT))
+        return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
     }
 
     // validation (middle) ✅
@@ -131,10 +131,11 @@ export const getMemberInfo = async (req, res) => {
 */
 export const patchMember = async (req, res) => {
     /*
-        Query String: userIdx
+        Query String: userIdx, adminIdx
     */
     const userIdx = req.query.userIdx;
     const JWT_Token_adminIdx = req.verifiedToken.adminId;
+    const adminIdx = req.query.adminIdx;
   
     // validation (basic) ✅
     if(!userIdx) {
@@ -143,20 +144,31 @@ export const patchMember = async (req, res) => {
     if (userIdx <= 0) {
         return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
     }
+    if(!adminIdx) {
+        return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+    } 
+    if (adminIdx <= 0) {
+        return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+    }
 
-    // validation (middle) ❌
+    if (adminIdx != JWT_Token_adminIdx){
+        return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+    }
+
+    // validation (middle) ✅
     /*
         userIdx's Status valid with User Table ? - 프론트진에서 의미가 있는지는 확인필요 아래와 동일논리
         JWT Token's adminIdx include req.userIdx as ACTIVE ? - 프론트에서 검증이 필요하다면, 만들어야 될 듯
     */
+    /*
     const userStatus = await memberProvider.checkUserStatus(userIdx);
     if (userStatus != "ACTIVE"){
         return res.send(errResponse(baseResponse.USER_USERIDX_STATUS));
     }
-
+    */
 
     // 회원 삭제
-    const deleteMemberResult = await memberService.deleteMember(userIdx, JWT_Token_adminIdx);
+    const deleteMemberResult = await memberService.deleteMember(userIdx, adminIdx);
   
     return res.send(deleteMemberResult);
   };

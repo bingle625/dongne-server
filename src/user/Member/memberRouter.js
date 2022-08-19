@@ -1,6 +1,7 @@
 import express from "express";
 // import  {getDatabaseTest, getClubMemberList} from "./memberController";
 const member = require("./memberController");
+const userJwtMiddleWare = require("../../../config/userJwtMiddleWare");
 
 const memberRouter = express.Router();
 
@@ -11,32 +12,50 @@ memberRouter.get("/db", member.getDatabaseTest);
 /**
  * @swagger
  * paths:
- *  /user/member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
+ *  /user/member?adminIdx={adminIdx}&page={page}&pageSize={pageSize}&userIdx={userIdx}:
  *   get:
- *     tags: [USER: 회원 명단]
+ *     tags: [USER 회원 명단]
  *     summary: 단체 모든 회원명단 리스트 조회 API
  *     parameters:
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
- *           description: 단체 인덱스
+ *           description: 동아리 인덱스
  *         - in: query
  *           name: page
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
  *           description: 조회할 페이지 쪽 수
  *         - in: query
  *           name: pageSize
  *           securitySchemes:
  *              type: integer
- *           example: 5
+ *           default: 10
  *           required: true
  *           description: 한 페이지에서 조회할 데이터 수
+ *         - in: query
+ *           name: userIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 유저 인덱스
+ *         - in: header
+ *           name: x-access-token
+ *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
+ *           required: true
+ *           schema:
+ *               type: string
+ *           examples:
+ *              Sample:
+ *                 value: JWT_token
+ *                 summary: JWT_token_userIdx
+ *           style: simple
  *     responses:
  *       "1000":
  *         description: 단체 모든 회원명단 리스트 조회 API 성공
@@ -50,25 +69,50 @@ memberRouter.get("/db", member.getDatabaseTest);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/", member.getClubMemberList);
+memberRouter.get("/", userJwtMiddleWare, member.getClubMemberList);
 
 
 // 4.2 회원 상세 조회 API
 /**
  * @swagger
  * paths:
- *  /user/member/info?userIdx={userIdx}:
+ *  /user/member/info?retrieveUserIdx={retrieveUserIdx}&userIdx={userIdx}&adminIdx={adminIdx}:
  *   get:
- *     tags: [USER: 회원 명단]
+ *     tags: [USER 회원 명단]
  *     summary: 회원 상세 조회 API
  *     parameters:
+ *         - in: query
+ *           name: retrieveUserIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 3
+ *           required: true
+ *           description: 상세 조회할 유저 인덱스
  *         - in: query
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           example: 2
+ *           default: 1
  *           required: true
- *           description: 유저 인덱스
+ *           description: (본인)유저 인덱스
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
+ *         - in: header
+ *           name: x-access-token
+ *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
+ *           required: true
+ *           schema:
+ *               type: string
+ *           examples:
+ *              Sample:
+ *                 value: JWT_token
+ *                 summary: JWT_token_userIdx
+ *           style: simple
  *     responses:
  *       "1000":
  *         description: 단체 모든 회원명단 리스트 조회 API 성공
@@ -82,6 +126,6 @@ memberRouter.get("/", member.getClubMemberList);
  *         description: 데이터 베이스 에러
  *
  */
-memberRouter.get("/info", member.getMemberInfo);
+memberRouter.get("/info", userJwtMiddleWare, member.getMemberInfo);
 
 export default memberRouter;

@@ -1,7 +1,7 @@
 import express from "express";
 // import { getDatabaseTest } from "./groupController";
 const group = require("./groupController");
-const jwtMiddleWare = require("../../../config/jwtMiddleWare");
+const adminJwtMiddleWare = require("../../../config/adminJwtMiddleWare");
 
 const groupRouter = express.Router();
 
@@ -12,9 +12,9 @@ groupRouter.get("/db", group.getDatabaseTest);
 /**
  * @swagger
  * paths:
- *  /group:
+ *  /admin/group:
  *   post:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 추가 API
  *     consumes:
  *       - application/json
@@ -34,6 +34,7 @@ groupRouter.get("/db", group.getDatabaseTest);
  *                    adminIdx:
  *                          description: 단체 인덱스
  *                          type: integer
+ *                          default: 11
  *                    groupName:
  *                          description: 그룹 이름
  *                          type: string
@@ -43,9 +44,11 @@ groupRouter.get("/db", group.getDatabaseTest);
  *                    groupCategory:
  *                          description: 그룹 카테고리
  *                          type: string
+ *                          default: "#"
  *                    userIdx:
  *                          description: 유저 인덱스 배열
  *                          type: arrry
+ *                          default: [1,2,3]
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
@@ -84,7 +87,7 @@ groupRouter.get("/db", group.getDatabaseTest);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.post("/", jwtMiddleWare ,group.postGroup);
+groupRouter.post("/", adminJwtMiddleWare ,group.postGroup);
 
 
 
@@ -93,30 +96,30 @@ groupRouter.post("/", jwtMiddleWare ,group.postGroup);
 /**
  * @swagger
  * paths:
- *  /group?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
+ *  /admin/group?adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 리스트 (그룹 이름, 그룹 카테고리) 조회 API
  *     parameters:
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 11
  *           required: true
  *           description: 단체 인덱스
  *         - in: query
  *           name: page
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
  *           description: 조회할 페이지 쪽 수
  *         - in: query
  *           name: pageSize
  *           securitySchemes:
  *              type: integer
- *           example: 5
+ *           default: 10
  *           required: true
  *           description: 한 페이지에 조회할 데이터 수
  *         - in: header
@@ -141,7 +144,7 @@ groupRouter.post("/", jwtMiddleWare ,group.postGroup);
  *         description: 데이터 베이스 에러
  * 
  */
-groupRouter.get("/", jwtMiddleWare ,group.getGroupList);
+groupRouter.get("/", adminJwtMiddleWare ,group.getGroupList);
 
 
 
@@ -152,18 +155,25 @@ groupRouter.get("/", jwtMiddleWare ,group.getGroupList);
 /**
  * @swagger
  * paths:
- *  /group/info?groupIdx={groupIdx}:
+ *  /admin/group/info?groupIdx={groupIdx}&adminIdx={adminIdx}:
  *   get:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 정보(그룹 이름, 내용, 그룹 카테고리) 조회 API
  *     parameters:
  *         - in: query
  *           name: groupIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 20
  *           required: true
  *           description: 그룹 인덱스
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
@@ -186,37 +196,44 @@ groupRouter.get("/", jwtMiddleWare ,group.getGroupList);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.get("/info", jwtMiddleWare ,group.getGroupInfo);
+groupRouter.get("/info", adminJwtMiddleWare ,group.getGroupInfo);
 
 // 그룹 소속회원 조회 - part 2
 // Query String
 /**
  * @swagger
  * paths:
- *  /group/members?groupIdx={groupIdx}&page={page}&pageSize={pageSize}:
+ *  /admin/group/members?groupIdx={groupIdx}&adminIdx={adminIdx}&page={page}&pageSize={pageSize}:
  *   get:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 소속회원 조회 API
  *     parameters:
  *         - in: query
  *           name: groupIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 20
  *           required: true
  *           description: 그룹 인덱스
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: query
  *           name: page
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
  *           description: 조회할 페이지 쪽 수
  *         - in: query
  *           name: pageSize
  *           securitySchemes:
  *              type: integer
- *           example: 5
+ *           default: 5
  *           required: true
  *           description: 한 페이지에 조회할 데이터 수
  *         - in: header
@@ -241,7 +258,7 @@ groupRouter.get("/info", jwtMiddleWare ,group.getGroupInfo);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.get("/members", jwtMiddleWare ,group.getGroupMembers);
+groupRouter.get("/members", adminJwtMiddleWare ,group.getGroupMembers);
 
 
 // 4.4 그룹 수정
@@ -251,9 +268,9 @@ groupRouter.get("/members", jwtMiddleWare ,group.getGroupMembers);
 /**
  * @swagger
  * paths:
- *  /group/info/{groupIdx}:
+ *  /admin/group/info/{groupIdx}/{adminIdx}:
  *   patch:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 정보(그룹 이름, 내용, 그룹 카테고리) 수정 API
  *     consumes:
  *         - application/json
@@ -262,9 +279,16 @@ groupRouter.get("/members", jwtMiddleWare ,group.getGroupMembers);
  *           name: groupIdx
  *           schema:
  *              type: integer
- *           example: 1
+ *           default: 20
  *           required: true
  *           description: 그룹 인덱스
+ *         - in: Path
+ *           name: adminIdx
+ *           schema:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: body
  *           name: group
  *           description: 그룹 파라미터
@@ -318,7 +342,7 @@ groupRouter.get("/members", jwtMiddleWare ,group.getGroupMembers);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
+groupRouter.patch("/info/:groupIdx/:adminIdx", adminJwtMiddleWare ,group.patchGroupInfo);
 
 
 // 그룹 회원삭제
@@ -326,9 +350,9 @@ groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
 /**
  * @swagger
  * paths:
- *  /group/deleteMembers/{groupIdx}:
+ *  /admin/group/deleteMembers/{groupIdx}/{adminIdx}:
  *   patch:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 소속회원 삭제 수정 API
  *     consumes:
  *         - application/json
@@ -337,9 +361,16 @@ groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
  *           name: groupIdx
  *           schema:
  *              type: integer
- *           example: 1
+ *           default: 20
  *           required: true
  *           description: 그룹 인덱스
+ *         - in: Path
+ *           name: adminIdx
+ *           schema:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: body
  *           name: group
  *           description: 그룹 파라미터
@@ -365,6 +396,8 @@ groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
  *     responses:
  *       "1000":
  *         description: 그룹 소속회원 삭제 수정 API 성공
+ *       "2010":
+ *         description: 이미 그룹에서 삭제된 userIdx or 그룹에 속하지 않는 userIdx or 동아리에 속하지 않는 userIdx or 동네 웹을 탈퇴한 userIdx
  *       "4007":
  *         description: 파라미터 (groupIdx)를 입력하세요.
  *       "4008":
@@ -377,16 +410,16 @@ groupRouter.patch("/info/:groupIdx", jwtMiddleWare ,group.patchGroupInfo);
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/deleteMembers/:groupIdx", jwtMiddleWare ,group.patchGroupMembers);
+groupRouter.patch("/deleteMembers/:groupIdx/:adminIdx", adminJwtMiddleWare ,group.patchGroupMembers);
 
 // 그룹 회원추가
 // Path Variable & Body
 /**
  * @swagger
  * paths:
- *  /group/insertMembers/{groupIdx}:
+ *  /admin/group/insertMembers/{groupIdx}/{adminIdx}:
  *   post:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 소속회원 추가 수정 API
  *     consumes:
  *         - application/json
@@ -395,9 +428,16 @@ groupRouter.patch("/deleteMembers/:groupIdx", jwtMiddleWare ,group.patchGroupMem
  *           name: groupIdx
  *           schema:
  *              type: integer
- *           example: 1
+ *           default: 20
  *           required: true
  *           description: 그룹 인덱스
+ *         - in: Path
+ *           name: adminIdx
+ *           schema:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: body
  *           name: group
  *           description: 그룹 파라미터
@@ -435,7 +475,7 @@ groupRouter.patch("/deleteMembers/:groupIdx", jwtMiddleWare ,group.patchGroupMem
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.post("/insertMembers/:groupIdx", jwtMiddleWare ,group.postGroupMembers);
+groupRouter.post("/insertMembers/:groupIdx/:adminIdx", adminJwtMiddleWare ,group.postGroupMembers);
 
 // 4.5 그룹 삭제
 // TO DO : 6
@@ -443,18 +483,25 @@ groupRouter.post("/insertMembers/:groupIdx", jwtMiddleWare ,group.postGroupMembe
 /**
  * @swagger
  * paths:
- *  /group/delete/{groupIdx}:
+ *  /admin/group/delete/{groupIdx}/{adminIdx}:
  *   patch:
- *     tags: [출석 그룹]
+ *     tags: [ADMIN 출석 그룹]
  *     summary: 그룹 삭제 API
  *     parameters:
  *         - in: Path
  *           name: groupIdx
  *           schema:
  *              type: integer
- *           example: 1
+ *           default: 20
  *           required: true
  *           description: 그룹 인덱스
+ *         - in: Path
+ *           name: adminIdx
+ *           schema:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: 동아리 인덱스
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
@@ -469,6 +516,8 @@ groupRouter.post("/insertMembers/:groupIdx", jwtMiddleWare ,group.postGroupMembe
  *     responses:
  *       "1000":
  *         description: 그룹 삭제 API 성공
+ *       "2009":
+ *         description: 이미 삭제된 groupIdx or 본인 동아리에 속하지 않은 groupIdx or 존재하지 않은 groupIdx
  *       "4007":
  *         description: 파라미터 (groupIdx)를 입력하세요.
  *       "4008":
@@ -477,6 +526,6 @@ groupRouter.post("/insertMembers/:groupIdx", jwtMiddleWare ,group.postGroupMembe
  *         description: 데이터 베이스 에러
  *
  */
-groupRouter.patch("/delete/:groupIdx", jwtMiddleWare ,group.patchGroup);
+groupRouter.patch("/delete/:groupIdx/:adminIdx", adminJwtMiddleWare ,group.patchGroup);
 
 export default groupRouter;

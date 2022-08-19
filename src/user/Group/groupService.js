@@ -5,15 +5,21 @@ const { logger } = require("../../../config/winston");
 
 const groupDao = require("./groupDao");
 const groupProvider = require("./groupProvider");
+const res = require("express/lib/response");
 
 // API 5.1 - Paging
-exports.retrievePagingGroupList = async function (adminIdx, page, pageSize){
+exports.retrievePagingGroupList = async function (adminIdx, userIdx, page, pageSize){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌retrievePagingClubMemberList DB Error: ${error.message}`);
 
     try {
+        // Validation Check's adminIdx Status
+        const adminIdxStatus = await groupProvider.checkAdminIdxStatus(adminIdx, userIdx);
+        if (adminIdxStatus[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS)
+        }
+
         let start = 0;
-        
         // Paging Validation
         if (page <= 0){
             page = 1;
@@ -40,13 +46,25 @@ exports.retrievePagingGroupList = async function (adminIdx, page, pageSize){
 }
 
 // API 5.2 - Paging
-exports.retrievePagingGroupMembers = async function (groupIdx, page, pageSize){
+exports.retrievePagingGroupMembers = async function (groupIdx, adminIdx, userIdx, page, pageSize){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌retrievePagingClubMemberList DB Error: ${error.message}`);
 
     try {
-        let start = 0;
+        // Validation Check's adminIdx Status
+        const adminIdxStatus = await groupProvider.checkAdminIdxStatus(adminIdx, userIdx);
+        if (adminIdxStatus[0]?.status != "ACTIVE"){
+            return res.send(errResponse(baseResponseStatus.USER_ADMINIDX_STATUS));
+        }
+
+        // Validation Check's groupIdx Status
+        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
+        if (groupIdxStatus[0]?.status != "ACTIVE"){
+            return res.send(errResponse(baseResponseStatus.USER_GROUPIDX_STATUS))
+        }
         
+
+        let start = 0;
         // Paging Validation
         if (page <= 0){
             page = 1;
