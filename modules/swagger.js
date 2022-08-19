@@ -7,7 +7,7 @@ const swaggerDefinition = {
     version: "1.0.0",
     description: "test"
   },
-  host: "localhost:3000",
+  host: "http://3.38.55.57:3000/",
   basePath: "/"
 };
 

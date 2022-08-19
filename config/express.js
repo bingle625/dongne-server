@@ -13,6 +13,8 @@ import memberRouter from "../src/app/Member/memberRoute";
 import authRouter from "../src/app/Auth/authRouter";
 import adminRouter from "../src/app/Admin/adminRouter";
 
+
+
 module.exports = function () {
   const app = express();
 
@@ -31,8 +33,7 @@ module.exports = function () {
 
   /*
     해당 줄부터 도메인 추가
-   */
-
+   */	
   // 0. test API
   app.use("/test", testRouter);
   app.use("/schedule", scheduleRouter);
