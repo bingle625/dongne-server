@@ -172,9 +172,11 @@ export const getGroupList = async (req, res) => {
 */
 export const getGroupInfo = async (req, res) => {
   /*
-      Query String: group
+      Query String: group, adminIdx
   */
   const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
 
   // validation (basic) ✅
   if(!groupIdx) {
@@ -184,6 +186,17 @@ export const getGroupInfo = async (req, res) => {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
 
+  if(!adminIdx) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if (adminIdx != JWT_Token_adminIdx){
+      return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
+
   // Validation (Middle) ❌ 
   /*
     + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
@@ -191,7 +204,7 @@ export const getGroupInfo = async (req, res) => {
   */
 
   // 그룹 이름, 내용 조회
-  const groupInfoResult = await groupProvider.retrieveGroupInfo(groupIdx);
+  const groupInfoResult = await groupProvider.retrieveGroupInfo(groupIdx, adminIdx);
 
   return res.send(response(baseResponse.SUCCESS, groupInfoResult));
 };
@@ -204,9 +217,12 @@ export const getGroupInfo = async (req, res) => {
 */
 export const getGroupMembers = async (req, res) => {
   /*
-      Query String: groupIdx, page, pageSize
+      Query String: groupIdx,adminIdx ,page, pageSize
   */
   const groupIdx = req.query.groupIdx;
+  const adminIdx = req.query.adminIdx;
+  const JWT_Token_adminIdx = req.query.adminIdx;
+
 
   // validation (basic) ✅
   if(!groupIdx) {
@@ -216,6 +232,16 @@ export const getGroupMembers = async (req, res) => {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
   }
 
+  if(!adminIdx) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+      return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if (adminIdx != JWT_Token_adminIdx){
+      return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
 
   // Validation (Middle) ❌ 
   /*
@@ -231,7 +257,7 @@ export const getGroupMembers = async (req, res) => {
   }
 
   // 그룹 소속회원 조회
-  const groupMembersResult = await groupService.retrievePagingGroupMembers(groupIdx, page, pageSize);
+  const groupMembersResult = await groupService.retrievePagingGroupMembers(groupIdx, adminIdx, page, pageSize);
 
   return res.send(response(baseResponse.SUCCESS, groupMembersResult));
 };
@@ -249,15 +275,17 @@ export const getGroupMembers = async (req, res) => {
 /*
     API No. 4.4 - Part 1
     API Nanme: 그룹 이름, 내용, 그룹 카테고리 수정
-    [PATCH] /group/info/:groupIdx
+    [PATCH] /group/info/:groupIdx/:adminIdx
 */
 export const patchGroupInfo = async (req, res) => {
   /*
-      Body : groupName, groupIntroduction
-      Path Variable: groupIdx
+      Body : groupName, groupIntroduction, groupCategory
+      Path Variable: groupIdx, adminIdx
   */
   const groupIdx = req.params.groupIdx;
+  const adminIdx = req.params.adminIdx;
   const {groupName, groupIntroduction, groupCategory} = req.body;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
   // Validation (basic) ✅
   if (!groupIdx){
@@ -284,6 +312,17 @@ export const patchGroupInfo = async (req, res) => {
     return res.send(errResponse(baseResponse.GROUP_GROUPCATEGORY_LENGTH));
   }
 
+  if(!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if (adminIdx != JWT_Token_adminIdx){
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
+
   // Validation (Middle) ❌ 
   /*
     + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
@@ -292,7 +331,7 @@ export const patchGroupInfo = async (req, res) => {
 
   
   // 그룹 이름, 내용, 그룹 카테고리 수정
-  const editGroupInfoResponse = await groupService.editGroupInfo(groupIdx, groupName, groupIntroduction, groupCategory);
+  const editGroupInfoResponse = await groupService.editGroupInfo(groupIdx, adminIdx, groupName, groupIntroduction, groupCategory);
 
   return res.send(editGroupInfoResponse);
 }
@@ -302,15 +341,17 @@ export const patchGroupInfo = async (req, res) => {
 /*
     API No. 4.4 - Part 2
     API Nanme: 그룹 소속회원 삭제
-    [PATCH] /group/deleteMembers/:groupIdx
+    [PATCH] /admin/group/deleteMembers/:groupIdx/:adminIdx
 */
 export const patchGroupMembers = async (req, res) => {
   /*
       Body : userIdx [array type]
-      Path Variable: groupIdx
+      Path Variable: groupIdx, adminIdx
   */
   const groupIdx = req.params.groupIdx;
+  const adminIdx = req.params.adminIdx;
   const {userIdx} = req.body;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
   // Validation (basic) ✅
   if (!groupIdx){
@@ -326,6 +367,17 @@ export const patchGroupMembers = async (req, res) => {
     } else if (groupUserIdx <= 0){
       return res.send(errResponse(baseResponse.GROUP_USERIDX_LENGTH));
     }
+  }
+
+  if(!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if (adminIdx != JWT_Token_adminIdx){
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
   }
 
   // Validation (Middle) ❌ 
@@ -337,7 +389,7 @@ export const patchGroupMembers = async (req, res) => {
   */
 
   // 그룹 소속회원 삭제 - transcation 적용완료
-  const editGroupMembersResponse = await groupService.editGroupMembers(groupIdx, userIdx);
+  const editGroupMembersResponse = await groupService.editGroupMembers(groupIdx, adminIdx , userIdx);
 
   return res.send(editGroupMembersResponse);
 }
@@ -347,15 +399,17 @@ export const patchGroupMembers = async (req, res) => {
 /*
     API No. 4.4 - Part 3
     API Nanme: 그룹 소속회원 추가
-    [POST] /group/insertMembers/:groupIdx
+    [POST] /group/insertMembers/:groupIdx/:adminIdx
 */
 export const postGroupMembers = async (req, res) => {
   /*
       Body : userIdx [array type]
-      Path Variable: groupIdx
+      Path Variable: groupIdx, adminIdx
   */
   const groupIdx = req.params.groupIdx;
+  const adminIdx = req.params.adminIdx;
   const {userIdx} = req.body;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
   // Validation (basic) ✅
   if (!groupIdx){
@@ -373,6 +427,18 @@ export const postGroupMembers = async (req, res) => {
     }
   }
 
+  if(!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if (adminIdx != JWT_Token_adminIdx){
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
+
+
   // Validation (Middle) ❌ 
   /*
     + groupIdx's Status valid with GroupList Table ? - 프론트진에서 필요한 지 생각 후 Validation
@@ -383,7 +449,7 @@ export const postGroupMembers = async (req, res) => {
   */
 
   // 그룹 소속회원 추가 - transcation 적용완료
-  const createGroupMembersResponse = await groupService.insertGroupMembers(groupIdx, userIdx);
+  const createGroupMembersResponse = await groupService.insertGroupMembers(groupIdx, adminIdx, userIdx);
 
   return res.send(createGroupMembersResponse);
 }
@@ -401,12 +467,25 @@ export const patchGroup = async (req, res) => {
       Path Variable: groupIdx
   */
   const groupIdx = req.params.groupIdx;
+  const adminIdx = req.params.adminIdx;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
   
   // Validation (basic) ✅
   if (!groupIdx){
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
   } else if (groupIdx <= 0) {
       return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
+
+  if(!adminIdx) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+  } 
+  if (adminIdx <= 0) {
+    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+  }
+
+  if (adminIdx != JWT_Token_adminIdx){
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
   }
 
   // Validation (Middle) ❌ 
@@ -416,7 +495,7 @@ export const patchGroup = async (req, res) => {
   */
 
   // 그룹 삭제
-  const deleteGroupResponse = await groupService.deleteGroup(groupIdx);
+  const deleteGroupResponse = await groupService.deleteGroup(groupIdx, adminIdx);
 
   return res.send(deleteGroupResponse);
 }

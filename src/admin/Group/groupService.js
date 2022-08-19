@@ -115,20 +115,26 @@ exports.retrievePagingGroupList = async function (adminIdx, page, pageSize){
 }
 
 // API 4.3 - Paging
-exports.retrievePagingGroupMembers = async function (groupIdx, page, pageSize){
+exports.retrievePagingGroupMembers = async function (groupIdx, adminIdx, page, pageSize){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌retrievePagingClubMemberList DB Error: ${error.message}`);
 
     try {
+        // Validation Check's groupIdx Status (middle)
+        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
+        if (groupIdxStatus[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
+        }
+
+
         let start = 0;
-        
         // Paging Validation
         if (page <= 0){
             page = 1;
         } else {
             start = (page - 1) * pageSize;
         }
-        const totalDataCountResult = await groupProvider.retrieveGroupMembersTotalDataCount(groupIdx);
+        const totalDataCountResult = await groupProvider.retrieveGroupMembersTotalDataCount(groupIdx, adminIdx);
         // req.page's valid with retrieveData ?
         const lastPage = Math.ceil(totalDataCountResult[0].totalDataCount/ pageSize);
         if (page > lastPage){
@@ -150,11 +156,18 @@ exports.retrievePagingGroupMembers = async function (groupIdx, page, pageSize){
 
 
 // 그룹 이름, 내용 수정 - API 4.4 -> Part 1
-exports.editGroupInfo = async function (groupIdx, groupName, groupIntroduction, groupCategory){
+exports.editGroupInfo = async function (groupIdx, adminIdx , groupName, groupIntroduction, groupCategory){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌editGroupInfo DB Error: ${error.message}`);
 
     try {
+        // Validation Check's groupIdx Status (middle)
+        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
+        if (groupIdxStatus[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
+        }
+        
+
         const editGroupInfoParams = [groupName, groupIntroduction, groupCategory, groupIdx];
         const editGroupInfoResult = await groupDao.editGroupInfo(connection, editGroupInfoParams);
         return response(baseResponseStatus.SUCCESS);
@@ -168,12 +181,27 @@ exports.editGroupInfo = async function (groupIdx, groupName, groupIntroduction, 
 }
 
 // 그룹 소속회원 삭제 - API 4.4 -> Part 2
-exports.editGroupMembers = async function (groupIdx, userIdx){
+exports.editGroupMembers = async function (groupIdx, adminIdx, userIdx){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌editGroupMembers DB Error: ${error.message}`);
 
     try {
+        // Validation Check's groupIdx Status (middle)
+        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
+        if (groupIdxStatus[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
+        }
+
+        // Validation Check's deleteUserIdx Status (middle)
         var groupUserIdx;
+        for (groupUserIdx of userIdx){
+            const groupUserIdxStatus = await groupProvider.checkGroupUserIdxStatus(groupUserIdx, groupIdx, adminIdx);
+            if (groupUserIdxStatus[0]?.ClubUserIdxStatus != "ACTIVE" || groupUserIdxStatus[0]?.GroupUserIdxStatus != "ACTIVE" || groupUserIdxStatus[0]?.UserStatus){
+                return errResponse(baseResponseStatus.ADMIN_DELETE_GROUPUSERIDX_STATUS);
+            }
+        }
+        
+        // 그룹 소속회원 삭제
         for (groupUserIdx of userIdx){
             await connection.beginTransaction();
             const editGroupMembersParams = [groupIdx, groupUserIdx];
@@ -193,12 +221,32 @@ exports.editGroupMembers = async function (groupIdx, userIdx){
 }
 
 // 그룹 소속회원 추가 - API 4.4 -> Part 3
-exports.insertGroupMembers = async function (groupIdx, userIdx){
+exports.insertGroupMembers = async function (groupIdx, adminIdx, userIdx){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌createGroupMembers DB Error: ${error.message}`);
 
     try {
+        // Validation Check's groupIdx Status (middle)
+        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
+        if (groupIdxStatus[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
+        }
+
+        // Validation Check's insertUserIdx Status (middle)
         var groupUserIdx;
+        for (groupUserIdx of userIdx){
+            const groupUserIdxStatus = await groupProvider.checkInsertGroupUserIdxStatus1(groupUserIdx, adminIdx);
+            if (groupUserIdxStatus[0]?.ClubUserIdxStatus != "ACTIVE" || groupUserIdxStatus[0]?.UserStatus != "ACTIVE"){
+                return errResponse(baseResponseStatus.ADMIN_INSERT_GROUPUSERIDX_STATUS);
+            }
+
+            const groupUserIdxStatus2 = await groupProvider.checkInsertGroupUserIdxStatus2(groupUserIdx, groupIdx);
+            if (groupUserIdxStatus2[0]?.GroupUserIdxStatus == "ACTIVE"){
+                return errResponse(baseResponseStatus.ADMIN_INSERT_GROUPUSERIDX_STATUS);
+            }
+        }
+
+        // 그룹 소속회원 추가
         for (groupUserIdx of userIdx){
             await connection.beginTransaction();
             const insertGroupMembersParams = [groupUserIdx, groupIdx];
@@ -219,11 +267,18 @@ exports.insertGroupMembers = async function (groupIdx, userIdx){
 
 
 // 그룹 삭제 - API NO. 4.5
-exports.deleteGroup = async function (groupIdx){
+exports.deleteGroup = async function (groupIdx, adminIdx){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌deleteGroup DB Error: ${error.message}`);
 
     try {
+        // Validation Check's groupIdx Status (middle)
+        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
+        if (groupIdxStatus[0]?.status != "ACTIVE"){
+            return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
+        }
+
+        // 그룹 삭제
         const GroupResult = await groupDao.editGroup(connection, groupIdx);
         return response(baseResponseStatus.SUCCESS);
 

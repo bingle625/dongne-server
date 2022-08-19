@@ -55,8 +55,21 @@ const selectTotalDataCount = async (connection, adminIdx) => {
   return totalDataCountRows;
 };
 
+// API NO. 4.1 - Validation Check's adminIdx Status
+const selectAdminIdxStatus = async (connection, adminIdxStatusParams) => {
+  const selectAdminIdxStatusQuery = `
+    SELECT status
+    FROM ClubMembers
+    WHERE adminIdx = ? and userIdx = ?;
+      `;
+
+  const [adminIdxStatusRows] = await connection.query(selectAdminIdxStatusQuery, adminIdxStatusParams);
+
+  return adminIdxStatusRows;
+};
+
 // 회원 상세 조회 - API NO. 4.2
-const selectMemberInfo = async (connection, userIdx) => {
+const selectMemberInfo = async (connection, retrieveUserIdx) => {
   const selectMemberInfoQuery = `
   SELECT name as 이름,
   phoneNum as 전화번호,
@@ -68,7 +81,7 @@ const selectMemberInfo = async (connection, userIdx) => {
   WHERE userIdx = ? and status = "ACTIVE"
       `;
 
-  const [memberInfoRows] = await connection.query(selectMemberInfoQuery, userIdx);
+  const [memberInfoRows] = await connection.query(selectMemberInfoQuery, retrieveUserIdx);
 
   return memberInfoRows;
 };
@@ -86,6 +99,19 @@ const selectUserStatus = async (connection, userIdx) => {
   return userStatusRows;
 };
 
+// API NO. 4.2 - Validation Check's retrieveUserIdx Status
+const selectRetrieveUserIdxStatus = async (connection, retrieveUserIdxStatusParams) => {
+  const selectRetrieveUserIdxStatusQuery = `
+      SELECT status
+      FROM ClubMembers
+      WHERE adminIdx = ? and userIdx = ?;
+      `;
+
+  const [userStatusRows] = await connection.query(selectRetrieveUserIdxStatusQuery, retrieveUserIdxStatusParams);
+
+  return userStatusRows;
+};
+
 
   module.exports = 
   { selectUserPosts,
@@ -94,6 +120,8 @@ const selectUserStatus = async (connection, userIdx) => {
     selectMemberInfo,
     selectUserStatus,
     selectTotalDataCount,
+    selectAdminIdxStatus,
+    selectRetrieveUserIdxStatus,
 
 
     

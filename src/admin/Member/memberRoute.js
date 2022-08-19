@@ -37,21 +37,21 @@ memberRouter.get("/db", member.getDatabaseTest);
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
- *           description: 단체 인덱스
+ *           description: 동아리 인덱스
  *         - in: query
  *           name: page
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 1
  *           required: true
  *           description: 조회할 페이지 쪽 수
  *         - in: query
  *           name: pageSize
  *           securitySchemes:
  *              type: integer
- *           example: 5
+ *           default: 10
  *           required: true
  *           description: 한 페이지에 조회할 데이터 수
  *         - in: header
@@ -94,14 +94,14 @@ memberRouter.get("/",adminJwtMiddleWare ,member.getClubMemberList);
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           example: 2
+ *           default: 3
  *           required: true
  *           description: 유저 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 11
+ *           default: 1
  *           required: true
  *           description: 동아리 인덱스
  *         - in: header
@@ -148,14 +148,14 @@ memberRouter.get("/info",adminJwtMiddleWare ,member.getMemberInfo);
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           example: 2
+ *           default: 3
  *           required: true
  *           description: 유저 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 11
+ *           default: 1
  *           required: true
  *           description: 동아리 인덱스
  *         - in: header
@@ -199,7 +199,7 @@ memberRouter.patch("/",adminJwtMiddleWare ,member.patchMember);
  *           name: adminIdx
  *           Schemes:
  *              type: integer
- *           example: 11
+ *           default: 1
  *           required: true
  *           description: 동아리 인덱스
  *         - in: body
@@ -257,14 +257,14 @@ export default memberRouter;
  *           name: userIdx
  *           securitySchemes:
  *              type: integer
- *           example: 1
+ *           default: 3
  *           required: true
  *           description: 유저 인덱스
  *         - in: query
  *           name: adminIdx
  *           securitySchemes:
  *              type: integer
- *           example: 11
+ *           default: 1
  *           required: true
  *           description: 동아리 인덱스
  *         - in: body

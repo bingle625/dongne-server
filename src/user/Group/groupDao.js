@@ -41,6 +41,19 @@ const selectTotalDataCount = async (connection, adminIdx) => {
   return totalDataCountRows;
 };
 
+// API NO. 5.1 - Validation Check's adminIdx Status
+const selectAdminIdxStatus = async (connection, adminIdxStatusParams) => {
+  const selectAdminIdxStatusQuery = `
+    SELECT status
+    FROM ClubMembers
+    WHERE adminIdx = ? and userIdx = ?;
+      `;
+
+  const [adminIdxStatusRows] = await connection.query(selectAdminIdxStatusQuery, adminIdxStatusParams);
+
+  return adminIdxStatusRows;
+};
+
 // 그룹 이름, 내용 조회 - API NO. 5.2 -> Part 1
 const selectGroupInfo = async (connection, groupIdx) => {
   const selectGroupInfoQuery = `
@@ -55,6 +68,20 @@ const selectGroupInfo = async (connection, groupIdx) => {
   const [groupInfoRows] = await connection.query(selectGroupInfoQuery, groupIdx);
 
   return groupInfoRows;
+};
+
+// API NO. 5.2 -> Part 1 - Validation Check's groupIdx Status
+const selectGroupIdxStatus = async (connection, groupIdxStatusParams) => {
+  const selectGroupIdxQuery = `
+    SELECT
+    status
+    FROM GroupList
+    WHERE groupIdx = ? and adminIdx = ?;
+      `;
+
+  const [groupIdxStatusRows] = await connection.query(selectGroupIdxQuery, groupIdxStatusParams);
+
+  return groupIdxStatusRows;
 };
 
 
@@ -115,6 +142,9 @@ const selectAdminIdx = async (connection, groupIdx) => {
     selectGroupMembersTotalDataCount,
     selectAdminIdx,
     selectTotalDataCount,
+    selectAdminIdxStatus,
+    selectGroupIdxStatus
+
 
 
 
