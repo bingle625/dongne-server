@@ -10,8 +10,8 @@ import "dotenv/config";
 import { logger } from "../../../config/winston";
 
 export const createFinAccount = async (adminIdx, finAccountCategoryIdx, isProfit, finAccountItem, finAccountCost, finAccountDate, etc) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const connection = await pool.getConnection(async (conn) => conn);
     const finAccountInfo = [adminIdx, finAccountCategoryIdx, isProfit, finAccountItem, finAccountCost, finAccountDate, etc];
 
     const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
@@ -35,17 +35,18 @@ export const createFinAccount = async (adminIdx, finAccountCategoryIdx, isProfit
       return errResponse(baseResponse.FINACCOUNT_CATEGORY_DELETED);
     }
     const createAccountResult = await accountDao.insertFinAccount(connection, finAccountInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, createAccountResult[0].insertId);
   } catch (err) {
     logger.error(`Admin - createFinAccount Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
 export const createFinAccCategory = async (categoryName, adminIdx) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const connection = await pool.getConnection(async (conn) => conn);
     const finAccCategoryInfo = [categoryName, adminIdx];
     //todo: admin 상태 확인
     const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
@@ -58,17 +59,18 @@ export const createFinAccCategory = async (categoryName, adminIdx) => {
     const categoryRows = await accountProvider.categoryDupCheck(adminIdx, categoryName);
     if (categoryRows.length !== 0) return errResponse(baseResponse.FINACCOUNT_CATEGORY_EXIST);
     const createAccCategoryResult = await accountDao.insertFinAccCategory(connection, finAccCategoryInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, createAccCategoryResult[0].insertId);
   } catch (err) {
     logger.error(`Admin - createFinAccCategory Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
 export const updateFinCategory = async (adminIdx, categroyIdx, categoryName) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const connection = await pool.getConnection(async (conn) => conn);
     const finAccCategoryInfo = [categoryName, categroyIdx];
     //todo: admin 상태 확인
     const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
@@ -98,17 +100,18 @@ export const updateFinCategory = async (adminIdx, categroyIdx, categoryName) => 
       return errResponse(baseResponse.FINACCOUNT_CATEGORY_EXIST);
     }
     const updateAccCategoryResult = await accountDao.modifyFinAccCategory(connection, finAccCategoryInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, updateAccCategoryResult[0].insertId);
   } catch (err) {
     logger.error(`Admin - updateFinCategory Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
 export const updateFinAccount = async (accountIdx, adminIdx, finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const connection = await pool.getConnection(async (conn) => conn);
     const finAccountInfo = [finAccountCategoryIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, etc, accountIdx];
     //todo: adminIdx 상태 확인
     const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
@@ -138,17 +141,18 @@ export const updateFinAccount = async (accountIdx, adminIdx, finAccountCategoryI
       return errResponse(baseResponse.FINACCOUNT_CATEGORY_DELETED);
     }
     const updateFinAccountResult = await accountDao.modifyFinAccount(connection, finAccountInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, updateFinAccountResult[0].insertId);
   } catch (err) {
     logger.error(`Admin - updateFinAccount Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
 export const deleteFinAccount = async (accountIdx, adminIdx) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const connection = await pool.getConnection(async (conn) => conn);
     const finAccountInfo = [accountIdx];
     //todo: adminIdx 상태 확인
     const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
@@ -165,17 +169,18 @@ export const deleteFinAccount = async (accountIdx, adminIdx) => {
     if (finAccountInfoRows[0].status === "DELETED") return errResponse(baseResponse.FINACCOUNT_ALREADY_DELETED);
 
     const deleteFinAccountResult = await accountDao.deleteFinAccount(connection, finAccountInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, deleteFinAccountResult[0].insertId);
   } catch (err) {
     logger.error(`Admin - deleteFinAccount Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
 export const getFinAccountByIdx = async (accountIdx, adminIdx) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const connection = await pool.getConnection(async (conn) => conn);
     const finAccountInfo = [accountIdx];
     //todo: adminIdx 상태 확인
     const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
@@ -192,10 +197,11 @@ export const getFinAccountByIdx = async (accountIdx, adminIdx) => {
     if (finAccountInfoRows[0].status === "DELETED") return errResponse(baseResponse.FINACCOUNT_ALREADY_DELETED);
 
     const getFinAccountResult = await accountDao.getFinAccountByIdx(connection, finAccountInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, getFinAccountResult[0]);
   } catch (err) {
     logger.error(`Admin - deleteFinAccount Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
