@@ -246,7 +246,6 @@ memberRouter.patch("/",adminJwtMiddleWare ,member.patchMember);
  *
  */
 memberRouter.post("/update/:adminIdx", adminJwtMiddleWare, member.postClubTeam);
-export default memberRouter;
 
 // 3.5 동아리 소속회원 팀/조 카테고리 적용하기
 /**
@@ -255,7 +254,7 @@ export default memberRouter;
  *  /admin/member/update?userIdx={userIdx}&adminIdx={adminIdx}:
  *   patch:
  *     tags: [ADMIN 회원 명단]
- *     summary: 동아리의 회원 팀/조 카테고리 추가 API
+ *     summary: 동아리의 회원 팀/조 카테고리 적용 API
  *     parameters:
  *         - in: query
  *           name: userIdx
@@ -321,3 +320,94 @@ export default memberRouter;
  *
  */
 memberRouter.patch("/update", adminJwtMiddleWare, member.patchMemberClubTeam);
+
+
+// 추가 API
+// 3.6 동아리 마이페이지 정보 수정하기
+/**
+ * @swagger
+ * paths:
+ *  /admin/member/mypage?adminIdx={adminIdx}:
+ *   patch:
+ *     tags: [ADMIN 회원 명단]
+ *     summary: 동아리의 마이페이지 수정 API
+ *     parameters:
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 12
+ *           required: true
+ *           description: 동아리 인덱스
+ *         - in: body
+ *           name: ClubTeamList
+ *           description: 마이페이지 수정 파라미터
+ *           schema:
+ *              type: object
+ *              required:
+ *                - clubName
+ *                - establishmentYea
+ *                - clubRegion
+ *                - clubWebLink
+ *                - clubIntroduction
+ *              properties:
+ *                    clubName:
+ *                        description: 동아리 이름
+ *                        type: int
+ *                        default: "마하"
+ *                    establishmentYear:
+ *                        description: 동아리 설립 연도
+ *                        type: int
+ *                        default: "2022-03-07"
+ *                    clubRegion:
+ *                        description: 동아리 활동 지역
+ *                        type: int
+ *                        default: "안산/에리카"
+ *                    clubWebLink:
+ *                        description: 동아리 웹 사이트
+ *                        type: int
+ *                        default: "http://maha.com"
+ *                    clubIntroduction:
+ *                        description: 동아리 소개
+ *                        type: int
+ *                        default: "마하의 속도로 평평한 에리카 부지에서 보드를 타는 동아리입니다."
+ *         - in: header
+ *           name: x-access-token
+ *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
+ *           schema:
+ *               type: string
+ *           examples:
+ *              Sample:
+ *                 value: JWT_token
+ *                 summary: JWT_token_adminIdx
+ *           style: simple
+ *     responses:
+ *       "1000":
+ *         description: 동아리의 마이페이지 수정 API 성공
+ *       "3000":
+ *         description: 파라미터(userIdx)를 입력하세요.
+ *       "3001":
+ *         description: userIdx를 0보다 큰 값으로 입력해주세요.
+ *       "2001":
+ *         description: 파라미터(adminIdx)를 입력해주세요.
+ *       "2002":
+ *         description: adminIdx를 0보다 큰 값으로 입력해주세요.
+ *       "2006":
+ *         description: 파라미터(clubTeamListIdx)를 입력해주세요.
+ *       "2007":
+ *         description: clubTeamListIdx를 0보다 큰 값으로 입력해주세요.
+ *       "2008":
+ *         description: 유효하지 않은 userIdx입니다. [INACTIVE or DELETED or NULL[동아리에 속하지 않은 회원 or 동네 웹에 존재하지 않은 회원]
+ *       "3002":
+ *         description: 유효하지 않은 clubTeamListIdx입니다. [INACTIVE or DELETED or NULL[동아리에 속하지 않은 팀/조 카테고리]
+ *       "5000":
+ *         description: 데이터 베이스 에러
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
+ *
+ */
+memberRouter.patch("/mypage", adminJwtMiddleWare, member.patchMyPage);
+
+export default memberRouter;

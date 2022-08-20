@@ -173,6 +173,24 @@ const updateMemberClubTeam = async (connection, updateMemberClubTeamParams) => {
   return updateMemberClubTeamRows;
 };
 
+// 동아리 마이페이지 수정 - API NO. 3.6
+const updateClubMypage = async (connection, editClubMypageParams) => {
+  const updateMemberClubTeamQuery = `
+    UPDATE Admin
+    SET
+    clubName = ?,
+    establishmentYear = ?,
+    clubRegion = ?,
+    clubWebLink = ?,
+    clubIntroduction = ?
+    WHERE adminIdx = ?
+      `;
+
+  const [updateMemberClubTeamRows] = await connection.query(updateMemberClubTeamQuery, editClubMypageParams);
+
+  return updateMemberClubTeamRows;
+};
+
   module.exports = 
   { selectUserPosts,
     selectClub,
@@ -186,6 +204,8 @@ const updateMemberClubTeam = async (connection, updateMemberClubTeamParams) => {
     createClubTeam,
     selectClubTeamListIdxStatus,
     updateMemberClubTeam,
+    updateClubMypage,
+    
 
     
   };

@@ -119,3 +119,21 @@ exports.updateMemberClubTeam = async function (clubTeamListIdx, userIdx, adminId
         connection.release(); 
     }
 }
+
+// 동아리 마이페이지 수정 - API NO. 3.6
+exports.editClubMypage = async function (adminIdx, clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌deleteGroup DB Error: ${error.message}`);
+
+    try {
+        const editClubMypageParams = [clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction, adminIdx];
+        const editClubMypageResult = await memberDao.updateClubMypage(connection, editClubMypageParams);
+        return response(baseResponseStatus.SUCCESS);
+
+    } catch (error) {
+        handleError(error);
+        return errResponse(baseResponseStatus.DB_ERRORS);
+    } finally {
+        connection.release(); 
+    }
+}

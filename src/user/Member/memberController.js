@@ -2,6 +2,7 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 const memberProvider = require("./memberProvider");
 const memberService = require("./memberService");
+const moment = require("moment");
 
 
 
@@ -140,11 +141,11 @@ export const getMemberInfo = async (req, res) => {
   };
 
 
-  /*
+/*
     API No. 4.3
     API Nanme: 회원의 소속 동아리 리스트 조회 API
     [GET] /member/home?userIdx=
-  */
+*/
 
 export const getClubList = async (req, res) => {
     /*
@@ -185,4 +186,95 @@ export const getClubList = async (req, res) => {
     const clubListResult = await memberProvider.retrieveClubList(userIdx);
   
     return res.send(response(baseResponse.SUCCESS, clubListResult));
+  };
+
+
+
+/*
+    API No. 4.4
+    API Nanme: 개인 회원의 마이페이지 수정 API
+    [GET] /member/mypage?userIdx=
+*/
+
+export const patchUserMypage = async (req, res) => {
+    /*
+        Query String: userIdx
+        Body: name, school, phoneNum, birth, address, introduction
+    */
+    const userIdx = req.query.userIdx;
+    const JWT_token_userIdx = req.verifiedToken.adminId;
+    const {name, school, phoneNum, birth, address, introduction} = req.body
+
+  
+    // validation (basic) ✅
+    if(!userIdx) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+    } 
+    if (userIdx <= 0) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+    }
+
+    if (userIdx != JWT_token_userIdx){
+        return res.send(errResponse(baseResponse.JWT_USER_TOKEN_DIFFERENT));
+    }
+
+
+    if(!name) {
+        return res.send(errResponse(baseResponse.USER_NAME_EMPTY));
+    } 
+    if (name.length > 30) {
+        return res.send(errResponse(baseResponse.USER_NAME_LENGTH));
+    }
+
+    if(!birth) {
+        return res.send(errResponse(baseResponse.USER_BIRTH_EMPTY));
+    } 
+    if (
+        !moment(birth, "YYYY/MM/DD", true).isValid() &&
+        !moment(birth, "YYYY-MM-DD", true).isValid()) {
+        return res.send(errResponse(baseResponse.USER_BIRTH_TYPE));
+    }
+
+    if(!school) {
+        return res.send(errResponse(baseResponse.USER_SCHOOL_EMPTY));
+    } 
+    if (school.length > 45) {
+        return res.send(errResponse(baseResponse.USER_SCHOOL_LENGTH));
+    }
+
+    if(!phoneNum) {
+        return res.send(errResponse(baseResponse.USER_PHONENUM_EMPTY));
+    } 
+    if (phoneNum.length > 45) {
+        return res.send(errResponse(baseResponse.USER_PHONENUM_LENGTH));
+    }
+
+    if(!address) {
+        return res.send(errResponse(baseResponse.USER_ADDRESS_EMPTY));
+    } 
+    if (address.length > 100) {
+        return res.send(errResponse(baseResponse.USER_ADDRESS_LENGTH));
+    }
+
+    if(!introduction) {
+        return res.send(errResponse(baseResponse.USER_INTRODUCTION_EMPTY));
+    }
+    if(introduction.length > 450) {
+        return res.send(errResponse(baseResponse.USER_INTRODUCTION_LENGTH));
+    }
+
+    
+
+
+    // validation (middle)
+    /*
+        Auth 로그인 API를 통해 userIdx가 유효한 사용자임을 Validation 검증을 함.
+        그래서 여기선 별도의 Validation (middle) 존재하지 않음.
+    */
+
+
+    // 개인 회원의 마이페이지 수정 
+    const editUserMypageResult = await memberService.editUserMypage(userIdx, name, school, phoneNum, birth, address, introduction);
+  
+    return res.send(response(baseResponse.SUCCESS));
   };

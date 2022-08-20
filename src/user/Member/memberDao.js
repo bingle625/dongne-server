@@ -143,6 +143,25 @@ const selectRetrieveUserStatus = async (connection, userIdx) => {
   return userStatusRows;
 };
 
+// 개인 회원의 마이페이지 수정 - API NO. 4.4
+const updateUserMypageClub = async (connection, editUserMypageParams) => {
+  const updateUserMypageParamsQuery = `
+    UPDATE User
+    SET
+    name = ?,
+    school = ?,
+    phoneNum = ?,
+    birth = ?,
+    address = ?,
+    introduction = ?
+    WHERE userIdx = ?;
+      `;
+
+  const [userStatusRows] = await connection.query(updateUserMypageParamsQuery, editUserMypageParams);
+
+  return userStatusRows;
+};
+
 
   module.exports = 
   { selectUserPosts,
@@ -155,6 +174,8 @@ const selectRetrieveUserStatus = async (connection, userIdx) => {
     selectRetrieveUserIdxStatus,
     selectRetrieveUserStatus,
     selectClubList,
+    updateUserMypageClub,
+    
 
 
 

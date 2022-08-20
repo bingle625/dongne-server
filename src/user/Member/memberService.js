@@ -44,3 +44,21 @@ exports.retrievePagingClubMemberList = async function (adminIdx, userIdx, page, 
         connection.release(); 
     }
 }
+
+// 개인 회원의 마이페이지 수정 - API NO. 4.4
+exports.editUserMypage = async function (userIdx, name, school, phoneNum, birth, address, introduction) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const handleError = (error) => logger.error(`❌retriebeClubMemberList DB Error: ${error.message}`);
+  
+    try {
+      const editUserMypageParams = [name, school, phoneNum, birth, address, introduction, userIdx];
+      const editUserMypageResult = await memberDao.updateUserMypageClub(connection, editUserMypageParams);
+      connection.release();
+      return editUserMypageResult;
+  
+    } catch (error) {
+      handleError(error);
+      connection.release();
+      return errResponse(baseResponseStatus.DB_ERRORS);
+    }
+  };
