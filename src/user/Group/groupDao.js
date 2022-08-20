@@ -16,8 +16,8 @@ const selectUserPosts = async (connection) => {
 const selectGroupList = async (connection, groupListPagingParams) => {
   const selectGroupListQuery = `
     SELECT
-    groupName as "회원의 출결그룹",
-    groupCategory as "그룹 카테고리"
+    groupName,
+    groupCategory
     FROM GroupList
     WHERE adminIdx = ? and status = "ACTIVE"
     LIMIT ?, ?      
@@ -58,9 +58,9 @@ const selectAdminIdxStatus = async (connection, adminIdxStatusParams) => {
 const selectGroupInfo = async (connection, groupIdx) => {
   const selectGroupInfoQuery = `
     SELECT 
-    groupName as 그룹이름,
-    groupIntroduction as 활동내용,
-    groupCategory as "그룹 카테고리"
+    groupName,
+    groupIntroduction,
+    groupCategory
     FROM GroupList
     WHERE groupIdx = ? and status = "ACTIVE"       
       `;
@@ -89,8 +89,8 @@ const selectGroupIdxStatus = async (connection, groupIdxStatusParams) => {
 const selectGroupMembers = async (connection, groupMembersPagingParams) => {
 
   const selectGroupMembersQuery = `
-  SELECT name as 회원이름,
-  userImgUrl as 회원프로필
+  SELECT name,
+  userImgUrl
   FROM GroupMembers
   JOIN User
   ON GroupMembers.userIdx = User.userIdx
