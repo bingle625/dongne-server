@@ -16,10 +16,16 @@ import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
  *     parameters:
  *       - name: x-access-token
  *         in: header
- *         description: an authorization header
+ *         description: jwt 토큰
  *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *         required: true
  *         type: string
+ *       - in: header
+ *         name: adminIdx
+ *         description: 클럽 admin 인덱스
+ *         default: 1
+ *         required: true
+ *         type: integer
  *       - in: body
  *         name: finAccountInfo
  *         description: 회계 정보 파라미터
@@ -111,10 +117,16 @@ adminfinAccountRouter.post("/", adminJwtMiddleWare, finAccount.createFinAccount)
  *     parameters:
  *       - name: x-access-token
  *         in: header
- *         description: an authorization header
+ *         description: jwt 토큰
  *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *         required: true
  *         type: string
+ *       - in: header
+ *         name: adminIdx
+ *         description: 클럽 admin 인덱스
+ *         default: 1
+ *         required: true
+ *         type: integer
  *       - in: body
  *         name: finAccountInfo
  *         description: 회계 카테고리 정보 파라미터
@@ -186,13 +198,13 @@ adminfinAccountRouter.get("/", adminJwtMiddleWare, finAccount.getFinAccount);
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - in: header
  *           name: adminIdx
- *           description: an authorization header
+ *           description: 클럽 어드민 인덱스
  *           default: 1
  *           required: true
  *           type: integer
@@ -233,13 +245,13 @@ adminfinAccountRouter.get("/month", adminJwtMiddleWare, finAccount.getFinAccount
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - in: header
  *           name: adminIdx
- *           description: an authorization header
+ *           description: 클럽 어드민 인덱스
  *           default: 1
  *           required: true
  *           type: integer
@@ -289,7 +301,7 @@ adminfinAccountRouter.get("/day", adminJwtMiddleWare, finAccount.getFinAccountDa
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
@@ -349,7 +361,7 @@ adminfinAccountRouter.patch("/category/:cId", adminJwtMiddleWare, finAccount.pat
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
@@ -454,7 +466,7 @@ adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAcco
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string

@@ -14,13 +14,13 @@ import userJwtMiddleWare from "../../../config/userJwtMiddleWare";
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
  *           required: true
  *           type: string
  *         - name: adminIdx
  *           in: header
- *           description: an authorization header
+ *           description: 클럽 admin 인덱스
  *           default: 1
  *           required: true
  *           type: integer
@@ -44,13 +44,13 @@ userfinAccountRouter.get("/", userJwtMiddleWare, finAccount.getFinAccount);
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
  *           required: true
  *           type: string
  *         - in: header
  *           name: adminIdx
- *           description: an authorization header
+ *           description: 클럽 admin 인덱스
  *           default: 1
  *           required: true
  *           type: integer
@@ -91,13 +91,13 @@ userfinAccountRouter.get("/month", userJwtMiddleWare, finAccount.getFinAccountMo
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNSwiaWF0IjoxNjYwODM2OTQ2LCJleHAiOjE2OTIzNzI5NDYsInN1YiI6IkFkbWluIn0.N1xU7r5IcVu9lQr5eh1UY3P97TrBPO5hSfNjs_4vgfs
  *           required: true
  *           type: string
  *         - in: header
  *           name: adminIdx
- *           description: an authorization header
+ *           description: 클럽 admin 인덱스
  *           default: 1
  *           required: true
  *           type: integer

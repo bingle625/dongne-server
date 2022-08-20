@@ -61,7 +61,8 @@ export const createFinAccCategory = async (req, res) => {
       - categoryName
       - adminIdx
   */
-  const { categoryName, adminIdx } = req.body;
+  const adminIdx = req.get("adminIdx");
+  const { categoryName } = req.body;
   if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
   if (!categoryName) return res.send(errResponse(baseResponseStatus.FINACCOUNT_CATEGORY_NAME_EMPTY));
 
