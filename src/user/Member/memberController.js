@@ -138,3 +138,51 @@ export const getMemberInfo = async (req, res) => {
   
     return res.send(response(baseResponse.SUCCESS, memberInfoResult));
   };
+
+
+  /*
+    API No. 4.3
+    API Nanme: 회원의 소속 동아리 리스트 조회 API
+    [GET] /member/home?userIdx=
+  */
+
+export const getClubList = async (req, res) => {
+    /*
+        Query String: userIdx
+    */
+    const userIdx = req.query.userIdx;
+    const JWT_token_userIdx = req.verifiedToken.adminId;
+
+  
+    // validation (basic) ✅
+    if(!userIdx) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+    } 
+    if (userIdx <= 0) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+    }
+
+    if (userIdx != JWT_token_userIdx){
+        return res.send(errResponse(baseResponse.JWT_USER_TOKEN_DIFFERENT));
+    }
+
+
+    // validation (middle) ❌
+    /*
+        userIdx's Status valid with User Table ?
+        JWT Token's userIdx and req.userIdx by ClubMembers Table is status "ACTIVE" ? (WHERE ID)
+    */
+
+    /*
+    const userStatus = await memberProvider.checkUserStatus(userIdx);
+    if (userStatus != "ACTIVE"){
+        return res.send(errResponse(baseResponse.USER_USERIDX_STATUS));
+    }
+    */
+
+
+    // 회원의 소속 동아리 리스트 조회
+    const clubListResult = await memberProvider.retrieveClubList(userIdx);
+  
+    return res.send(response(baseResponse.SUCCESS, clubListResult));
+  };

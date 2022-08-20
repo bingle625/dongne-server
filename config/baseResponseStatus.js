@@ -505,6 +505,11 @@ module.exports = {
     code: 3007,
     message: "(본인) 유저가 속한 동아리에서 유효하지 않은 groupIdx입니다."
   },
+  USER_USER_STATUS: {
+    isSuccess: false,
+    code: 3008,
+    message: "동네 웹에서 유효하지 않은 userIdx입니다."
+  },
   USER_USERIDX_NOT_MATCH: {
     isSuccess: false,
     code: 3020,

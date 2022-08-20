@@ -145,3 +145,27 @@ exports.checkUserStatus = async function (userIdx) {
     return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
+
+
+// 회원의 소속 동아리 리스트 조회 - API NO. 4.3
+exports.retrieveClubList = async function (userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const handleError = (error) => logger.error(`❌checkUserStatus DB Error: ${error.message}`);
+
+  try {
+    // Validation Check's User Status
+    const usertatus = await memberDao.selectRetrieveUserStatus(connection, userIdx);
+    if (usertatus[usertatus.length -1].status != "ACTIVE"){
+      return errResponse(baseResponseStatus.USER_USER_STATUS)
+    }
+
+    const clubList = await memberDao.selectClubList(connection, userIdx);
+    connection.release();
+    return clubList;
+
+  } catch (error) {
+    handleError(error);
+    connection.release();
+    return errResponse(baseResponseStatus.DB_ERRORS);
+  }
+};
