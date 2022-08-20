@@ -71,12 +71,12 @@ const selectAdminIdxStatus = async (connection, adminIdxStatusParams) => {
 // 회원 상세 조회 - API NO. 4.2
 const selectMemberInfo = async (connection, retrieveUserIdx) => {
   const selectMemberInfoQuery = `
-  SELECT name as 이름,
-  phoneNum as 전화번호,
-  school as 학교,
-  birth as 생년월일,
-  address as 주소,
-  introduction as 소개
+  SELECT name,
+  phoneNum,
+  school,
+  birth,
+  address,
+  introduction
   FROM User
   WHERE userIdx = ? and status = "ACTIVE"
       `;

@@ -32,7 +32,7 @@ const selectUserAccount = async (connection, email) => {
   return selectUserAccountRow;
 };
 
-//admin 레코드 생성
+//user 레코드 생성
 const insertUserInfo = async (connection, insertUserInfoParams) => {
   const insertUserQuery = `
   INSERT INTO User(name, userEmail, password, phoneNum, school, birth, address, introduction, userImgUrl)
@@ -43,9 +43,58 @@ const insertUserInfo = async (connection, insertUserInfoParams) => {
   return insertUserInfoRow;
 };
 
+// 유저 동아리 가입
+const userJoinClub = async (connection, memberInfoParams) => {
+  const insertMemberQuery = `
+  INSERT INTO ClubMembers(userIdx,adminIdx)
+  VALUES (?, ?);
+  `;
+
+  const userJoinClubRow = await connection.query(insertMemberQuery, memberInfoParams);
+  return userJoinClubRow;
+};
+
+// 동아리에 이미 가입한 회원인지 조회
+const selectMember = async (connection, memberInfoParams) => {
+  const selectMemberQuery = `
+        SELECT memIdx
+        FROM ClubMembers
+        WHERE userIdx = ? and adminIdx = ?
+  `;
+
+  const selectMemberInfoRow = await connection.query(selectMemberQuery, memberInfoParams);
+  return selectMemberInfoRow;
+};
+
+const selectAdminAccountByIdx = async (connection, adminIdx) => {
+  const selectAdminAccountByIdxQuery = `
+      SELECT status
+      FROM Admin
+      WHERE adminIdx = ?;
+      `;
+  const [adminResult] = await connection.query(selectAdminAccountByIdxQuery, [adminIdx]);
+  return adminResult;
+};
+
+const selectUserStatus = async (connection, userIdx) => {
+  const selectUserStatusQuery = `
+      SELECT status
+      FROM User
+      WHERE userIdx = ?;
+      `;
+
+  const [selectUserStatusRows] = await connection.query(selectUserStatusQuery, userIdx);
+
+  return selectUserStatusRows;
+};
+
 module.exports = {
   selectUserEmail,
   insertUserInfo,
   selectUserPassword,
-  selectUserAccount
+  selectUserAccount,
+  userJoinClub,
+  selectMember,
+  selectAdminAccountByIdx,
+  selectUserStatus
 };

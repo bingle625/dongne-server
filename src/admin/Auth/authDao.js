@@ -53,10 +53,22 @@ const insertAdminInfo = async (connection, insertUserInfoParams) => {
   return insertUserInfoRow;
 };
 
+const updateClubCode = async (connection, insertUserInfoParams) => {
+  const insertUserQuery = `
+        UPDATE Admin
+        SET clubCode = ?
+        WHERE adminIdx =?;  
+  `;
+
+  const insertUserInfoRow = await connection.query(insertUserQuery, insertUserInfoParams);
+  return insertUserInfoRow;
+};
+
 module.exports = {
   selectAdminEmail,
   insertAdminInfo,
   selectAdminPassword,
   selectAdminAccount,
-  selectAdminAccountByIdx
+  selectAdminAccountByIdx,
+  updateClubCode
 };

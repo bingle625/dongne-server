@@ -59,13 +59,13 @@ const selectTotalDataCount = async (connection, adminIdx) => {
 // 회원 상세 조회 - API NO. 3.2
 const selectMemberInfo = async (connection, memberInfoParams) => {
   const selectMemberInfoQuery = `
-    SELECT name as 이름,
-    phoneNum as 전화번호,
-    school as 학교,
-    birth as 생년월일,
-    address as 주소,
-    introduction as 소개,
-    teamName as "소속 팀/조"
+    SELECT name,
+    phoneNum,
+    school,
+    birth,
+    address,
+    introduction,
+    teamName
     FROM User
     JOIN ClubMembers
     ON ClubMembers.userIdx = User.userIdx
