@@ -269,6 +269,11 @@ module.exports = {
     code: 3006,
     message: "탈퇴 된 계정입니다. 고객센터에 문의해주세요."
   },
+  SIGNUP_CLUBNAME_EMPTY: {
+    isSuccess: false,
+    code: 3007,
+    message: "탈퇴 된 계정입니다. 고객센터에 문의해주세요."
+  },
 
   // Common
   TOKEN_EMPTY: {
