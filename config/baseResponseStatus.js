@@ -454,6 +454,60 @@ module.exports = {
     message: "adminIdx를 입력해주세요."
   },
 
+  ADMIN_CLUBNAME_EMPTY: {
+    isSuccess: false,
+    code: 2021,
+    message: "clubName을 입력해주세요."
+  },
+
+  ADMIN_CLUBNAME_LENGTH: {
+    isSuccess: false,
+    code: 2022,
+    message: "clubName을 45자 이내로 입력해주세요."
+  },
+
+  ADMIN_ESTABLISHMENTYEAR_EMPTY: {
+    isSuccess: false,
+    code: 2023,
+    message: "establishmentYear을 입력해주세요."
+  },
+
+  ADMIN_ESTABLISHMENTYEAR_TYPE: {
+    isSuccess: false,
+    code: 2024,
+    message: "establishmentYear의 입력 형식을 YYYY-MM-DD 또는 YYYY/MM/DD으로 입력해주세요."
+  },
+
+  ADMIN_CLUBREGION_EMPTY: {
+    isSuccess: false,
+    code: 2025,
+    message: "clubRegion을 입력해주세요."
+  },
+
+  ADMIN_CLUREGION_LENGTH: {
+    isSuccess: false,
+    code: 2026,
+    message: "clubRegion을 45자 이내로 입력해주세요."
+  },
+
+  ADMIN_CLUBWEBLINK_EMPTY: {
+    isSuccess: false,
+    code: 2027,
+    message: "clubWebLink를 입력해주세요."
+  },
+
+  ADMIN_CLUBWEBLINK_LENGTH: {
+    isSuccess: false,
+    code: 2027,
+    message: "clubWebLink를 45자 이내로 입력해주세요."
+  },
+
+  ADMIN_CLUBINTRODUCTION_EMPTY: {
+    isSuccess: false,
+    code: 2028,
+    message: "clubIntroduction을 입력해주세요."
+  },
+
   //USER's errResponse
   USER_USERIDX_EMPTY: {
     isSuccess: false,
@@ -505,12 +559,89 @@ module.exports = {
     code: 3007,
     message: "(본인) 유저가 속한 동아리에서 유효하지 않은 groupIdx입니다."
   },
+  USER_USER_STATUS: {
+    isSuccess: false,
+    code: 3008,
+    message: "동네 웹에서 유효하지 않은 userIdx입니다."
+  },
   USER_USERIDX_NOT_MATCH: {
     isSuccess: false,
     code: 3020,
     message: "adminIdx를 입력해주세요."
   },
+//
+  USER_NAME_EMPTY: {
+    isSuccess: false,
+    code: 3021,
+    message: "유저의 name을 입력해주세요."
+  },
 
+  USER_NAME_LENGTH: {
+    isSuccess: false,
+    code: 3022,
+    message: "유저의 name을 30자 이내로 입력해주세요."
+  },
+
+  USER_BIRTH_EMPTY: {
+    isSuccess: false,
+    code: 3023,
+    message: "유저의 birth를 입력해주세요."
+  },
+
+  USER_BIRTH_TYPE: {
+    isSuccess: false,
+    code: 3024,
+    message: "유저의 birth의 입력 형식을 YYYY-MM-DD 또는 YYYY/MM/DD으로 입력해주세요."
+  },
+
+  USER_SCHOOL_EMPTY: {
+    isSuccess: false,
+    code: 3025,
+    message: "유저의 school를 입력해주세요."
+  },
+
+  USER_SCHOOL_LENGTH: {
+    isSuccess: false,
+    code: 3026,
+    message: "유저의 school를 45자 이내로 입력해주세요."
+  },
+
+  USER_PHONENUM_EMPTY: {
+    isSuccess: false,
+    code: 3027,
+    message: "유저의 phoneNum을 입력해주세요."
+  },
+
+  USER_PHONENUM_LENGTH: {
+    isSuccess: false,
+    code: 3028,
+    message: "유저의 phoneNum을 45자 이내로 입력해주세요."
+  },
+
+  USER_ADDRESS_EMPTY: {
+    isSuccess: false,
+    code: 3029,
+    message: "유저의 address를 입력해주세요."
+  },
+
+  USER_ADDRESS_LENGTH: {
+    isSuccess: false,
+    code: 3030,
+    message: "유저의 address를 100자 이내로 입력해주세요."
+  },
+
+  USER_INTRODUCTION_EMPTY: {
+    isSuccess: false,
+    code: 3031,
+    message: "유저의 introduction를 입력해주세요."
+  },
+
+  USER_INTRODUCTION_LENGTH: {
+    isSuccess: false,
+    code: 3032,
+    message: "유저의 introduction를 450자 이내로 입력해주세요."
+  },
+//
   GROUP_GROUPNAME_EMPTY: {
     isSuccess: false,
     code: 4001,
