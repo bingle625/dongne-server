@@ -142,3 +142,29 @@ export const deleteFinAccount = async (accountIdx, adminIdx) => {
     return errResponse(baseResponse.DB_ERROR);
   }
 };
+
+export const getFinAccountByIdx = async (accountIdx, adminIdx) => {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const finAccountInfo = [accountIdx];
+    //todo: adminIdx 상태 확인
+    const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
+    if (userInfoRows[0].status === "INACTIVE") {
+      return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
+    } else if (userInfoRows[0].status === "DELETED") {
+      return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
+    }
+
+    //todo: accountIdx 존재하는 지 확인
+    const finAccountInfoRows = await accountProvider.accountStatusCheck(accountIdx);
+    if (finAccountInfoRows.length === 0) return errResponse(baseResponse.FINACCOUNT_NOT_EXIST);
+    if (finAccountInfoRows[0].status === "DELETED") return errResponse(baseResponse.FINACCOUNT_ALREADY_DELETED);
+
+    const getFinAccountResult = await accountDao.getFinAccountByIdx(connection, finAccountInfo);
+    connection.release();
+    return response(baseResponse.SUCCESS, getFinAccountResult[0]);
+  } catch (err) {
+    logger.error(`Admin - deleteFinAccount Service error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};

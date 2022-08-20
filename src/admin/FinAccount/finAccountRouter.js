@@ -501,4 +501,85 @@ adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAcco
  *            description: 이미 삭제된 회계항목입니다.
  */
 adminfinAccountRouter.patch("/status/:fId", adminJwtMiddleWare, finAccount.deleteFinAccount);
+
+//api 7.8 특정 동아리의 회계 항목 카테고리 전체 조회
+/**
+ * @swagger
+ * paths:
+ *  /admin/finAccount/category:
+ *   get:
+ *     tags: [admin 회계 관리]
+ *     summary: 특정 동아리의 회계 카테고리 전체 조회
+ *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: jwt 토큰
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
+ *           required: true
+ *           type: string
+ *         - in: header
+ *           name: adminIdx
+ *           description: 클럽 어드민 인덱스
+ *           default: 1
+ *           required: true
+ *           type: integer
+ *     responses:
+ *       "1000":
+ *         description: 회계 카테고리 조회 api 성공
+ *       "5001":
+ *         description: admin Idx 비어있음.
+ *
+ *
+ */
+adminfinAccountRouter.get("/category", adminJwtMiddleWare, finAccount.getFinAccountCategory);
+
+//특정 회계 항목 조회
+//api 7.8 특정 회계항목 조회
+/**
+ *
+ * @swagger
+ * paths:
+ *  /admin/finAccount/status/{fId}:
+ *   patch:
+ *     tags: [admin 회계 관리]
+ *     summary: 회계 항목 삭제 API
+ *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: jwt 토큰
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
+ *           required: true
+ *           type: string
+ *         - in: path
+ *           name: fId
+ *           schema:
+ *              type: integer
+ *           default: 2
+ *           required: true
+ *           description: 회계 항목 인덱스
+ *         - in: header
+ *           name: adminIdx
+ *           schema:
+ *              type: integer
+ *           default: 1
+ *           required: true
+ *           description: admin 인덱스
+ *     responses:
+ *          "1000":
+ *            description: 회계 카테고리 삭제 API 성공
+ *          "5001":
+ *            description: admin 인덱스를 입력해주세요.
+ *          "5019":
+ *            description: 회계 항목 idx를 적어주세요.
+ *          "3005":
+ *            description: 비활성화 된 계정입니다. 고객센터에 문의해주세요.
+ *          "3006":
+ *            description: 탈퇴 된 계정입니다. 고객센터에 문의해주세요.
+ *          "6004":
+ *            description: 존재하지 않는 회계항목입니다.
+ *          "6005":
+ *            description: 이미 삭제된 회계항목입니다.
+ */
+adminfinAccountRouter.get("/:fId", adminJwtMiddleWare, finAccount.getFinAccountByIdx);
+
 export default adminfinAccountRouter;

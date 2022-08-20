@@ -42,6 +42,18 @@ export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
   }
 };
 
+export const getCategory = async (adminIdxNum) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  try {
+    const getDailyFinAccountResult = await accountDao.getFinAccountByIdx(connection, adminIdxNum);
+    connection.release();
+    return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
+  } catch (err) {
+    logger.error(`Admin - getFinAccountByDay Provider error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
 export const categoryStatusCheck = async (idx) => {
   const connection = await pool.getConnection(async (conn) => conn);
   const categoryResult = await accountDao.selectCategory(connection, idx);
