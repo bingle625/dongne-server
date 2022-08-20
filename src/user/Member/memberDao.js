@@ -113,6 +113,56 @@ const selectRetrieveUserIdxStatus = async (connection, retrieveUserIdxStatusPara
 };
 
 
+// 회원의 소속 동아리 리스트 조회 - API NO. 4.3
+const selectClubList = async (connection, userIdx) => {
+  const selectClubListQuery = `
+    SELECT
+    Admin.adminIdx,
+    clubName
+    FROM ClubMembers
+    JOIN Admin
+    ON ClubMembers.adminIdx = Admin.adminIdx
+    WHERE userIdx = ? and ClubMembers.status = "ACTIVE";
+      `;
+
+  const [clubListRows] = await connection.query(selectClubListQuery, userIdx);
+
+  return clubListRows;
+};
+
+// API NO. 4.3 - Validation Check's User Status
+const selectRetrieveUserStatus = async (connection, userIdx) => {
+  const selectRetrieveUserStatusQuery = `
+      SELECT status
+      FROM User
+      WHERE userIdx = ?;
+      `;
+
+  const [userStatusRows] = await connection.query(selectRetrieveUserStatusQuery, userIdx);
+
+  return userStatusRows;
+};
+
+// 개인 회원의 마이페이지 수정 - API NO. 4.4
+const updateUserMypageClub = async (connection, editUserMypageParams) => {
+  const updateUserMypageParamsQuery = `
+    UPDATE User
+    SET
+    name = ?,
+    school = ?,
+    phoneNum = ?,
+    birth = ?,
+    address = ?,
+    introduction = ?
+    WHERE userIdx = ?;
+      `;
+
+  const [userStatusRows] = await connection.query(updateUserMypageParamsQuery, editUserMypageParams);
+
+  return userStatusRows;
+};
+
+
   module.exports = 
   { selectUserPosts,
     selectClub,
@@ -122,6 +172,11 @@ const selectRetrieveUserIdxStatus = async (connection, retrieveUserIdxStatusPara
     selectTotalDataCount,
     selectAdminIdxStatus,
     selectRetrieveUserIdxStatus,
+    selectRetrieveUserStatus,
+    selectClubList,
+    updateUserMypageClub,
+    
+
 
 
     

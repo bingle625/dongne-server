@@ -2,6 +2,7 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 const memberProvider = require("./memberProvider");
 const memberService = require("./memberService");
+const moment = require("moment");
 
 
 
@@ -271,4 +272,78 @@ export const patchMemberClubTeam = async (req, res) => {
     const updateMemberClubTeamResult = await memberService.updateMemberClubTeam(clubTeamListIdx, userIdx, adminIdx);
   
     return res.send(updateMemberClubTeamResult);
+  };
+
+
+/*
+    API No. 3.6
+    API Nanme: 동아리 마이페이지 수정 API
+    [PATCH] /member/mypage?adminIdx
+*/
+export const patchMyPage = async (req, res) => {
+    /*
+        query string: adminIdx
+        Body: clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction
+    */
+    const adminIdx = req.query.adminIdx;
+    const {clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction} = req.body;
+    const JWT_Token_adminIdx = req.verifiedToken.adminId;
+
+    // validation (basic) ✅
+    if(!adminIdx) {
+        return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_EMPTY));
+    } 
+    if (adminIdx <= 0) {
+        return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
+    }
+
+    if(JWT_Token_adminIdx != adminIdx) {
+        return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+    }
+
+    // Validation (basic - body) ✅
+    if(!clubName) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBNAME_EMPTY));
+    } 
+    if (clubName.length > 45) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBNAME_LENGTH));
+    }
+
+    if(!establishmentYear) {
+        return res.send(errResponse(baseResponse.ADMIN_ESTABLISHMENTYEAR_EMPTY));
+    } 
+    if (
+        !moment(establishmentYear, "YYYY/MM/DD", true).isValid() &&
+        !moment(establishmentYear, "YYYY-MM-DD", true).isValid()) {
+        return res.send(errResponse(baseResponse.ADMIN_ESTABLISHMENTYEAR_TYPE));
+    }
+
+    if(!clubRegion) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBREGION_EMPTY));
+    } 
+    if (clubRegion.length > 45) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUREGION_LENGTH));
+    }
+
+    if(!clubWebLink) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBWEBLINK_EMPTY));
+    } 
+    if (clubWebLink > 45) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBWEBLINK_LENGTH));
+    }
+
+    if(!clubIntroduction) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBINTRODUCTION_EMPTY));
+    }
+    
+    // Validation (middle)
+    /*
+        별다른 middle Validation 검증이 필요없음.
+        - 이미 Auth에서 adminIdx Status 검증을 함. -
+    */
+
+    // 동아리 마이페이지 수정
+    const editClubMypageResult = await memberService.editClubMypage(adminIdx, clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction);
+  
+    return res.send(editClubMypageResult);
   };
