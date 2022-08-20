@@ -684,6 +684,21 @@ module.exports = {
     code: 6005,
     message: "이미 삭제된 회계항목입니다."
   },
+  FINACCOUNT_CATEGORY_NOT_IN_CLUB: {
+    isSuccess: false,
+    code: 6006,
+    message: "본 동아리의 카테고리가 아닙니다."
+  },
+  FINACCOUNT_CATEGORY_NOT_EXIST: {
+    isSuccess: false,
+    code: 6007,
+    message: "존재하지 않는 카테고리입니다."
+  },
+  FINACCOUNT_NOT_IN_CLUB: {
+    isSuccess: false,
+    code: 6008,
+    message: "본 동아리의 회계항목이 아닙니다."
+  },
 
   //DB Error
   DB_ERRORS: { isSuccess: false, code: 5000, message: "데이터베이스 에러" },

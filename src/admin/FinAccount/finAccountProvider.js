@@ -45,7 +45,7 @@ export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
 export const getCategory = async (adminIdxNum) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const getDailyFinAccountResult = await accountDao.getFinAccountByIdx(connection, adminIdxNum);
+    const getDailyFinAccountResult = await accountDao.retrieveCategory(connection, adminIdxNum);
     connection.release();
     return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
   } catch (err) {

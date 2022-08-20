@@ -20,12 +20,6 @@ import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
  *         default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *         required: true
  *         type: string
- *       - in: header
- *         name: adminIdx
- *         description: 클럽 admin 인덱스
- *         default: 1
- *         required: true
- *         type: integer
  *       - in: body
  *         name: finAccountInfo
  *         description: 회계 정보 파라미터
@@ -42,11 +36,11 @@ import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
  *
  *            properties:
  *                  adminIdx:
- *                        default: 1
+ *                        default: 12
  *                        description: admin 인덱스
  *                        type: int
  *                  finAccountCategoryIdx:
- *                        default: 1
+ *                        default: 6
  *                        description: 카테고리 인덱스
  *                        type: int
  *                  finAccountItem:
@@ -98,8 +92,15 @@ import adminJwtMiddleWare from "../../../config/adminJwtMiddleWare";
  *         description: 비활성화 된 계정입니다. 고객센터에 문의해주세요.
  *       "3006":
  *         description: 탈퇴 된 계정입니다. 고객센터에 문의해주세요.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *       "6002":
  *         description: 삭제된 카테고리입니다.
+ *       "6006":
+ *         description: 본 동아리의 카테고리가 아닙니다.
+ *       "6007":
+ *         description: 존재하지 않는 카테고리입니다.
+ *
  *
  */
 adminfinAccountRouter.post("/", adminJwtMiddleWare, finAccount.createFinAccount);
@@ -124,7 +125,7 @@ adminfinAccountRouter.post("/", adminJwtMiddleWare, finAccount.createFinAccount)
  *       - in: header
  *         name: adminIdx
  *         description: 클럽 admin 인덱스
- *         default: 1
+ *         default: 12
  *         required: true
  *         type: integer
  *       - in: body
@@ -152,6 +153,8 @@ adminfinAccountRouter.post("/", adminJwtMiddleWare, finAccount.createFinAccount)
  *         description: 비활성화된 계정입니다.
  *       "3006":
  *         description: 탈퇴한 회원입니다.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *       "6003":
  *         description: 이미 존재하는 카테고리 이름입니다.
  */
@@ -168,14 +171,14 @@ adminfinAccountRouter.post("/category", adminJwtMiddleWare, finAccount.createFin
  *     parameters:
  *         - name: x-access-token
  *           in: header
- *           description: an authorization header
+ *           description: jwt 토큰
  *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
  *           required: true
  *           type: string
  *         - name: adminIdx
  *           in: header
- *           description: an authorization header
- *           default: 1
+ *           description: 클럽 어드민 인덱스
+ *           default: 12
  *           required: true
  *           type: integer
  *     responses:
@@ -183,6 +186,8 @@ adminfinAccountRouter.post("/category", adminJwtMiddleWare, finAccount.createFin
  *         description: 최근 회계 4개 조회 api 성공
  *       "5001":
  *         description: admin Idx 비어있음.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *
  */
 adminfinAccountRouter.get("/", adminJwtMiddleWare, finAccount.getFinAccount);
@@ -205,7 +210,7 @@ adminfinAccountRouter.get("/", adminJwtMiddleWare, finAccount.getFinAccount);
  *         - in: header
  *           name: adminIdx
  *           description: 클럽 어드민 인덱스
- *           default: 1
+ *           default: 12
  *           required: true
  *           type: integer
  *         - in: query
@@ -229,6 +234,8 @@ adminfinAccountRouter.get("/", adminJwtMiddleWare, finAccount.getFinAccount);
  *         description: 날짜의 year 비어있음.
  *       "5015":
  *         description: 날짜의 month 비어있음.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *
  *
  */
@@ -252,7 +259,7 @@ adminfinAccountRouter.get("/month", adminJwtMiddleWare, finAccount.getFinAccount
  *         - in: header
  *           name: adminIdx
  *           description: 클럽 어드민 인덱스
- *           default: 1
+ *           default: 12
  *           required: true
  *           type: integer
  *         - in: query
@@ -284,6 +291,8 @@ adminfinAccountRouter.get("/month", adminJwtMiddleWare, finAccount.getFinAccount
  *         description: 날짜의 month 비어있음.
  *       "5016":
  *         description: 날짜의 day 비어있음.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *
  *
  */
@@ -316,7 +325,7 @@ adminfinAccountRouter.get("/day", adminJwtMiddleWare, finAccount.getFinAccountDa
  *           name: adminIdx
  *           schema:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: admin 인덱스
  *         - in: body
@@ -343,9 +352,16 @@ adminfinAccountRouter.get("/day", adminJwtMiddleWare, finAccount.getFinAccountDa
  *         description: 비활성화된 계정입니다.
  *       "3006":
  *         description: 탈퇴한 회원입니다.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
+ *       "6002":
+ *         description: 삭제된 카테고리입니다.
  *       "6003":
  *         description: 이미 존재하는 카테고리 이름입니다.
- 
+ *       "6006":
+ *         description: 본 동아리의 카테고리가 아닙니다.
+ *       "6007":
+ *         description: 존재하지 않는 카테고리입니다.
  */
 adminfinAccountRouter.patch("/category/:cId", adminJwtMiddleWare, finAccount.patchCategory);
 
@@ -369,14 +385,14 @@ adminfinAccountRouter.patch("/category/:cId", adminJwtMiddleWare, finAccount.pat
  *           name: fId
  *           schema:
  *              type: integer
- *           default: 2
+ *           default: 20
  *           required: true
  *           description: 회계 항목 인덱스
  *         - in: header
  *           name: adminIdx
  *           schema:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: admin 인덱스
  *         - in: body
@@ -444,12 +460,20 @@ adminfinAccountRouter.patch("/category/:cId", adminJwtMiddleWare, finAccount.pat
  *         description: 비활성화 된 계정입니다. 고객센터에 문의해주세요.
  *       "3006":
  *         description: 탈퇴 된 계정입니다. 고객센터에 문의해주세요.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
  *       "6002":
  *         description: 삭제된 카테고리입니다.
  *       "6004":
  *         description: 존재하지 않는 회계항목입니다.
  *       "6005":
  *         description: 이미 삭제된 회계항목입니다.
+ *       "6006":
+ *         description: 본 동아리의 카테고리가 아닙니다.
+ *       "6007":
+ *         description: 존재하지 않는 카테고리입니다.
+ *       "6008":
+ *         description: 본 동아리의 회계항목이 아닙니다.
  *
  */
 adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAccount);
@@ -474,14 +498,14 @@ adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAcco
  *           name: fId
  *           schema:
  *              type: integer
- *           default: 2
+ *           default: 20
  *           required: true
  *           description: 회계 항목 인덱스
  *         - in: header
  *           name: adminIdx
  *           schema:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: admin 인덱스
  *     responses:
@@ -499,6 +523,8 @@ adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAcco
  *            description: 존재하지 않는 회계항목입니다.
  *          "6005":
  *            description: 이미 삭제된 회계항목입니다.
+ *          "6008":
+ *            description: 본 동아리의 회계항목이 아닙니다.
  */
 adminfinAccountRouter.patch("/status/:fId", adminJwtMiddleWare, finAccount.deleteFinAccount);
 
@@ -520,7 +546,7 @@ adminfinAccountRouter.patch("/status/:fId", adminJwtMiddleWare, finAccount.delet
  *         - in: header
  *           name: adminIdx
  *           description: 클럽 어드민 인덱스
- *           default: 1
+ *           default: 12
  *           required: true
  *           type: integer
  *     responses:
@@ -539,10 +565,10 @@ adminfinAccountRouter.get("/category", adminJwtMiddleWare, finAccount.getFinAcco
  *
  * @swagger
  * paths:
- *  /admin/finAccount/status/{fId}:
- *   patch:
+ *  /admin/finAccount/{fId}:
+ *   get:
  *     tags: [admin 회계 관리]
- *     summary: 회계 항목 삭제 API
+ *     summary: 특정 회계 항목 조회
  *     parameters:
  *         - name: x-access-token
  *           in: header
@@ -554,14 +580,14 @@ adminfinAccountRouter.get("/category", adminJwtMiddleWare, finAccount.getFinAcco
  *           name: fId
  *           schema:
  *              type: integer
- *           default: 2
+ *           default: 20
  *           required: true
  *           description: 회계 항목 인덱스
  *         - in: header
  *           name: adminIdx
  *           schema:
  *              type: integer
- *           default: 1
+ *           default: 12
  *           required: true
  *           description: admin 인덱스
  *     responses:

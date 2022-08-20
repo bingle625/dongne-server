@@ -23,7 +23,12 @@ export const createFinAccount = async (adminIdx, finAccountCategoryIdx, isProfit
 
     //todo: finAcountCategoryIdx 상태 확인
     const categoryInfoRows = await accountProvider.categoryStatusCheck(finAccountCategoryIdx);
-    console.log(finAccountCategoryIdx);
+    if (!categoryInfoRows[0]) {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_NOT_EXIST);
+    }
+    if (categoryInfoRows[0].adminIdx !== parseInt(adminIdx)) {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_NOT_IN_CLUB);
+    }
     if (categoryInfoRows[0].status === "INACTIVE") {
       return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
     } else if (categoryInfoRows[0].status === "DELETED") {
@@ -67,6 +72,21 @@ export const updateFinCategory = async (adminIdx, categroyIdx, categoryName) => 
     const finAccCategoryInfo = [categoryName, categroyIdx];
     //todo: admin 상태 확인
     const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
+
+    const categoryInfoRows = await accountProvider.categoryStatusCheck(categroyIdx);
+    if (!categoryInfoRows[0]) {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_NOT_EXIST);
+    }
+
+    if (categoryInfoRows[0].adminIdx !== parseInt(adminIdx)) {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_NOT_IN_CLUB);
+    }
+    if (categoryInfoRows[0].status === "INACTIVE") {
+      return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
+    } else if (categoryInfoRows[0].status === "DELETED") {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_DELETED);
+    }
+
     if (userInfoRows[0].status === "INACTIVE") {
       return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
     } else if (userInfoRows[0].status === "DELETED") {
@@ -99,10 +119,19 @@ export const updateFinAccount = async (accountIdx, adminIdx, finAccountCategoryI
     }
     const finAccountInfoRows = await accountProvider.accountStatusCheck(accountIdx);
     if (finAccountInfoRows.length === 0) return errResponse(baseResponse.FINACCOUNT_NOT_EXIST);
+    if (finAccountInfoRows[0].adminIdx !== parseInt(adminIdx)) return errResponse(baseResponse.FINACCOUNT_NOT_IN_CLUB);
     if (finAccountInfoRows[0].status === "DELETED") return errResponse(baseResponse.FINACCOUNT_ALREADY_DELETED);
 
     //todo: 카테고리 idx 존재하는 지 확인
     const categoryInfoRows = await accountProvider.categoryStatusCheck(finAccountCategoryIdx);
+
+    if (!categoryInfoRows[0]) {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_NOT_EXIST);
+    }
+
+    if (categoryInfoRows[0].adminIdx !== parseInt(adminIdx)) {
+      return errResponse(baseResponse.FINACCOUNT_CATEGORY_NOT_IN_CLUB);
+    }
     if (categoryInfoRows[0].status === "INACTIVE") {
       return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
     } else if (categoryInfoRows[0].status === "DELETED") {
@@ -132,6 +161,7 @@ export const deleteFinAccount = async (accountIdx, adminIdx) => {
     //todo: accountIdx 존재하는 지 확인
     const finAccountInfoRows = await accountProvider.accountStatusCheck(accountIdx);
     if (finAccountInfoRows.length === 0) return errResponse(baseResponse.FINACCOUNT_NOT_EXIST);
+    if (finAccountInfoRows[0].adminIdx !== parseInt(adminIdx)) return errResponse(baseResponse.FINACCOUNT_NOT_IN_CLUB);
     if (finAccountInfoRows[0].status === "DELETED") return errResponse(baseResponse.FINACCOUNT_ALREADY_DELETED);
 
     const deleteFinAccountResult = await accountDao.deleteFinAccount(connection, finAccountInfo);
@@ -158,6 +188,7 @@ export const getFinAccountByIdx = async (accountIdx, adminIdx) => {
     //todo: accountIdx 존재하는 지 확인
     const finAccountInfoRows = await accountProvider.accountStatusCheck(accountIdx);
     if (finAccountInfoRows.length === 0) return errResponse(baseResponse.FINACCOUNT_NOT_EXIST);
+    if (finAccountInfoRows[0].adminIdx !== parseInt(adminIdx)) return errResponse(baseResponse.FINACCOUNT_NOT_IN_CLUB);
     if (finAccountInfoRows[0].status === "DELETED") return errResponse(baseResponse.FINACCOUNT_ALREADY_DELETED);
 
     const getFinAccountResult = await accountDao.getFinAccountByIdx(connection, finAccountInfo);

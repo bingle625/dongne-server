@@ -130,6 +130,16 @@ userfinAccountRouter.get("/month", userJwtMiddleWare, finAccount.getFinAccountMo
  *         description: 날짜의 month 비어있음.
  *       "5016":
  *         description: 날짜의 day 비어있음.
+ *       "6004":
+ *         description: 존재하지 않는 회계항목입니다.
+ *       "6005":
+ *         description: 이미 삭제된 회계항목입니다.
+ *       "6008":
+ *         description: 본 동아리의 회계항목이 아닙니다.
+ *       "3005":
+ *         description: 비활성화 된 계정입니다. 고객센터에 문의해주세요.
+ *       "3006":
+ *         description: 탈퇴 된 계정입니다. 고객센터에 문의해주세요.
  *
  *
  */

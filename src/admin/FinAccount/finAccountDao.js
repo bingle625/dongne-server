@@ -89,7 +89,7 @@ const retrieveCategory = async (connection, adminIdxNum) => {
 
 const selectCategory = async (connection, idx) => {
   const categoryInfoQuery = `
-        SELECT categoryName 
+        SELECT categoryName,adminIdx
         FROM FinAccountCategory
         WHERE finAccountCategoryIdx = ?; 
   `;
@@ -132,7 +132,7 @@ const getFinAccountByIdx = async (connection, finAccountInfo) => {
 
 const selectAdminAccountByIdx = async (connection, accountIdx) => {
   const categoryInfoQuery = `
-        SELECT finAccountIdx, status
+        SELECT finAccountIdx, adminIdx, status
         FROM FinancialAccount
         WHERE finAccountIdx = ?; 
   `;
