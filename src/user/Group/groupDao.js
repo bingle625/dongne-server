@@ -16,11 +16,14 @@ const selectUserPosts = async (connection) => {
 const selectGroupList = async (connection, groupListPagingParams) => {
   const selectGroupListQuery = `
     SELECT
+    GroupList.groupIdx,
     groupName,
     groupCategory
     FROM GroupList
-    WHERE adminIdx = ? and status = "ACTIVE"
-    LIMIT ?, ?      
+    JOIN GroupMembers
+    ON GroupList.groupIdx = GroupMembers.groupIdx
+    WHERE GroupList.adminIdx = ? and GroupList.status = "ACTIVE" and GroupMembers.userIdx = ? and GroupMembers.status = "ACTIVE"
+    LIMIT ?, ?     
       `;
 
   const [groupListRows] = await connection.query(selectGroupListQuery, groupListPagingParams);
@@ -62,7 +65,7 @@ const selectGroupInfo = async (connection, groupIdx) => {
     groupIntroduction,
     groupCategory
     FROM GroupList
-    WHERE groupIdx = ? and status = "ACTIVE"       
+    WHERE groupIdx = ? and status = "ACTIVE";       
       `;
 
   const [groupInfoRows] = await connection.query(selectGroupInfoQuery, groupIdx);
@@ -74,9 +77,12 @@ const selectGroupInfo = async (connection, groupIdx) => {
 const selectGroupIdxStatus = async (connection, groupIdxStatusParams) => {
   const selectGroupIdxQuery = `
     SELECT
-    status
+    GroupList.status as GroupListStatus,
+    GroupMembers.Status as GroupMembersStatus
     FROM GroupList
-    WHERE groupIdx = ? and adminIdx = ?;
+    JOIN GroupMembers
+    ON GroupList.groupIdx = GroupMembers.groupIdx
+    WHERE GroupList.groupIdx = ? and GroupList.adminIdx = ? and GroupMembers.userIdx = ?;
       `;
 
   const [groupIdxStatusRows] = await connection.query(selectGroupIdxQuery, groupIdxStatusParams);
@@ -89,7 +95,9 @@ const selectGroupIdxStatus = async (connection, groupIdxStatusParams) => {
 const selectGroupMembers = async (connection, groupMembersPagingParams) => {
 
   const selectGroupMembersQuery = `
-  SELECT name,
+  SELECT
+  User.userIdx,
+  name,
   userImgUrl
   FROM GroupMembers
   JOIN User

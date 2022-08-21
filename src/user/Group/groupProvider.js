@@ -6,12 +6,12 @@ const { logger } = require("../../../config/winston");
 const groupDao = require("./groupDao");
 
 // 그룹 리스트 조회 - API 5.1
-exports.retrieveGroupList = async function (adminIdx, start, pageSize) {
+exports.retrieveGroupList = async function (adminIdx, userIdx, start, pageSize) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveGroupInfo DB Error: ${error.message}`);
 
   try {
-    const groupListPagingParams = [adminIdx, start, pageSize];
+    const groupListPagingParams = [adminIdx, userIdx, start, pageSize];
     const groupListResult = await groupDao.selectGroupList(connection, groupListPagingParams);
     connection.release();
     return groupListResult;
@@ -66,22 +66,22 @@ exports.retrieveGroupInfo = async function (groupIdx, adminIdx, userIdx) {
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌retrieveGroupInfo DB Error: ${error.message}`);
   
-    //Try문 예외처리
     try {
       // Validation Check's adminIdx Status (middle)
       const adminIdxStatusParams = [adminIdx, userIdx];
       const adminIdxStatus = await groupDao.selectAdminIdxStatus(connection, adminIdxStatusParams);
-      if (adminIdxStatus[0]?.status != "ACTIVE"){
+      if (adminIdxStatus[adminIdxStatus.length -1]?.status != "ACTIVE"){
         return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS);
       }
 
 
-      // Validation Check's groupIdx Status (middle)
-      const groupIdxStatusParams = [groupIdx, adminIdx];
+      // Validation Check's User groupIdx Status (middle)
+      const groupIdxStatusParams = [groupIdx, adminIdx, userIdx];
       const groupIdxStatus = await groupDao.selectGroupIdxStatus(connection, groupIdxStatusParams);
-      if (groupIdxStatus[0]?.status != "ACTIVE"){
+      if (groupIdxStatus[groupIdxStatus.length -1]?.GroupListStatus != "ACTIVE" || groupIdxStatus[groupIdxStatus.length -1]?.GroupMembersStatus != "ACTIVE"){
         return errResponse(baseResponseStatus.USER_GROUPIDX_STATUS);
       }
+
 
       //그룹 이름, 내용 조회
       const groupInfoResult = await groupDao.selectGroupInfo(connection, groupIdx);
@@ -136,13 +136,13 @@ exports.retrieveGroupMembersTotalDataCount = async function (groupIdx, adminIdx)
 };
 
 // API NO. 5.2 -> Part 2 - Validation Check's groupIdx Status
-exports.checkGroupIdxStatus = async function (groupIdx, adminIdx) {
+exports.checkGroupIdxStatus = async function (groupIdx, adminIdx, userIdx) {
   const connection = await pool.getConnection(async (conn) => conn);
   const handleError = (error) => logger.error(`❌retrieveTotalDataCount DB Error: ${error.message}`);
 
   //Try문 예외처리
   try {
-    const groupIdxStatusParams = [groupIdx, adminIdx];
+    const groupIdxStatusParams = [groupIdx, adminIdx, userIdx];
     const groupIdxStatus = await groupDao.selectGroupIdxStatus(connection, groupIdxStatusParams);
     connection.release();
     return groupIdxStatus;
