@@ -34,7 +34,7 @@ exports.retrievePagingGroupList = async function (adminIdx, userIdx, page, pageS
         }
 
         // Paging 된 회원명단 리스트 조회
-        const pagingRetrieveGroupListResult = await groupProvider.retrieveGroupList(adminIdx, start, pageSize);
+        const pagingRetrieveGroupListResult = await groupProvider.retrieveGroupList(adminIdx, userIdx, start, pageSize);
         return pagingRetrieveGroupListResult;
 
     } catch (error) {
@@ -53,13 +53,13 @@ exports.retrievePagingGroupMembers = async function (groupIdx, adminIdx, userIdx
     try {
         // Validation Check's adminIdx Status
         const adminIdxStatus = await groupProvider.checkAdminIdxStatus(adminIdx, userIdx);
-        if (adminIdxStatus[0]?.status != "ACTIVE"){
+        if (adminIdxStatus[adminIdxStatus.length -1]?.status != "ACTIVE"){
             return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS);
         }
 
         // Validation Check's groupIdx Status
-        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx);
-        if (groupIdxStatus[0]?.status != "ACTIVE"){
+        const groupIdxStatus = await groupProvider.checkGroupIdxStatus(groupIdx, adminIdx, userIdx);
+        if (groupIdxStatus[groupIdxStatus.length -1]?.GroupListStatus != "ACTIVE" || groupIdxStatus[groupIdxStatus.length -1]?.GroupMembersStatus != "ACTIVE"){
             return errResponse(baseResponseStatus.USER_GROUPIDX_STATUS);
         }
         
