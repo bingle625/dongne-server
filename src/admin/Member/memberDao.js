@@ -13,7 +13,10 @@ const selectUserPosts = async (connection) => {
 // 단체 모든 회원명단 리스트 조회 (SELECT) - API NO. 3.1
 const selectClub = async (connection, clubMembersPagingParams) => {
     const selectClubMemberQuery = `
-    SELECT name, userImgUrl,
+    SELECT
+    User.userIdx,
+    name,
+    userImgUrl,
     teamName
     FROM ClubMembers
     JOIN User
@@ -59,7 +62,8 @@ const selectTotalDataCount = async (connection, adminIdx) => {
 // 회원 상세 조회 - API NO. 3.2
 const selectMemberInfo = async (connection, memberInfoParams) => {
   const selectMemberInfoQuery = `
-    SELECT name,
+    SELECT 
+    name,
     phoneNum,
     school,
     birth,

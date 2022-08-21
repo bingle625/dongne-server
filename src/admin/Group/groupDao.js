@@ -54,7 +54,8 @@ const selectMembersStatus = async (connection, membersStatusParams) => {
 // 그룹 리스트 조회 - API NO. 4.2
 const selectGroupList = async (connection, groupListPagingParams) => {
   const selectGroupListQuery = `
-  SELECT 
+  SELECT
+  groupIdx,
   groupName,
   groupCategory
   FROM GroupList
@@ -115,7 +116,9 @@ const selectGroupIdxStatus = async (connection, groupIdxStatusParams) => {
 const selectGroupMembers = async (connection, groupMembersPagingParams) => {
 
   const selectGroupMembersQuery = `
-  SELECT name,
+  SELECT
+  User.userIdx,
+  name,
   userImgUrl
   FROM GroupMembers
   JOIN User
