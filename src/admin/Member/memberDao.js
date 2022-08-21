@@ -195,6 +195,32 @@ const updateClubMypage = async (connection, editClubMypageParams) => {
   return updateMemberClubTeamRows;
 };
 
+// 어드민의 동아리 메인 홈 정보 조회 - API NO. 3.7
+const selectAdminMainhome = async (connection, adminMainpageParams) => {
+  const selectAdminMainhomeQuery = `
+    SELECT
+    a.ClubName,
+      (SELECT
+      count(userIdx) as clubMemberCount
+      FROM ClubMembers
+      WHERE adminIdx = ? and status = "ACTIVE" ) as clubMemberCount,
+    a.establishmentYear,
+    a.clubRegion,
+    a.clubWebLink
+    FROM Admin as a
+    WHERE a.adminIdx = ? and status = "ACTIVE";
+      `;
+
+  const [AdminMainhomeRows] = await connection.query(selectAdminMainhomeQuery, adminMainpageParams);
+
+  return AdminMainhomeRows;
+};
+
+
+
+
+
+
   module.exports = 
   { selectUserPosts,
     selectClub,
@@ -209,6 +235,8 @@ const updateClubMypage = async (connection, editClubMypageParams) => {
     selectClubTeamListIdxStatus,
     updateMemberClubTeam,
     updateClubMypage,
+    selectAdminMainhome,
+
     
 
     

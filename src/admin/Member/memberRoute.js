@@ -410,4 +410,51 @@ memberRouter.patch("/update", adminJwtMiddleWare, member.patchMemberClubTeam);
  */
 memberRouter.patch("/mypage", adminJwtMiddleWare, member.patchMyPage);
 
+// 3.7 어드민의 동아리 메인 홈 정보 조회 API
+/**
+ * @swagger
+ * paths:
+ *  /admin/member/mainhome?adminIdx={adminIdx}:
+ *   get:
+ *     tags: [ADMIN 회원 명단]
+ *     summary: 어드민의 동아리 메인홈 정보 조회 API
+ *     parameters:
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 12
+ *           required: true
+ *           description: 동아리 인덱스
+ *         - in: header
+ *           name: x-access-token
+ *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
+ *           schema:
+ *               type: string
+ *           examples:
+ *              Sample:
+ *                 value: JWT_token
+ *                 summary: JWT_token_adminIdx
+ *           style: simple
+ *     responses:
+ *       "1000":
+ *         description: 회원의 동아리 메인홈 정보 조회 API 성공
+ *       "3000":
+ *         description: 파라미터(userIdx)를 입력하세요.
+ *       "3001":
+ *         description: userIdx를 0보다 큰 값으로 입력해주세요.
+ *       "3008":
+ *         description: 동네 웹에서 유효하지 않은 userIdx입니다 (탈퇴한 회원 or 비활성화 한 회원).
+ *       "6003":
+ *         description: userIdx가 입력하신 토큰과 다릅니다. 본인의 userIdx에 대해서만 접근하세요.
+ *       "5000":
+ *         description: 데이터 베이스 에러
+ *
+ */
+memberRouter.get("/mainhome", adminJwtMiddleWare, member.getAdminMainhome);
+
+
+
 export default memberRouter;

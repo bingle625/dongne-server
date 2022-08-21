@@ -168,17 +168,10 @@ export const getClubList = async (req, res) => {
     }
 
 
-    // validation (middle) ❌
+    // validation (middle)
     /*
-        userIdx's Status valid with User Table ?
-        JWT Token's userIdx and req.userIdx by ClubMembers Table is status "ACTIVE" ? (WHERE ID)
-    */
-
-    /*
-    const userStatus = await memberProvider.checkUserStatus(userIdx);
-    if (userStatus != "ACTIVE"){
-        return res.send(errResponse(baseResponse.USER_USERIDX_STATUS));
-    }
+        별다른 Validation (middle)이 필요가 없음.
+        - 동아리 리스트 조회 API이므로, adminIdx Status 체크가 필요없다. 왜냐, adminIdx로 접근하여 작업을 수행하는 API가 아니기에..!
     */
 
 
@@ -277,4 +270,51 @@ export const patchUserMypage = async (req, res) => {
     const editUserMypageResult = await memberService.editUserMypage(userIdx, name, school, phoneNum, birth, address, introduction);
   
     return res.send(response(baseResponse.SUCCESS));
+  };
+
+
+
+/*
+    API No. 4.5
+    API Nanme: 회원의 동아리 메인 홈 정보 조회 API
+    [GET] /member/info?userIdx
+*/
+export const getMemberMainhome = async (req, res) => {
+    /*
+        Query String: userIdx, adminIdx
+    */
+    const userIdx = req.query.userIdx;
+    const JWT_token_userIdx = req.verifiedToken.adminId;
+    const adminIdx = req.query.adminIdx;
+  
+    // validation (basic) ✅
+    if(!adminIdx) {
+        return res.send(errResponse(baseResponse.USER_ADMINIDX_EMPTY));
+    } 
+    if (adminIdx <= 0) {
+        return res.send(errResponse(baseResponse.USER_ADMINIDX_LENGTH));
+    }
+
+    if(!userIdx) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+    } 
+    if (userIdx <= 0) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+    }
+
+    if (userIdx != JWT_token_userIdx){
+        return res.send(errResponse(baseResponse.JWT_USER_TOKEN_DIFFERENT));
+    }
+
+
+    // validation (middle) 
+    /*
+        Validation Check's adminIdx Status
+    */
+
+
+    // 회원의 동아리 메인 홈 정보 조회
+    const memberMainhomeResult = await memberProvider.retrieveMemberMainhome(adminIdx, userIdx);
+  
+    return res.send(response(baseResponse.SUCCESS, memberMainhomeResult));
   };

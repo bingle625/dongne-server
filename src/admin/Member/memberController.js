@@ -347,3 +347,43 @@ export const patchMyPage = async (req, res) => {
   
     return res.send(editClubMypageResult);
   };
+
+
+/*
+    API No. 3.7
+    API Nanme: 어드민의 동아리 메인 홈 정보 조회 API
+    [GET] /member/mainhome?adminIdx
+*/
+export const getAdminMainhome = async (req, res) => {
+    /*
+        Query String: adminIdx
+    */
+    const adminIdx = req.query.adminIdx;
+    const JWT_token_adminIdx = req.verifiedToken.adminId;
+  
+    // validation (basic) ✅
+    if(!adminIdx) {
+        return res.send(errResponse(baseResponse.USER_ADMINIDX_EMPTY));
+    } 
+    if (adminIdx <= 0) {
+        return res.send(errResponse(baseResponse.USER_ADMINIDX_LENGTH));
+    }
+
+    if (adminIdx != JWT_token_adminIdx){
+        return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+    }
+
+
+    // validation (middle) 
+    /*
+        별다른 Validation (middle) 필요하지 않음.
+        - Validation 검증 완료한 adminIdx만으로 API 조회를 수행하기 때문..!
+        if 인증이 완료가 안된 req.data를 이용한다면 Validation (middle) 필요
+    */
+
+
+    // 어드민의 동아리 메인 홈 정보 조회
+    const adminMainhomeResult = await memberProvider.retrieveAdminMainhome(adminIdx);
+  
+    return res.send(response(baseResponse.SUCCESS, adminMainhomeResult));
+  };

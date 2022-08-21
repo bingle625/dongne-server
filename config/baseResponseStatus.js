@@ -843,7 +843,7 @@ module.exports = {
   JWT_TOKEN_DIFFERENT: {
     isSuccess: false,
     code: 6000,
-    message: "접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요."
+    message: "접근할 수 없는 동아리입니다. 본인(관리자 권한) 동아리에 대해서만 접근하세요."
   },
   JWT_GROUP_DIFFERENT: {
     isSuccess: false,

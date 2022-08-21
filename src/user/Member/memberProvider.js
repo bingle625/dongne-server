@@ -169,3 +169,29 @@ exports.retrieveClubList = async function (userIdx) {
     return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
+
+
+// 회원의 동아리 메인 홈 정보 조회 - API NO. 4.5
+exports.retrieveMemberMainhome = async function (adminIdx, userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const handleError = (error) => logger.error(`❌retriebeClubMemberList DB Error: ${error.message}`);
+
+  try {
+    // Validation Check's adminIdx Status (middle)
+    const adminIdxStatusParams = [adminIdx, userIdx];
+    const adminIdxStatus = await memberDao.selectAdminIdxStatus(connection, adminIdxStatusParams);
+    if (adminIdxStatus[adminIdxStatus.length -1].status != "ACTIVE"){
+      return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS);
+    }
+
+    const memberMainpageParams = [adminIdx, userIdx, adminIdx];
+    const memberMainpage = await memberDao.selectMemberMainhome(connection, memberMainpageParams);
+    connection.release();
+    return memberMainpage;
+
+  } catch (error) {
+    handleError(error);
+    connection.release();
+    return errResponse(baseResponseStatus.DB_ERRORS);
+  }
+};
