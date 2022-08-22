@@ -1,6 +1,6 @@
 const retrieveFinAccount = async (connection, adminIdx) => {
   const getFinAccountQuery = `
-        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
+        SELECT c.categoryName,f.finAccountIdx, DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
         FROM FinAccountCategory as c, (
             SELECT finAccountIdx, finAccountDate, isProfit, finAccountCategoryIdx, finAccountItem, finAccountCost
         FROM FinancialAccount
@@ -16,7 +16,7 @@ const retrieveFinAccount = async (connection, adminIdx) => {
 
 const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) => {
   const getFinAccountQuery = `
-      SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate
+      SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, DATE_FORMAT(finAccountDate, '%Y-%m-%d') as finAccountDate
       FROM FinancialAccount
       WHERE adminIdx = ? and (MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?)
   `;
@@ -26,7 +26,7 @@ const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) =
 
 const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day) => {
   const retrieveFinAccountByDayQuery = `
-        SELECT c.categoryName,f.finAccountIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost, f.etc
+        SELECT c.categoryName,f.finAccountIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost, f.etc
         FROM FinAccountCategory as c, (
               SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc
               FROM FinancialAccount
