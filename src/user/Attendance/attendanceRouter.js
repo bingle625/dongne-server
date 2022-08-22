@@ -2,6 +2,7 @@ import express from "express";
 
 const userAttendanceRouter = express.Router();
 const attendance = require("./attendanceController");
+const jwtMiddleware = require("../../../config/userJwtMiddleWare");
 
 // 7.1 출석코드 인증 API
 /**
@@ -14,6 +15,12 @@ const attendance = require("./attendanceController");
  *     consumes:
  *         - application/json
  *     parameters:
+ *         - in: header
+ *           name: x-access-token
+ *           schema:
+ *           type: string
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE2NjA4MzUwNjMsImV4cCI6MTY5MjM3MTA2Mywic3ViIjoiQWRtaW4ifQ.QCcoqBDDxDBUrHJFThfbCIDc4iisw4j52ytchxex5Ic
  *         - in: body
  *           name: attendance
  *           description: 출석 인증 파라미터
@@ -34,7 +41,7 @@ const attendance = require("./attendanceController");
  *                      type: integer
  *                      format: date
  *                  attendanceCode:
- *                      default: "code"
+ *                      default: "aaaa"
  *                      description: 출석 인증 코드
  *                      type: string
  *     responses:
@@ -60,6 +67,10 @@ const attendance = require("./attendanceController");
  *         description: 데이터 베이스 에러
  *
  */
-userAttendanceRouter.post("/code", attendance.postAttendanceCode);
+userAttendanceRouter.post(
+  "/code",
+  jwtMiddleware,
+  attendance.postAttendanceCode
+);
 
 export default userAttendanceRouter;

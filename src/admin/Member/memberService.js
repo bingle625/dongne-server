@@ -44,12 +44,18 @@ exports.retrievePagingClubMemberList = async function (adminIdx, page, pageSize)
 
 
 // 회원 삭제 - API NO. 3.3
-exports.deleteMember = async function (userIdx, JWT_Token_adminIdx){
+exports.deleteMember = async function (userIdx, adminIdx){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌deleteGroup DB Error: ${error.message}`);
 
     try {
-        const editMemberParams = [userIdx, JWT_Token_adminIdx];
+        // Validation Check's member Status is ACTIVE? || User Table is ACTIVE? (middle)
+        const memberStatus = await memberProvider.checkMemberStatus(userIdx, adminIdx);
+        if (memberStatus[0]?.status != "ACTIVE" || memberStatus[0]?.UserStatus != "ACTIVE"){
+          return errResponse(baseResponseStatus.USER_USERIDX_STATUS);
+        }
+
+        const editMemberParams = [userIdx, adminIdx];
         const editMemberResult = await memberDao.editMember(connection, editMemberParams);
         return response(baseResponseStatus.SUCCESS);
 

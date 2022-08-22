@@ -108,7 +108,16 @@ exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
       const editNameParams = [editScheduleParams.scheduleName, scheduleIdx];
       await scheduleDao.updateScheduleName(connection, editNameParams);
     }
-
+    // 8. edit scheduleCode
+    if (editScheduleParams.code !== undefined) {
+      const editCodeParams = [editScheduleParams.code, scheduleIdx];
+      await scheduleDao.updateScheduleCode(connection, editCodeParams);
+    }
+    // 9. edit scheduleEtc
+    if (editScheduleParams.etc != undefined) {
+      const editEtcParams = [editScheduleParams.etc, scheduleIdx];
+      await scheduleDao.updateScheduleEtc(connection, editEtcParams);
+    }
     // transaction commit
     await connection.commit();
     return response(baseResponse.SUCCESS);
