@@ -106,18 +106,19 @@ exports.retrieveMemberInfo = async function (retrieveUserIdx, adminIdx, userIdx)
     // Validation Check's adminIdx Status (middle)
     const adminIdxStatusParams = [adminIdx, userIdx]
     const adminIdxStatus = await memberDao.selectAdminIdxStatus(connection, adminIdxStatusParams);
-    if (adminIdxStatus[0]?.status != "ACTIVE"){
+    if (adminIdxStatus[adminIdxStatus.length - 1]?.status != "ACTIVE"){
       return errResponse(baseResponseStatus.USER_ADMINIDX_STATUS);
     }
 
     // Validation Check's retrieveUserIdx Status (middle)
     const retrieveUserIdxStatusParams = [adminIdx, retrieveUserIdx];
     const retrieveUserIdxStatus = await memberDao.selectRetrieveUserIdxStatus(connection, retrieveUserIdxStatusParams);
-    if (retrieveUserIdxStatus[0]?.status != "ACTIVE"){
+    if (retrieveUserIdxStatus[retrieveUserIdxStatus.length - 1]?.status != "ACTIVE"){
       return errResponse(baseResponseStatus.USER_RETRIEVEUSERIDX_STATUS);
     }
 
-    const memberInfo = await memberDao.selectMemberInfo(connection, retrieveUserIdx);
+    const memberInfoParams = [retrieveUserIdx, adminIdx];
+    const memberInfo = await memberDao.selectMemberInfo(connection, memberInfoParams);
     connection.release();
     return memberInfo;
 

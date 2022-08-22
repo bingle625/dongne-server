@@ -32,12 +32,18 @@ async function countAttendList(connection, scheduleIdx) {
 // 출석한 회원 조회
 async function selectAttendList(connection, selectAttendParams) {
   const selectAttendListQuery = `
-    SELECT u.userIdx, u.name
-    FROM User u
-      right join (SELECT userIdx
-                 FROM Attendance
-                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=1) p on p.userIdx = u.userIdx
-    WHERE u.status = 'ACTIVE'
+    SELECT User.userIdx, User.name, teamName
+    FROM Attendance
+    JOIN User
+    ON Attendance.userIdx = User.userIdx
+    JOIN GroupMembers
+    ON GroupMembers.userIdx = Attendance.userIdx
+    JOIN ClubMembers
+    ON ClubMembers.userIdx = GroupMembers.userIdx
+    JOIN ClubTeamList
+    ON ClubTeamList.clubTeamListIdx = ClubMembers.clubTeamListIdx
+    WHERE Attendance.scheduleIdx = ? and attendanceStatus = 1 and GroupMembers.groupIdx = ? and ClubMembers.adminIdx = ? and  Attendance.status = 'ACTIVE'
+    and User.status = "ACTIVE" and ClubMembers.status = "ACTIVE" and GroupMembers.status = "ACTIVE"
     LIMIT ?, ?;
     `;
 
@@ -69,12 +75,18 @@ async function countAbsenceList(connection, scheduleIdx) {
 // 결석한 회원 조회
 async function selectAbsenceList(connection, selectAbsenceParmas) {
   const selectAbsenceListQuery = `
-    SELECT u.userIdx, u.name
-    FROM User u
-      right join (SELECT userIdx
-                 FROM Attendance
-                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=0) p on p.userIdx = u.userIdx
-    WHERE u.status = 'ACTIVE'
+    SELECT User.userIdx, User.name, teamName
+    FROM Attendance
+    JOIN User
+    ON Attendance.userIdx = User.userIdx
+    JOIN GroupMembers
+    ON GroupMembers.userIdx = Attendance.userIdx
+    JOIN ClubMembers
+    ON ClubMembers.userIdx = GroupMembers.userIdx
+    JOIN ClubTeamList
+    ON ClubTeamList.clubTeamListIdx = ClubMembers.clubTeamListIdx
+    WHERE Attendance.scheduleIdx = ? and attendanceStatus = 0 and GroupMembers.groupIdx = ? and ClubMembers.adminIdx = ? and  Attendance.status = 'ACTIVE'
+    and User.status = "ACTIVE" and ClubMembers.status = "ACTIVE" and GroupMembers.status = "ACTIVE"
     LIMIT ?, ?;
     `;
 

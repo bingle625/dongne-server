@@ -74,20 +74,25 @@ const selectAdminIdxStatus = async (connection, adminIdxStatusParams) => {
 };
 
 // 회원 상세 조회 - API NO. 4.2
-const selectMemberInfo = async (connection, retrieveUserIdx) => {
+const selectMemberInfo = async (connection, memberInfoParams) => {
   const selectMemberInfoQuery = `
-  SELECT
-  name,
-  phoneNum,
-  school,
-  birth,
-  address,
-  introduction
-  FROM User
-  WHERE userIdx = ? and status = "ACTIVE"
+    SELECT
+    name,
+    phoneNum,
+    school,
+    birth,
+    address,
+    introduction,
+    teamName
+    FROM User
+    JOIN ClubMembers
+    ON ClubMembers.userIdx = User.userIdx
+    JOIN ClubTeamList
+    ON ClubMembers.clubTeamListIdx = ClubTeamList.clubTeamListIdx
+    WHERE User.userIdx = ? and ClubMembers.adminIdx = ?;
       `;
 
-  const [memberInfoRows] = await connection.query(selectMemberInfoQuery, retrieveUserIdx);
+  const [memberInfoRows] = await connection.query(selectMemberInfoQuery, memberInfoParams);
 
   return memberInfoRows;
 };

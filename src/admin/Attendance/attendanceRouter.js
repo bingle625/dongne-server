@@ -8,7 +8,7 @@ const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
 /**
  * @swagger
  * paths:
- *  /admin/attendance?scheduleIdx=#&adminIdx=#&curPage=#:
+ *  /admin/attendance?scheduleIdx=#&adminIdx=#&groupIdx=#&curPage=#:
  *   get:
  *     tags: [ADMIN 출석]
  *     summary: 출석한 회원 리스트 조회 API
@@ -30,6 +30,13 @@ const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
  *           name: adminIdx
  *           default: 1
  *           description: 단체 회원 인덱스
+ *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: groupIdx
+ *           default: 1
+ *           description: 그룹 index
  *           required: true
  *           schema:
  *              type: integer
@@ -64,7 +71,7 @@ attendanceRouter.get("/", jwtMiddleware, attendance.getAttendance);
 /**
  * @swagger
  * paths:
- *  /admin/attendance/absence?scheduleIdx=#&adminIdx=#&curPage=#:
+ *  /admin/attendance/absence?scheduleIdx=#&adminIdx=#&groupIdx=#&curPage=#:
  *   get:
  *     tags: [ADMIN 출석]
  *     summary: 결석한 회원 리스트 조회 API
@@ -86,6 +93,13 @@ attendanceRouter.get("/", jwtMiddleware, attendance.getAttendance);
  *           name: adminIdx
  *           default: 1
  *           description: 단체 회원 인덱스
+ *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: groupIdx
+ *           default: 1
+ *           description: 그룹 index
  *           required: true
  *           schema:
  *              type: integer
