@@ -275,6 +275,11 @@ exports.patchSchedule = async function (req, res) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULENAME_LENGTH));
   }
 
+  // code valid
+  if (editScheduleParams.code && editScheduleParams.code.length > 45) {
+    return res.send(errResponse(baseResponse.ATTENDANCE_CODE_LENGTH));
+  }
+
   // edit
   const editScheduleResponse = await scheduleService.editSchedule(
     scheduleIdx,
