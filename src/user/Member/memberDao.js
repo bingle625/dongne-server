@@ -50,7 +50,9 @@ const selectTotalDataCount = async (connection, adminIdx) => {
   const selectTotalDataCountQuery = `
     SELECT COUNT(adminIdx) as totalDataCount
     FROM ClubMembers
-    WHERE adminIdx = ?;
+    JOIN User
+    ON ClubMembers.userIdx = User.userIdx
+    WHERE adminIdx = ? and ClubMembers.status = "ACTIVE" and User.status = "ACTIVE";
       `;
 
   const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, adminIdx);

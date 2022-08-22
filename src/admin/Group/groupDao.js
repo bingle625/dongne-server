@@ -73,7 +73,7 @@ const selectTotalDataCount = async (connection, adminIdx) => {
   const selectTotalDataCountQuery = `
     SELECT COUNT(adminIdx) as totalDataCount
     FROM GroupList
-    WHERE adminIdx = ?;
+    WHERE adminIdx = ? and status = "ACTIVE";
       `;
 
   const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, adminIdx);
@@ -116,17 +116,21 @@ const selectGroupIdxStatus = async (connection, groupIdxStatusParams) => {
 const selectGroupMembers = async (connection, groupMembersPagingParams) => {
 
   const selectGroupMembersQuery = `
-  SELECT
-  User.userIdx,
-  name,
-  userImgUrl
-  FROM GroupMembers
-  JOIN User
-  ON GroupMembers.userIdx = User.userIdx
-  JOIN ClubMembers
-  on GroupMembers.userIdx = ClubMembers.userIdx
-  WHERE groupIdx = ? and adminIdx = ? and User.status = "ACTIVE" and GroupMembers.status = "ACTIVE" and ClubMembers.status = "ACTIVE"
-  LIMIT ?, ?;
+    SELECT
+    User.userIdx,
+    name,
+    school,
+    ClubTeamList.teamName,
+    userImgUrl
+    FROM GroupMembers as g
+    JOIN User
+    ON g.userIdx = User.userIdx
+    JOIN ClubMembers as c
+    on g.userIdx = c.userIdx
+    JOIN ClubTeamList
+    on c.clubTeamListIdx = ClubTeamList.clubTeamListIdx
+    WHERE groupIdx = ? and c.adminIdx = ? and User.status = "ACTIVE" and g.status = "ACTIVE" and c.status = "ACTIVE"
+    LIMIT ?, ?;
       `;
 
   const [groupMembersRows] = await connection.query(selectGroupMembersQuery, groupMembersPagingParams);
