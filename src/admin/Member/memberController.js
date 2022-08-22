@@ -283,10 +283,10 @@ export const patchMemberClubTeam = async (req, res) => {
 export const patchMyPage = async (req, res) => {
     /*
         query string: adminIdx
-        Body: clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction
+        Body: clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction, clubCategoryIdx
     */
     const adminIdx = req.query.adminIdx;
-    const {clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction} = req.body;
+    const {clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction, clubCategoryIdx} = req.body;
     const JWT_Token_adminIdx = req.verifiedToken.adminId;
 
     // validation (basic) ✅
@@ -336,6 +336,12 @@ export const patchMyPage = async (req, res) => {
         return res.send(errResponse(baseResponse.ADMIN_CLUBINTRODUCTION_EMPTY));
     }
     
+    if(!clubCategoryIdx) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBCATEGORYIDX_EMPTY));
+    } 
+    if (clubCategoryIdx < 0) {
+        return res.send(errResponse(baseResponse.ADMIN_CLUBCATEGORYIDX_LENGTH));
+    }
     // Validation (middle)
     /*
         별다른 middle Validation 검증이 필요없음.
@@ -343,7 +349,7 @@ export const patchMyPage = async (req, res) => {
     */
 
     // 동아리 마이페이지 수정
-    const editClubMypageResult = await memberService.editClubMypage(adminIdx, clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction);
+    const editClubMypageResult = await memberService.editClubMypage(adminIdx, clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction, clubCategoryIdx);
   
     return res.send(editClubMypageResult);
   };
@@ -386,4 +392,44 @@ export const getAdminMainhome = async (req, res) => {
     const adminMainhomeResult = await memberProvider.retrieveAdminMainhome(adminIdx);
   
     return res.send(response(baseResponse.SUCCESS, adminMainhomeResult));
+  };
+
+
+  /*
+    API No. 3.8
+    API Nanme: 어드민의 동아리 마이페이지 정보 조회 API
+    [GET] /member/mainhome?adminIdx
+*/
+export const getAdminMypageInfo = async (req, res) => {
+    /*
+        Query String: adminIdx
+    */
+    const adminIdx = req.query.adminIdx;
+    const JWT_token_adminIdx = req.verifiedToken.adminId;
+  
+    // validation (basic) ✅
+    if(!adminIdx) {
+        return res.send(errResponse(baseResponse.USER_ADMINIDX_EMPTY));
+    } 
+    if (adminIdx <= 0) {
+        return res.send(errResponse(baseResponse.USER_ADMINIDX_LENGTH));
+    }
+
+    if (adminIdx != JWT_token_adminIdx){
+        return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+    }
+
+
+    // validation (middle) 
+    /*
+        별다른 Validation (middle) 필요하지 않음.
+        - Validation 검증 완료한 adminIdx만으로 API 조회를 수행하기 때문..!
+        if 인증이 완료가 안된 req.data를 이용한다면 Validation (middle) 필요
+    */
+
+
+    // 어드민의 동아리 마이페이지 정보 조회
+    const adminMypageInfoResult = await memberProvider.retrieveAdminMypageInfo(adminIdx);
+  
+    return res.send(response(baseResponse.SUCCESS, adminMypageInfoResult));
   };

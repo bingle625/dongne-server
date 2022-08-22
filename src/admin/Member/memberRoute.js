@@ -350,27 +350,33 @@ memberRouter.patch("/update", adminJwtMiddleWare, member.patchMemberClubTeam);
  *                - clubRegion
  *                - clubWebLink
  *                - clubIntroduction
+ *                - clubCategoryIdx
  *              properties:
  *                    clubName:
  *                        description: 동아리 이름
- *                        type: int
+ *                        type: string
  *                        default: "마하"
  *                    establishmentYear:
  *                        description: 동아리 설립 연도
- *                        type: int
+ *                        type: date
  *                        default: "2022-03-07"
  *                    clubRegion:
  *                        description: 동아리 활동 지역
- *                        type: int
+ *                        type: string
  *                        default: "안산/에리카"
  *                    clubWebLink:
  *                        description: 동아리 웹 사이트
- *                        type: int
+ *                        type: string
  *                        default: "http://maha.com"
  *                    clubIntroduction:
  *                        description: 동아리 소개
- *                        type: int
+ *                        type: string
  *                        default: "마하의 속도로 평평한 에리카 부지에서 보드를 타는 동아리입니다."
+ *                    clubCategoryIdx:
+ *                        description: 동아리 카테고리 인덱스
+ *                        type: int
+ *                        default: 1
+ * 
  *         - in: header
  *           name: x-access-token
  *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
@@ -440,7 +446,7 @@ memberRouter.patch("/mypage", adminJwtMiddleWare, member.patchMyPage);
  *           style: simple
  *     responses:
  *       "1000":
- *         description: 회원의 동아리 메인홈 정보 조회 API 성공
+ *         description: 어드민의 동아리 메인홈 정보 조회 API 성공
  *       "3000":
  *         description: 파라미터(userIdx)를 입력하세요.
  *       "3001":
@@ -456,5 +462,49 @@ memberRouter.patch("/mypage", adminJwtMiddleWare, member.patchMyPage);
 memberRouter.get("/mainhome", adminJwtMiddleWare, member.getAdminMainhome);
 
 
+// 3.8 어드민의 동아리 마이페이지 정보 조회 API
+/**
+ * @swagger
+ * paths:
+ *  /admin/member/mypage?adminIdx={adminIdx}:
+ *   get:
+ *     tags: [ADMIN 회원 명단]
+ *     summary: 어드민의 동아리 마이페이지 정보 조회 API
+ *     parameters:
+ *         - in: query
+ *           name: adminIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 12
+ *           required: true
+ *           description: 동아리 인덱스
+ *         - in: header
+ *           name: x-access-token
+ *           description: 헤더에 JWT_adminIdx 토큰을 입력하세요
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwOTA1NDEzLCJleHAiOjE2OTI0NDE0MTMsInN1YiI6IkFkbWluIn0.AUfoVFxe1OWJXFq9-k2n7W_t17_bgcDlGBNZsnimlA0
+ *           schema:
+ *               type: string
+ *           examples:
+ *              Sample:
+ *                 value: JWT_token
+ *                 summary: JWT_token_adminIdx
+ *           style: simple
+ *     responses:
+ *       "1000":
+ *         description: 어드민의 동아리 마이페이지 정보 조회 API 성공
+ *       "3000":
+ *         description: 파라미터(userIdx)를 입력하세요.
+ *       "3001":
+ *         description: userIdx를 0보다 큰 값으로 입력해주세요.
+ *       "3008":
+ *         description: 동네 웹에서 유효하지 않은 userIdx입니다 (탈퇴한 회원 or 비활성화 한 회원).
+ *       "6003":
+ *         description: userIdx가 입력하신 토큰과 다릅니다. 본인의 userIdx에 대해서만 접근하세요.
+ *       "5000":
+ *         description: 데이터 베이스 에러
+ *
+ */
+memberRouter.get("/mypage", adminJwtMiddleWare, member.getAdminMypageInfo);
 
 export default memberRouter;

@@ -112,6 +112,11 @@ module.exports = {
     code: 2019,
     message: "출석코드를 입력해주세요."
   },
+  ATTENDANCE_CODE_LENGTH: {
+    isSuccess: false,
+    code: 2023,
+    message: "출석코드를 45자 이하로 입력해주세요."
+  },
 
   // Reponse ERROR
   SCHEDULE_STATUS_INACTIVE: {
@@ -513,6 +518,18 @@ module.exports = {
     message: "clubIntroduction을 입력해주세요."
   },
 
+  ADMIN_CLUBCATEGORYIDX_EMPTY: {
+    isSuccess: false,
+    code: 2029,
+    message: "clubCategoryIdx를 입력해주세요."
+  },
+
+  ADMIN_CLUBCATEGORYIDX_LENGTH: {
+    isSuccess: false,
+    code: 2029,
+    message: "clubCategoryIdx를 -1보다 큰 값을 입력해주세요."
+  },
+
   //USER's errResponse
   USER_USERIDX_EMPTY: {
     isSuccess: false,
@@ -574,7 +591,7 @@ module.exports = {
     code: 3020,
     message: "adminIdx를 입력해주세요."
   },
-//
+  //
   USER_NAME_EMPTY: {
     isSuccess: false,
     code: 3021,
@@ -646,7 +663,7 @@ module.exports = {
     code: 3032,
     message: "유저의 introduction를 450자 이내로 입력해주세요."
   },
-//
+  //
   GROUP_GROUPNAME_EMPTY: {
     isSuccess: false,
     code: 4001,

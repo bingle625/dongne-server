@@ -126,12 +126,12 @@ exports.updateMemberClubTeam = async function (clubTeamListIdx, userIdx, adminId
 }
 
 // 동아리 마이페이지 수정 - API NO. 3.6
-exports.editClubMypage = async function (adminIdx, clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction){
+exports.editClubMypage = async function (adminIdx, clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction, clubCategoryIdx){
     const connection = await pool.getConnection(async (conn) => conn);
     const handleError = (error) => logger.error(`❌deleteGroup DB Error: ${error.message}`);
 
     try {
-        const editClubMypageParams = [clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction, adminIdx];
+        const editClubMypageParams = [clubName, establishmentYear, clubRegion, clubWebLink, clubIntroduction, clubCategoryIdx, adminIdx];
         const editClubMypageResult = await memberDao.updateClubMypage(connection, editClubMypageParams);
         return response(baseResponseStatus.SUCCESS);
 

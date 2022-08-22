@@ -76,7 +76,7 @@ const selectAdminIdxStatus = async (connection, adminIdxStatusParams) => {
 // 회원 상세 조회 - API NO. 4.2
 const selectMemberInfo = async (connection, retrieveUserIdx) => {
   const selectMemberInfoQuery = `
-  SELECT 
+  SELECT
   name,
   phoneNum,
   school,
@@ -149,6 +149,21 @@ const selectRetrieveUserStatus = async (connection, userIdx) => {
   return userStatusRows;
 };
 
+// API NO. 4.3 - Retrieve UserName
+const selcetUserName = async (connection, userIdx) => {
+  const selectUserNameQuery = `
+    SELECT name
+    FROM User
+    WHERE userIdx = ?;
+      `;
+
+  const [userStatusRows] = await connection.query(selectUserNameQuery, userIdx);
+
+  return userStatusRows;
+};
+
+
+
 // 개인 회원의 마이페이지 수정 - API NO. 4.4
 const updateUserMypageClub = async (connection, editUserMypageParams) => {
   const updateUserMypageParamsQuery = `
@@ -195,6 +210,34 @@ const selectMemberMainhome = async (connection, memberMainpageParams) => {
   return memberMainhomeRows;
 };
 
+// 회원의 마이페이지 정보 조회 - API NO. 4.6
+const selectUserMypageInfo = async (connection, userIdx) => {
+  const selectUserMypageInfoQuery = `
+    SELECT
+    userEmail,
+    name,
+    userImgUrl,
+    school,
+    phoneNum,
+    birth,
+    address,
+    introduction,
+    updatedAt
+    FROM User
+    WHERE userIdx = ? and status = "ACTIVE";
+      `;
+
+  const [userMypageInfoRows] = await connection.query(selectUserMypageInfoQuery, userIdx);
+
+  return userMypageInfoRows;
+};
+
+
+
+
+
+
+
 
   module.exports = 
   { selectUserPosts,
@@ -209,7 +252,10 @@ const selectMemberMainhome = async (connection, memberMainpageParams) => {
     selectClubList,
     updateUserMypageClub,
     selectMemberMainhome,
+    selectUserMypageInfo,
+    selcetUserName,
     
+
     
 
 

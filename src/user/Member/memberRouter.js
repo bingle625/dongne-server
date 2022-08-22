@@ -326,6 +326,49 @@ memberRouter.patch("/mypage", userJwtMiddleWare, member.patchUserMypage);
  */
 memberRouter.get("/mainhome", userJwtMiddleWare, member.getMemberMainhome);
 
-
+// 4.6 회원의 마이페이지 정보 조회 API
+/**
+ * @swagger
+ * paths:
+ *  /user/member/mypage?userIdx={userIdx}&adminIdx={adminIdx}:
+ *   get:
+ *     tags: [USER 회원 명단]
+ *     summary: 회원의 마이페이지 정보 조회 API
+ *     parameters:
+ *         - in: query
+ *           name: userIdx
+ *           securitySchemes:
+ *              type: integer
+ *           default: 16
+ *           required: true
+ *           description: (본인)유저 인덱스
+ *         - in: header
+ *           name: x-access-token
+ *           description: 헤더에 JWT_userIdx 토큰을 입력하세요
+ *           required: true
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxNiwiaWF0IjoxNjYwODYwMzc2LCJleHAiOjE2OTIzOTYzNzYsInN1YiI6IkFkbWluIn0.ebitK_QPLpMABjAiPpFa_IjSm0fcrHQz4l34lYZhtr4
+ *           schema:
+ *               type: string
+ *           examples:
+ *              Sample:
+ *                 value: JWT_token
+ *                 summary: JWT_token_userIdx
+ *           style: simple
+ *     responses:
+ *       "1000":
+ *         description: 회원의 마이페이지 정보 조회 API 성공
+ *       "3000":
+ *         description: 파라미터(userIdx)를 입력하세요.
+ *       "3001":
+ *         description: userIdx를 0보다 큰 값으로 입력해주세요.
+ *       "3008":
+ *         description: 동네 웹에서 유효하지 않은 userIdx입니다 (탈퇴한 회원 or 비활성화 한 회원).
+ *       "6003":
+ *         description: userIdx가 입력하신 토큰과 다릅니다. 본인의 userIdx에 대해서만 접근하세요.
+ *       "5000":
+ *         description: 데이터 베이스 에러
+ *
+ */
+memberRouter.get("/mypage", userJwtMiddleWare, member.getUserMypage);
 
 export default memberRouter;
