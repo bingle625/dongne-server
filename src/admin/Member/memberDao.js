@@ -65,7 +65,6 @@ const selectTotalDataCount = async (connection, adminIdx) => {
 const selectMemberInfo = async (connection, memberInfoParams) => {
   const selectMemberInfoQuery = `
     SELECT
-    userEmail,
     name,
     phoneNum,
     school,
@@ -184,13 +183,16 @@ const updateMemberClubTeam = async (connection, updateMemberClubTeamParams) => {
 const updateClubMypage = async (connection, editClubMypageParams) => {
   const updateMemberClubTeamQuery = `
     UPDATE Admin
+    JOIN ClubCategory
+    ON Admin.clubCategoryIdx = ClubCategory.clubCategoryIdx
     SET
     clubName = ?,
     establishmentYear = ?,
     clubRegion = ?,
     clubWebLink = ?,
-    clubIntroduction = ?
-    WHERE adminIdx = ?
+    clubIntroduction = ?,
+    Admin.clubCategoryIdx = ?
+    WHERE adminIdx = ? and Admin.status = "ACTIVE"
       `;
 
   const [updateMemberClubTeamRows] = await connection.query(updateMemberClubTeamQuery, editClubMypageParams);
@@ -219,6 +221,49 @@ const selectAdminMainhome = async (connection, adminMainpageParams) => {
   return AdminMainhomeRows;
 };
 
+// 어드민 동아리 마이페이지 정보 조회 - API NO. 3.8
+const selectAdminMypageInfo = async (connection, adminIdx) => {
+  const selectAdminMypageInfoQuery = `
+    SELECT
+    adminEmail,
+    clubName,
+    clubImgUrl,
+    ClubCategory.clubCategoryIdx,
+    ClubCategory.categoryName,
+    establishmentYear,
+    clubRegion,
+    clubWebLink,
+    clubIntroduction,
+    Admin.updatedAt
+    FROM Admin
+    JOIN ClubCategory
+    ON Admin.clubCategoryIdx = ClubCategory.clubCategoryIdx
+    WHERE adminIdx = ? and Admin.status = "ACTIVE";
+      `;
+
+  const [AdminMypageInfoRows] = await connection.query(selectAdminMypageInfoQuery, adminIdx);
+
+  return AdminMypageInfoRows;
+};
+
+// API NO. 3.8 - Retrieve Admin CategoryList
+const selectAdminCategoryList = async (connection) => {
+  const selectAdminCategoryListQuery = `
+    SELECT
+    clubCategoryIdx,
+    categoryName
+    FROM
+    ClubCategory
+    WHERE status = "ACTIVE";
+      `;
+
+  const [adminCategoryListRows] = await connection.query(selectAdminCategoryListQuery);
+
+  return adminCategoryListRows;
+};
+
+
+
 
 
 
@@ -239,7 +284,9 @@ const selectAdminMainhome = async (connection, adminMainpageParams) => {
     updateMemberClubTeam,
     updateClubMypage,
     selectAdminMainhome,
-
+    selectAdminMypageInfo,
+    selectAdminCategoryList,
+    
     
 
     

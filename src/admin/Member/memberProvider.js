@@ -197,3 +197,25 @@ exports.retrieveAdminMainhome = async function (adminIdx) {
     return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
+
+// 어드민 동아리 마이페이지 정보 조회 - API NO. 3.8
+exports.retrieveAdminMypageInfo = async function (adminIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const handleError = (error) => logger.error(`❌retriebeClubMemberList DB Error: ${error.message}`);
+
+  try {
+    const adminCategoryList = await memberDao.selectAdminCategoryList(connection);
+
+    const adminMypageInfo = await memberDao.selectAdminMypageInfo(connection, adminIdx);
+
+    const adminMypageInfoAddAdminCategoryList = {adminMypageInfo, adminCategoryList}
+
+    connection.release();
+    return adminMypageInfoAddAdminCategoryList;
+
+  } catch (error) {
+    handleError(error);
+    connection.release();
+    return errResponse(baseResponseStatus.DB_ERRORS);
+  }
+};

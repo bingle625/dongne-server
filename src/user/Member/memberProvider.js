@@ -195,3 +195,20 @@ exports.retrieveMemberMainhome = async function (adminIdx, userIdx) {
     return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
+
+// 회원의 동아리 메인 홈 정보 조회 - API NO. 4.5
+exports.retrieveUserMypageInfo = async function (userIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const handleError = (error) => logger.error(`❌retriebeClubMemberList DB Error: ${error.message}`);
+
+  try {
+    const userMypageInfo = await memberDao.selectUserMypageInfo(connection, userIdx);
+    connection.release();
+    return userMypageInfo;
+
+  } catch (error) {
+    handleError(error);
+    connection.release();
+    return errResponse(baseResponseStatus.DB_ERRORS);
+  }
+};

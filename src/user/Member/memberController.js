@@ -318,3 +318,40 @@ export const getMemberMainhome = async (req, res) => {
   
     return res.send(response(baseResponse.SUCCESS, memberMainhomeResult));
   };
+
+/*
+    API No. 4.6
+    API Nanme: 회원의 마이페이지 정보 조회 API
+    [GET] /member/mypage?userIdx=
+*/
+export const getUserMypage = async (req, res) => {
+    /*
+        Query String: userIdx
+    */
+    const userIdx = req.query.userIdx;
+    const JWT_token_userIdx = req.verifiedToken.adminId;
+  
+    // validation (basic) ✅
+    if(!userIdx) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_EMPTY));
+    } 
+    if (userIdx <= 0) {
+        return res.send(errResponse(baseResponse.USER_USERIDX_LENGTH));
+    }
+
+    if (userIdx != JWT_token_userIdx){
+        return res.send(errResponse(baseResponse.JWT_USER_TOKEN_DIFFERENT));
+    }
+
+
+    // validation (middle) 
+    /*
+        Validation Check's adminIdx Status
+    */
+
+
+    // 회원의 마이페이지 조회
+    const userMypageInfoResult = await memberProvider.retrieveUserMypageInfo(userIdx);
+  
+    return res.send(response(baseResponse.SUCCESS, userMypageInfoResult));
+  };
