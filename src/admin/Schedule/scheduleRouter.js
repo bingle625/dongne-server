@@ -266,6 +266,14 @@ scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
  *                  scheduleName:
  *                      description: 스케줄 이름
  *                      type: string
+ *                  code:
+ *                      default: aaaa
+ *                      description: 스케줄 출석 코드
+ *                      type: string
+ *                  etc:
+ *                      description: 스케줄 비고
+ *                      default: 비고
+ *                      type: string
  *                  adminIdx:
  *                      default: 1
  *                      description: 단체 회원 인덱스
@@ -277,12 +285,6 @@ scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
  *         description: adminIdx를 입력해주세요.
  *       "2002":
  *         description: adminIdx를 0보다 큰 수로 입력해주세요.
- *       "2020":
- *         description: adminIdx를 값을 확인해주세요.
- *       "2021":
- *         description: 스케줄 인덱스를 입력해주세요.
- *       "2022":
- *         description: scheduleIdx는 0보다 큰 값으로 입력해주세요.
  *       "2011":
  *         description: 스케줄 소개는 150자 이하로 입력가능합니다.
  *       "2012":
@@ -295,6 +297,14 @@ scheduleRouter.get("/", jwtMiddleware, schedule.getScheduleInfo);
  *         description: 스케줄 시작시간을 YYYY/MM/DD HH:mm:ss 또는 YYYY-MM-DD HH:mm:ss 형식으로 입력하세요.
  *       "2016":
  *         description: 스케줄 종료시간을 YYYY/MM/DD HH:mm:ss 또는 YYYY-MM-DD HH:mm:ss 형식으로 입력하세요.
+ *       "2020":
+ *         description: adminIdx를 값을 확인해주세요.
+ *       "2021":
+ *         description: 스케줄 인덱스를 입력해주세요.
+ *       "2022":
+ *         description: scheduleIdx는 0보다 큰 값으로 입력해주세요.
+ *       "2023":
+ *         description: 출석코드를 45자 이하로 입력해주세요.
  *       "3004":
  *         description: 이미 삭제된 스케줄입니다.
  *       "4000":

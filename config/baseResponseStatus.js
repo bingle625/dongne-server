@@ -114,6 +114,11 @@ module.exports = {
     code: 2019,
     message: "출석코드를 입력해주세요.",
   },
+  ATTENDANCE_CODE_LENGTH: {
+    isSuccess: false,
+    code: 2023,
+    message: "출석코드를 45자 이하로 입력해주세요.",
+  },
 
   // Reponse ERROR
   SCHEDULE_STATUS_INACTIVE: {
@@ -136,12 +141,12 @@ module.exports = {
 
   SCHEDULE_SCHEDULEIDX_EMPTY: {
     isSuccess: false,
-    code: 2001,
+    code: 2021,
     message: "scheduleIdx를 입력해주세요.",
   },
   SCHEDULE_SCHEDULEIDX_LENGTH: {
     isSuccess: false,
-    code: 2002,
+    code: 2022,
     message: "scheduleIdx는 0보다 큰 값으로 입력해주세요.",
   },
   SCHEDULE_POST_PARAMS_EMPTY: {
@@ -437,19 +442,19 @@ module.exports = {
   ADMIN_GROUPIDX_STATUS: {
     isSuccess: false,
     code: 2009,
-    message: "유효하지 않은 groupIdx입니다."
+    message: "유효하지 않은 groupIdx입니다.",
   },
 
   ADMIN_DELETE_GROUPUSERIDX_STATUS: {
     isSuccess: false,
     code: 2010,
-    message: "본인 동아리내의 그룹에서 삭제를 수행할 수 없는 userIdx입니다."
+    message: "본인 동아리내의 그룹에서 삭제를 수행할 수 없는 userIdx입니다.",
   },
 
   ADMIN_INSERT_GROUPUSERIDX_STATUS: {
     isSuccess: false,
     code: 2011,
-    message: "본인 동아리내의 그룹에서 추가를 수행할 수 없는 userIdx입니다."
+    message: "본인 동아리내의 그룹에서 추가를 수행할 수 없는 userIdx입니다.",
   },
 
   ADMIN_ADMINIDX_NOT_MATCH: {
@@ -457,7 +462,6 @@ module.exports = {
     code: 2020,
     message: "adminIdx를 입력해주세요.",
   },
-
 
   //USER's errResponse
   USER_USERIDX_EMPTY: {
@@ -478,32 +482,34 @@ module.exports = {
   USER_ADMINIDX_STATUS: {
     isSuccess: false,
     code: 3003,
-    message: "본인 유저의 동아리에 대해서만 접근하세요. 본인이 속하지 않는 동아리에 대한 접근시도였습니다."
+    message:
+      "본인 유저의 동아리에 대해서만 접근하세요. 본인이 속하지 않는 동아리에 대한 접근시도였습니다.",
   },
   USER_RETRIEVEUSERIDX_EMPTY: {
     isSuccess: false,
     code: 3004,
-    message: "상세 조회할 userIdx를 입력해주세요."
+    message: "상세 조회할 userIdx를 입력해주세요.",
   },
   USER_RETRIEVEUSERIDX_LENGTH: {
     isSuccess: false,
     code: 3004,
-    message: "상세 조회할 userIdx를 0보다 큰 값으로 입력해주세요."
+    message: "상세 조회할 userIdx를 0보다 큰 값으로 입력해주세요.",
   },
   USER_ADMINIDX_EMPTY: {
     isSuccess: false,
     code: 3005,
-    message: "본인 유저가 속하고 있는 adminIdx를 입력해주세요."
+    message: "본인 유저가 속하고 있는 adminIdx를 입력해주세요.",
   },
   USER_ADMINIDX_LENGTH: {
     isSuccess: false,
     code: 3005,
-    message: "본인 유저가 속하고 있는 adminIdx를 0보다 큰 값으로 입력해주세요."
+    message: "본인 유저가 속하고 있는 adminIdx를 0보다 큰 값으로 입력해주세요.",
   },
   USER_RETRIEVEUSERIDX_STATUS: {
     isSuccess: false,
     code: 3006,
-    message: "상세 조회할 userIdx가 유효하지 않습니다. 본인유저의 동아리에 소속된 userIdx를 입력해주세요."
+    message:
+      "상세 조회할 userIdx가 유효하지 않습니다. 본인유저의 동아리에 소속된 userIdx를 입력해주세요.",
   },
   USER_GROUPIDX_STATUS: {
     isSuccess: false,
@@ -713,10 +719,9 @@ module.exports = {
   JWT_USER_TOKEN_DIFFERENT: {
     isSuccess: false,
     code: 6003,
-    message: "userIdx가 입력하신 토큰과 다릅니다. 본인의 userIdx에 대해서만 접근하세요.",
+    message:
+      "userIdx가 입력하신 토큰과 다릅니다. 본인의 userIdx에 대해서만 접근하세요.",
   },
-
-  
 
   // Paging's errResponse
   PAGING_PARAMS_EMPTY: {

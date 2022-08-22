@@ -79,7 +79,7 @@ async function selectScheduleStatus(connection, scheduleIdx) {
 // scheduleIdx로 schedule 상세 조회
 async function selectScheduleInfo(connection, scheduleIdx) {
   const selectScheduleInfoQuery = `
-  SELECT scheduleIdx, DATE_FORMAT(scheduleDate, '%Y-%m-%d') as scheduleDate, attendanceCode, DATE_FORMAT(init_time, '%Y-%m-%d %T') as init_time, DATE_FORMAT(end_time, '%Y-%m-%d %T') as end_time, introduction, place
+  SELECT scheduleIdx, DATE_FORMAT(scheduleDate, '%Y-%m-%d') as scheduleDate, attendanceCode, DATE_FORMAT(init_time, '%Y-%m-%d %T') as init_time, DATE_FORMAT(end_time, '%Y-%m-%d %T') as end_time, introduction, place, scheduleName, etc
   FROM GroupSchedule
   WHERE status='ACTIVE' and scheduleIdx=?;
     `;
@@ -199,6 +199,36 @@ async function updateScheduleName(connection, editNameParams) {
   return updateScheduleNameRow;
 }
 
+async function updateScheduleCode(connection, editCodeParams) {
+  const updateScheduleCodeQuery = `
+  UPDATE GroupSchedule
+  SET attendanceCode =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateScheduleCodeRow] = await connection.query(
+    updateScheduleCodeQuery,
+    editCodeParams
+  );
+
+  return updateScheduleCodeRow;
+}
+
+async function updateScheduleEtc(connection, editEtcParams) {
+  const updateScheduleEtcQuery = `
+  UPDATE GroupSchedule
+  SET etc =?
+  WHERE scheduleIdx =?;
+  `;
+
+  const [updateScheduleEtcRow] = await connection.query(
+    updateScheduleEtcQuery,
+    editEtcParams
+  );
+
+  return updateScheduleEtcRow;
+}
+
 module.exports = {
   insertSchedule,
   selectUser,
@@ -213,4 +243,6 @@ module.exports = {
   updateScheduleIntro,
   updateSchedulePlace,
   updateScheduleName,
+  updateScheduleCode,
+  updateScheduleEtc,
 };
