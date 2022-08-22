@@ -64,7 +64,8 @@ const selectTotalDataCount = async (connection, adminIdx) => {
 // 회원 상세 조회 - API NO. 3.2
 const selectMemberInfo = async (connection, memberInfoParams) => {
   const selectMemberInfoQuery = `
-    SELECT 
+    SELECT
+    userEmail,
     name,
     phoneNum,
     school,

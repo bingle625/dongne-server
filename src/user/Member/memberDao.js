@@ -76,7 +76,8 @@ const selectAdminIdxStatus = async (connection, adminIdxStatusParams) => {
 // 회원 상세 조회 - API NO. 4.2
 const selectMemberInfo = async (connection, retrieveUserIdx) => {
   const selectMemberInfoQuery = `
-  SELECT 
+  SELECT
+  userEmail,
   name,
   phoneNum,
   school,
