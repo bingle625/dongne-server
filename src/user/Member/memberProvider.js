@@ -159,9 +159,15 @@ exports.retrieveClubList = async function (userIdx) {
       return errResponse(baseResponseStatus.USER_USER_STATUS)
     }
 
+    const userName = await memberDao.selcetUserName(connection, userIdx);
+
     const clubList = await memberDao.selectClubList(connection, userIdx);
+
+    // 회원 이름 + 회원의 소속 동아리 리스트 response 객체 병합 
+    const clubListAddUserName = {clubList, userName};
+
     connection.release();
-    return clubList;
+    return clubListAddUserName;
 
   } catch (error) {
     handleError(error);

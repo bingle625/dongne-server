@@ -149,6 +149,21 @@ const selectRetrieveUserStatus = async (connection, userIdx) => {
   return userStatusRows;
 };
 
+// API NO. 4.3 - Retrieve UserName
+const selcetUserName = async (connection, userIdx) => {
+  const selectUserNameQuery = `
+    SELECT name
+    FROM User
+    WHERE userIdx = ?;
+      `;
+
+  const [userStatusRows] = await connection.query(selectUserNameQuery, userIdx);
+
+  return userStatusRows;
+};
+
+
+
 // 개인 회원의 마이페이지 수정 - API NO. 4.4
 const updateUserMypageClub = async (connection, editUserMypageParams) => {
   const updateUserMypageParamsQuery = `
@@ -238,7 +253,9 @@ const selectUserMypageInfo = async (connection, userIdx) => {
     updateUserMypageClub,
     selectMemberMainhome,
     selectUserMypageInfo,
+    selcetUserName,
     
+
     
 
 

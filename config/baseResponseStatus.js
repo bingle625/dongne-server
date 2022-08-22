@@ -518,6 +518,18 @@ module.exports = {
     message: "clubIntroduction을 입력해주세요."
   },
 
+  ADMIN_CLUBCATEGORYIDX_EMPTY: {
+    isSuccess: false,
+    code: 2029,
+    message: "clubCategoryIdx를 입력해주세요."
+  },
+
+  ADMIN_CLUBCATEGORYIDX_LENGTH: {
+    isSuccess: false,
+    code: 2029,
+    message: "clubCategoryIdx를 -1보다 큰 값을 입력해주세요."
+  },
+
   //USER's errResponse
   USER_USERIDX_EMPTY: {
     isSuccess: false,
