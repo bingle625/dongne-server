@@ -395,7 +395,7 @@ export const getAdminMainhome = async (req, res) => {
   };
 
 
-  /*
+/*
     API No. 3.8
     API Nanme: 어드민의 동아리 마이페이지 정보 조회 API
     [GET] /member/mainhome?adminIdx
