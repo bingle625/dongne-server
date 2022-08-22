@@ -128,6 +128,22 @@ const selectMemberStatus = async (connection, TokenUserStatusParams) => {
   return tokenUserStatusRows;
 };
 
+// API NO. 3.2 - 동아리 팀/조 카테고리 리스트 조회
+const selcetClubTeamList = async (connection, JWT_Token_adminIdx) => {
+  const selectClubTeamListQuery = `
+    SELECT
+    clubTeamListIdx,
+    teamName
+    FROM ClubTeamList
+    WHERE adminIdx = ? or adminIdx = 0 and status = "ACTIVE";
+      `;
+
+  const [clubTeamListRows] = await connection.query(selectClubTeamListQuery, JWT_Token_adminIdx);
+
+  return clubTeamListRows;
+};
+
+
 // 회원 삭제 - API NO. 3.3
 const editMember = async (connection, editMemberParams) => {
   const updateMemberQuery = `
@@ -267,8 +283,6 @@ const selectAdminCategoryList = async (connection) => {
 
 
 
-
-
   module.exports = 
   { selectUserPosts,
     selectClub,
@@ -286,6 +300,8 @@ const selectAdminCategoryList = async (connection) => {
     selectAdminMainhome,
     selectAdminMypageInfo,
     selectAdminCategoryList,
+    selcetClubTeamList,
+    
     
     
 

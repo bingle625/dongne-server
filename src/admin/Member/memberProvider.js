@@ -91,11 +91,15 @@ exports.retrieveMemberInfo = async function (userIdx, JWT_Token_adminIdx) {
       return errResponse(baseResponseStatus.USER_USERIDX_STATUS);
     }
 
-    // 회원 상세 조회
+    const clubTeamList = await memberDao.selcetClubTeamList(connection, JWT_Token_adminIdx);
+
     const memberInfoParams = [userIdx, JWT_Token_adminIdx];
     const memberInfo = await memberDao.selectMemberInfo(connection, memberInfoParams);
     connection.release();
-    return memberInfo;
+
+    // 팀/조 카테고리 리스트 + 회원 상세 조회 response 객체 병합
+    const memberInfoAddClubTeamList = {memberInfo, clubTeamList};
+    return memberInfoAddClubTeamList;
 
   } catch (error) {
     handleError(error);
@@ -219,3 +223,4 @@ exports.retrieveAdminMypageInfo = async function (adminIdx) {
     return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
+

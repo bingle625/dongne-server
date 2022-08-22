@@ -6,11 +6,20 @@ const { logger } = require("../../../config/winston");
 
 const attendanceDao = require("./attendanceDao");
 const scheduleProvider = require("../Schedule/scheduleProvider");
+const groupDao = require("../Group/groupDao");
+const baseResponseStatus = require("../../../config/baseResponseStatus");
 
 // paging 추가 ✅
-exports.retrieveAttendList = async function (scheduleIdx, curPage) {
+exports.retrieveAttendList = async function (scheduleIdx, groupIdx, adminIdx, curPage) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
+
+    // Validation Check's groupIdx Status (middle)
+    const groupIdxStatusParams = [adminIdx, groupIdx];
+    const groupIdxStatus = await groupDao.selectGroupIdxStatus(connection, groupIdxStatusParams);
+    if (groupIdxStatus[groupIdxStatus.length - 1]?.status != "ACTIVE"){
+      return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
+    }
 
     const page_size = 10; // 페이지당 회원 수
     const countAttnedResult = await attendanceDao.countAttendList(
@@ -22,7 +31,7 @@ exports.retrieveAttendList = async function (scheduleIdx, curPage) {
     const offset = (curPage - 1) * page_size; // 시작 번호
 
     // query param
-    const selectAttendParams = [scheduleIdx, offset, page_size];
+    const selectAttendParams = [scheduleIdx, groupIdx, adminIdx, offset, page_size];
     // select attendance
     const attendListResult = await attendanceDao.selectAttendList(
       connection,
@@ -45,10 +54,17 @@ exports.retrieveAttendList = async function (scheduleIdx, curPage) {
 };
 
 // paging 추가 ✅
-exports.retrieveAbsenceList = async function (scheduleIdx, curPage) {
+exports.retrieveAbsenceList = async function (scheduleIdx, groupIdx, adminIdx, curPage) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
-
+    
+    // Validation Check's groupIdx Status (middle)
+    const groupIdxStatusParams = [adminIdx, groupIdx];
+    const groupIdxStatus = await groupDao.selectGroupIdxStatus(connection, groupIdxStatusParams);
+    if (groupIdxStatus[groupIdxStatus.length - 1]?.status != "ACTIVE"){
+      return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
+    }
+    
     const page_size = 10; // 페이지당 회원수
     const countAbsenceResult = await attendanceDao.countAbsenceList(
       connection,
@@ -59,7 +75,7 @@ exports.retrieveAbsenceList = async function (scheduleIdx, curPage) {
     const offset = (curPage - 1) * page_size;
 
     //query param
-    const selectAbsenceParmas = [scheduleIdx, offset, page_size];
+    const selectAbsenceParmas = [scheduleIdx, groupIdx, adminIdx, offset, page_size];
     // select AbsenceLisrt
     const absenceListResult = await attendanceDao.selectAbsenceList(
       connection,

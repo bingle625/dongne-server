@@ -10,7 +10,7 @@ const attendanceService = require("./attendanceService");
  */
 exports.getAttendance = async function (req, res) {
   // Query Params : scheduleIdx, adminIdx, curPage
-  const { scheduleIdx, adminIdx, curPage } = req.query;
+  const { scheduleIdx, groupIdx, adminIdx, curPage } = req.query;
 
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
@@ -31,12 +31,21 @@ exports.getAttendance = async function (req, res) {
   } else if (scheduleIdx <= 0) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
+
+  // groupIdx Validation
+  if (!groupIdx) {
+    return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
+  } else if (groupIdx <= 0) {
+    return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
   if (curPage <= 0) {
     curPage = 1;
   }
 
   const attendListResult = await attendanceProvider.retrieveAttendList(
     scheduleIdx,
+    groupIdx,
+    adminIdx,
     curPage
   );
   return res.send(attendListResult);
@@ -49,7 +58,7 @@ exports.getAttendance = async function (req, res) {
  */
 exports.getAbsence = async function (req, res) {
   // Query Params : scheduleIdx, adminIdx, curPage
-  const { scheduleIdx, adminIdx, curPage } = req.query;
+  const { scheduleIdx, adminIdx, groupIdx, curPage } = req.query;
 
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
@@ -69,12 +78,22 @@ exports.getAbsence = async function (req, res) {
   } else if (scheduleIdx <= 0) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
+
+  // groupIdx Validation
+  if (!groupIdx) {
+    return res.send(errResponse(baseResponse.GROUP_GROUPIDX_EMPTY));
+  } else if (groupIdx <= 0) {
+    return res.send(errResponse(baseResponse.GROUP_GROUPIDX_LENGTH));
+  }
+  
   if (curPage <= 0) {
     curPage = 1;
   }
 
   const absenceListResult = await attendanceProvider.retrieveAbsenceList(
     scheduleIdx,
+    groupIdx,
+    adminIdx,
     curPage
   );
   return res.send(absenceListResult);

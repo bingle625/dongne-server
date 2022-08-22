@@ -507,4 +507,5 @@ memberRouter.get("/mainhome", adminJwtMiddleWare, member.getAdminMainhome);
  */
 memberRouter.get("/mypage", adminJwtMiddleWare, member.getAdminMypageInfo);
 
+
 export default memberRouter;
