@@ -26,16 +26,21 @@ exports.retrievePagingGroupList = async function (adminIdx, userIdx, page, pageS
         } else {
             start = (page - 1) * pageSize;
         }
-        const totalDataCountResult = await groupProvider.retrieveTotalDataCount(adminIdx);
+        const totalDataCountResult = await groupProvider.retrieveTotalDataCount(adminIdx, userIdx);
         // req.page's valid with retrieveData ?
+        /*
         const lastPage = Math.ceil(totalDataCountResult[0].totalDataCount/ pageSize);
         if (page > lastPage){
             return errResponse(baseResponseStatus.PAGING_PAGE_WRONG);
         }
+        */
 
         // Paging 된 회원명단 리스트 조회
         const pagingRetrieveGroupListResult = await groupProvider.retrieveGroupList(adminIdx, userIdx, start, pageSize);
-        return pagingRetrieveGroupListResult;
+
+        // 조회 전체 데이터 수 + Paging 된 회원명단 리스트 response 객체 병합
+        const pagingRetrieveGroupListAddTotalDataCountResult = {totalDataCountResult, pagingRetrieveGroupListResult};
+        return pagingRetrieveGroupListAddTotalDataCountResult;
 
     } catch (error) {
         handleError(error);
@@ -73,14 +78,19 @@ exports.retrievePagingGroupMembers = async function (groupIdx, adminIdx, userIdx
         }
         const totalDataCountResult = await groupProvider.retrieveGroupMembersTotalDataCount(groupIdx, adminIdx);
         // req.page's valid with retrieveData ?
+        /*
         const lastPage = Math.ceil(totalDataCountResult[0].totalDataCount/ pageSize);
         if (page > lastPage){
             return errResponse(baseResponseStatus.PAGING_PAGE_WRONG);
         }
+        */
 
         // Paging 된 회원명단 리스트 조회
         const pagingRetrieveGroupMembersResult = await groupProvider.retrieveGroupMembers(groupIdx, start, pageSize);
-        return pagingRetrieveGroupMembersResult;
+
+        // 조회 전체 데이터 수 + Paging 된 회원명단 리스트 response 객체 병합
+        const pagingRetrieveGroupMembersAddTotalDataCountResult = {totalDataCountResult, pagingRetrieveGroupMembersResult}
+        return pagingRetrieveGroupMembersAddTotalDataCountResult;
 
     } catch (error) {
         handleError(error);

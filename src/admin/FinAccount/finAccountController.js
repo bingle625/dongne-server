@@ -23,6 +23,10 @@ export const createFinAccount = async (req, res) => {
       - etc : VARCHAR(200)
   */
   const { adminIdx, finAccountCategoryIdx, isProfit, finAccountItem, finAccountCost, finAccountDate, etc } = req.body;
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
 
   //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
   if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
@@ -61,7 +65,13 @@ export const createFinAccCategory = async (req, res) => {
       - categoryName
       - adminIdx
   */
-  const { categoryName, adminIdx } = req.body;
+  const adminIdx = req.get("adminIdx");
+  const { categoryName } = req.body;
+
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
   if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
   if (!categoryName) return res.send(errResponse(baseResponseStatus.FINACCOUNT_CATEGORY_NAME_EMPTY));
 
@@ -79,6 +89,10 @@ export const createFinAccCategory = async (req, res) => {
 export const getFinAccount = async (req, res) => {
   const adminIdx = req.get("adminIdx");
   if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
   const adminIdxNum = Number(adminIdx);
   const getFinAccountResult = await accountProvider.getRecentFinAccount(adminIdxNum);
   return res.send(getFinAccountResult);
@@ -97,12 +111,18 @@ export const getFinAccountMonthly = async (req, res) => {
       - month
   */
   const adminIdx = req.get("adminIdx");
+
   const year = req.query.year;
   const month = req.query.month;
 
   if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
   if (!year) return res.send(errResponse(baseResponse.FINACCOUNT_YEAR_EMPTY));
   if (!month) return res.send(errResponse(baseResponse.FINACCOUNT_MONTH_EMPTY));
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    console.log(adminIdx, JWT_Token_adminIdx);
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
 
   const adminIdxNum = Number(adminIdx);
   const getFinAccountResult = await accountProvider.getFinAccountByMonth(adminIdxNum, year, month);
@@ -131,6 +151,10 @@ export const getFinAccountDaily = async (req, res) => {
   if (!month) return res.send(errResponse(baseResponse.FINACCOUNT_MONTH_EMPTY));
   if (!day) return res.send(errResponse(baseResponse.FINACCOUNT_DAY_EMPTY));
 
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
   const adminIdxNum = Number(adminIdx);
   const getFinAccountResult = await accountProvider.getFinAccountByDay(adminIdxNum, year, month, day);
   return res.send(getFinAccountResult);
@@ -156,7 +180,10 @@ export const patchCategory = async (req, res) => {
   if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
   if (!categroyIdx) return res.send(errResponse(baseResponse.FINACCOUNT_CATEGORYIDX_EMPTY));
   if (!categoryName) return res.send(errResponse(baseResponse.FINACCOUNT_CATEGORYNAME_EMPTY));
-
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
   const patchCategoryResult = await accountService.updateFinCategory(adminIdx, categroyIdx, categoryName);
   return res.send(patchCategoryResult);
 };
@@ -189,7 +216,10 @@ export const patchFinAccount = async (req, res) => {
   if (!finAccountItem) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ITEM_EMPTY));
   if (!finAccountCost) return res.send(errResponse(baseResponseStatus.FINACCOUNT_COST_EMPTY));
   if (!finAccountDate) return res.send(errResponse(baseResponseStatus.FINACCOUNT_DATE_EMPTY));
-  console.log(isProfit);
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
   //todo: isProfit 0과 1중 하나 맞는지 확인
   if (isProfit !== "0" && isProfit !== "1") return res.send(errResponse(baseResponseStatus.FINACCOUNT_ISPROFIT_WRONG));
   //todo: finAccountCost 숫자인지 확인
@@ -225,7 +255,41 @@ export const deleteFinAccount = async (req, res) => {
   //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
   if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
   if (!accountIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ACCOUNTIDX_EMPTY));
-
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
   const patchFinAccountResult = await accountService.deleteFinAccount(accountIdx, adminIdx);
   return res.send(patchFinAccountResult);
+};
+
+export const getFinAccountByIdx = async (req, res) => {
+  /*
+      header variable = adminIdx
+  */
+  const adminIdx = req.get("adminIdx");
+  const accountIdx = req.params.fId;
+  //todo: 모든 파라미터 (etc 제외) 다 있는 지 확인
+  if (!adminIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!accountIdx) return res.send(errResponse(baseResponseStatus.FINACCOUNT_ACCOUNTIDX_EMPTY));
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
+  const patchFinAccountResult = await accountService.getFinAccountByIdx(accountIdx, adminIdx);
+  return res.send(patchFinAccountResult);
+};
+
+//카테고리 조회
+export const getFinAccountCategory = async (req, res) => {
+  const adminIdx = req.get("adminIdx");
+
+  if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
+  const adminIdxNum = Number(adminIdx);
+  const getFinAccountCategoryResult = await accountProvider.getCategory(adminIdxNum);
+  return res.send(getFinAccountCategoryResult);
 };

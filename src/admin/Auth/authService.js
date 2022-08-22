@@ -60,11 +60,11 @@ export const postSignIn = async function (email, password) {
 };
 
 export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
     const hashedPassword = await crypto.createHash("sha512").update(adminPwd).digest("hex");
 
     const adminInfo = [clubName, adminEmail, hashedPassword, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl];
-    const connection = await pool.getConnection(async (conn) => conn);
 
     //이메일 중복 확인
     const emailStatus = await authDao.selectAdminEmail(connection, adminEmail);
@@ -88,12 +88,14 @@ export const createAdmin = async (clubName, adminEmail, adminPwd, establishmentY
 
     const updateAdminClubCode = await authDao.updateClubCode(connection, [clubCode, createAdminResult[0].insertId]);
     await connection.commit();
-    connection.release();
+    // connection.release();
     return response(baseResponse.SUCCESS, createAdminResult[0].insertId, updateAdminClubCode[0]);
   } catch (err) {
     await connection.rollback();
-    connection.release();
+    // connection.release();
     logger.error(`App - createAdmin Service error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };

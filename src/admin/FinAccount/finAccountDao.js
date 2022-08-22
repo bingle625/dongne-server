@@ -77,9 +77,19 @@ const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day
   return retrieveFinAccountByDayQueryResult;
 };
 
+const retrieveCategory = async (connection, adminIdxNum) => {
+  const retrieveCategoryQuery = `
+          SELECT finAccountCategoryIdx, categoryName
+          FROM FinAccountCategory
+          WHERE adminIdx = ?
+  `;
+  const retrieveCategoryResult = await connection.query(retrieveCategoryQuery, [adminIdxNum]);
+  return retrieveCategoryResult;
+};
+
 const selectCategory = async (connection, idx) => {
   const categoryInfoQuery = `
-        SELECT categoryName 
+        SELECT categoryName,adminIdx
         FROM FinAccountCategory
         WHERE finAccountCategoryIdx = ?; 
   `;
@@ -106,9 +116,23 @@ const deleteFinAccount = async (connection, finAccountInfo) => {
   return FinAccountDeleteResult;
 };
 
+const getFinAccountByIdx = async (connection, finAccountInfo) => {
+  const FinAccountDeleteQuery = `
+          SELECT c.categoryName,f.finAccountCategoryIdx,f.finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc
+          FROM FinAccountCategory as c, (
+                SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc
+                FROM FinancialAccount
+                WHERE finAccountIdx = ?
+              ) f
+          WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx
+  `;
+  const FinAccountDeleteResult = await connection.query(FinAccountDeleteQuery, finAccountInfo);
+  return FinAccountDeleteResult;
+};
+
 const selectAdminAccountByIdx = async (connection, accountIdx) => {
   const categoryInfoQuery = `
-        SELECT finAccountIdx, status
+        SELECT finAccountIdx, adminIdx, status
         FROM FinancialAccount
         WHERE finAccountIdx = ?; 
   `;
@@ -127,5 +151,7 @@ module.exports = {
   selectCategory,
   selectCategoryByName,
   deleteFinAccount,
-  selectAdminAccountByIdx
+  selectAdminAccountByIdx,
+  retrieveCategory,
+  getFinAccountByIdx
 };

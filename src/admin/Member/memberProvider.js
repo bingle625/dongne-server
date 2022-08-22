@@ -179,3 +179,21 @@ exports.checkClubTeamListIdxStatus = async function (clubTeamListIdx, adminIdx) 
     return errResponse(baseResponseStatus.DB_ERRORS);
   }
 };
+
+// 어드민의 동아리 메인 홈 정보 조회 - API NO. 3.7
+exports.retrieveAdminMainhome = async function (adminIdx) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const handleError = (error) => logger.error(`❌retriebeClubMemberList DB Error: ${error.message}`);
+
+  try {
+    const adminMainpageParams = [adminIdx, adminIdx];
+    const adminMainpage = await memberDao.selectAdminMainhome(connection, adminMainpageParams);
+    connection.release();
+    return adminMainpage;
+
+  } catch (error) {
+    handleError(error);
+    connection.release();
+    return errResponse(baseResponseStatus.DB_ERRORS);
+  }
+};

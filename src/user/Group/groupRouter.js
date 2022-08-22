@@ -90,7 +90,7 @@ groupRouter.get("/", userJwtMiddleWare, group.getGroupList);
  *           name: groupIdx
  *           securitySchemes:
  *              type: integer
- *           default: 60
+ *           default: 64
  *           required: true
  *           description: 그룹 인덱스
  *         - in: query
@@ -146,7 +146,7 @@ groupRouter.get("/info", userJwtMiddleWare, group.getGroupInfo);
  *           name: groupIdx
  *           securitySchemes:
  *              type: integer
- *           default: 60
+ *           default: 64
  *           required: true
  *           description: 그룹 인덱스
  *         - in: query

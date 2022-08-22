@@ -60,10 +60,10 @@ exports.postSignIn = async (email, password) => {
 };
 
 export const createUser = async (name, userEmail, password, phoneNum, school, birth, address, introduction, userImgUrl) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
     const hashedPassword = await crypto.createHash("sha512").update(password).digest("hex");
     const userInfo = [name, userEmail, hashedPassword, phoneNum, school, birth, address, introduction, userImgUrl];
-    const connection = await pool.getConnection(async (conn) => conn);
 
     //이메일 중복 확인
     const emailStatus = await authDao.selectUserEmail(connection, userEmail);
@@ -72,16 +72,18 @@ export const createUser = async (name, userEmail, password, phoneNum, school, bi
     }
 
     const createUserResult = await authDao.insertUserInfo(connection, userInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, createUserResult[0].insertId);
   } catch (err) {
     logger.error(`App - createUser Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
 export const joinClub = async (userIdx, clubCode) => {
+  const connection = await pool.getConnection(async (conn) => conn);
   try {
     let adminIdx = null;
     try {
@@ -90,7 +92,6 @@ export const joinClub = async (userIdx, clubCode) => {
       return errResponse(baseResponse.JOIN_CLUB_CODE_INVALID);
     }
     const memberInfo = [userIdx, adminIdx];
-    const connection = await pool.getConnection(async (conn) => conn);
 
     //동아리 상태 확인
     const [clubStatus] = await authDao.selectAdminAccountByIdx(connection, adminIdx);
@@ -110,11 +111,12 @@ export const joinClub = async (userIdx, clubCode) => {
       return errResponse(baseResponse.JOIN_CLUB_MEMBER_EXIST);
     }
     const joinClubResult = await authDao.userJoinClub(connection, memberInfo);
-    connection.release();
     return response(baseResponse.SUCCESS, joinClubResult[0].insertId);
   } catch (err) {
     logger.error(`App - joinClub Service error: ${err.message}`);
 
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };

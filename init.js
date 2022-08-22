@@ -15,10 +15,8 @@ app().get('/', (req, res) => {
 
 
 
-
 app().listen(PORTNUM, () => {
 });
-
 
 app().listen(PORTNUM_HTTP, () => {
   logger.info(`✅Start Express Server on port ${PORTNUM} `);

@@ -10,11 +10,12 @@ export const getRecentFinAccount = async (adminIdxNum) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     const getRecentFinAccountResult = await accountDao.retrieveFinAccount(connection, adminIdxNum);
-    connection.release();
     return response(baseResponse.SUCCESS, getRecentFinAccountResult[0]);
   } catch (error) {
     logger.error(`Admin - getRecentFinAccount Provider error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
+  } finally {
+    connection.release();
   }
 };
 
@@ -34,6 +35,18 @@ export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     const getDailyFinAccountResult = await accountDao.retrieveFinAccountByDay(connection, adminIdxNum, year, month, day);
+    connection.release();
+    return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
+  } catch (err) {
+    logger.error(`Admin - getFinAccountByDay Provider error: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
+export const getCategory = async (adminIdxNum) => {
+  const connection = await pool.getConnection(async (conn) => conn);
+  try {
+    const getDailyFinAccountResult = await accountDao.retrieveCategory(connection, adminIdxNum);
     connection.release();
     return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
   } catch (err) {

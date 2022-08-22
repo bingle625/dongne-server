@@ -46,7 +46,6 @@ export const login = async (req, res) => {
  */
 export const registerAdmin = async (req, res) => {
   const { clubName, adminEmail, adminPwd, establishmentYear, clubRegion, clubIntroduction, clubWebLink, clubImgUrl } = req.body;
-  console.log(clubWebLink);
   //빈 값 체크
 
   if (!adminEmail) {

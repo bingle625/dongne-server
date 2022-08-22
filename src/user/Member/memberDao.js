@@ -50,7 +50,9 @@ const selectTotalDataCount = async (connection, adminIdx) => {
   const selectTotalDataCountQuery = `
     SELECT COUNT(adminIdx) as totalDataCount
     FROM ClubMembers
-    WHERE adminIdx = ?;
+    JOIN User
+    ON ClubMembers.userIdx = User.userIdx
+    WHERE adminIdx = ? and ClubMembers.status = "ACTIVE" and User.status = "ACTIVE";
       `;
 
   const [totalDataCountRows] = await connection.query(selectTotalDataCountQuery, adminIdx);
@@ -166,6 +168,33 @@ const updateUserMypageClub = async (connection, editUserMypageParams) => {
   return userStatusRows;
 };
 
+// 회원의 동아리 메인 홈 정보 조회 - API NO. 4.5
+const selectMemberMainhome = async (connection, memberMainpageParams) => {
+  const selectMainhomeQuery = `
+    SELECT
+    name,
+    introduction,
+    a.ClubName,
+      (SELECT
+      count(userIdx) as clubMemberCount
+      FROM ClubMembers
+      WHERE adminIdx = ? and status = "ACTIVE" ) as clubMemberCount,
+    a.establishmentYear,
+    a.clubRegion,
+    a.clubWebLink
+    FROM User
+    JOIN ClubMembers
+    ON ClubMembers.userIdx = User.userIdx
+    JOIN Admin as a
+    ON a.adminIdx = ClubMembers.adminIdx
+    WHERE ClubMembers.userIdx = ? and ClubMembers.adminIdx = ? and ClubMembers.status = "ACTIVE";
+      `;
+
+  const [memberMainhomeRows] = await connection.query(selectMainhomeQuery, memberMainpageParams);
+
+  return memberMainhomeRows;
+};
+
 
   module.exports = 
   { selectUserPosts,
@@ -179,6 +208,8 @@ const updateUserMypageClub = async (connection, editUserMypageParams) => {
     selectRetrieveUserStatus,
     selectClubList,
     updateUserMypageClub,
+    selectMemberMainhome,
+    
     
 
 
