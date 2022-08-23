@@ -811,6 +811,11 @@ module.exports = {
     code: 5019,
     message: "회계 항목 idx를 적어주세요."
   },
+  FINACCOUNT_USERIDX_EMPTY: {
+    isSuccess: false,
+    code: 5020,
+    message: "user 인덱스를 입력해주세요."
+  },
   //finAccount's Response Error
   FINACCOUNT_CATEGORY_INACTIVE: {
     isSuccess: false,

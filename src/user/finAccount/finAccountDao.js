@@ -74,7 +74,7 @@ const retrieveAccountDates = async (connection, adminIdx) => {
           from FinancialAccount
           where adminIdx = ?;
 `;
-  const retrieveAccountDatesResult = await connection.query(retrieveAccountDatesQuery, [accountIdx]);
+  const retrieveAccountDatesResult = await connection.query(retrieveAccountDatesQuery, [adminIdx]);
   return retrieveAccountDatesResult;
 };
 
@@ -84,5 +84,6 @@ module.exports = {
   retrieveFinAccountByDay,
   selectCategory,
   selectCategoryByName,
-  selectAdminAccountByIdx
+  selectAdminAccountByIdx,
+  retrieveAccountDates
 };
