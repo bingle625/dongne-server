@@ -293,3 +293,15 @@ export const getFinAccountCategory = async (req, res) => {
   const getFinAccountCategoryResult = await accountProvider.getCategory(adminIdxNum);
   return res.send(getFinAccountCategoryResult);
 };
+
+export const getFinAccountDates = async (req, res) => {
+  const adminIdx = req.params.aId;
+  if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
+  const adminIdxNum = Number(adminIdx);
+  const getFinAccountDatesResult = await accountProvider.getFinAccountDates(adminIdxNum);
+  return res.send(getFinAccountDatesResult);
+};

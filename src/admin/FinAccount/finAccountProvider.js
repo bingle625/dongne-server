@@ -3,7 +3,7 @@ const { response, errResponse } = require("../../../config/response");
 
 const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
-
+import authProvider from "../Auth/authProvider";
 const accountDao = require("./finAccountDao");
 
 export const getRecentFinAccount = async (adminIdxNum) => {
@@ -75,4 +75,17 @@ export const accountStatusCheck = async (accountIdx) => {
   const userAcountResult = await accountDao.selectAdminAccountByIdx(connection, accountIdx);
   connection.release();
   return userAcountResult[0];
+};
+
+export const getFinAccountDates = async (adminIdx) => {
+  const userInfoRows = await authProvider.statusCheckByIdx(adminIdx);
+  if (userInfoRows[0].status === "INACTIVE") {
+    return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
+  } else if (userInfoRows[0].status === "DELETED") {
+    return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
+  }
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getFinAccountDatesResult = await accountDao.retrieveAccountDates(connection, adminIdx);
+  connection.release();
+  return getFinAccountDatesResult[0];
 };
