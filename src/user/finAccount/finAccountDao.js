@@ -68,6 +68,16 @@ const selectAdminAccountByIdx = async (connection, accountIdx) => {
   return categoryInfoResult;
 };
 
+const retrieveAccountDates = async (connection, adminIdx) => {
+  const retrieveAccountDatesQuery = `
+          SELECT distinct DATE_FORMAT(finAccountDate, '%Y-%m-%d') as finAccountDate
+          from FinancialAccount
+          where adminIdx = ?;
+`;
+  const retrieveAccountDatesResult = await connection.query(retrieveAccountDatesQuery, [accountIdx]);
+  return retrieveAccountDatesResult;
+};
+
 module.exports = {
   retrieveFinAccount,
   retrieveFinAccountByMonth,

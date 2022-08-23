@@ -478,7 +478,7 @@ adminfinAccountRouter.patch("/category/:cId", adminJwtMiddleWare, finAccount.pat
  */
 adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAccount);
 
-//api 7.7 회계 항목 삭제
+//api 7.8 회계 항목 삭제
 /**
  *
  * @swagger
@@ -528,7 +528,7 @@ adminfinAccountRouter.patch("/:fId", adminJwtMiddleWare, finAccount.patchFinAcco
  */
 adminfinAccountRouter.patch("/status/:fId", adminJwtMiddleWare, finAccount.deleteFinAccount);
 
-//api 7.8 특정 동아리의 회계 항목 카테고리 전체 조회
+//api 7.9 특정 동아리의 회계 항목 카테고리 전체 조회
 /**
  * @swagger
  * paths:
@@ -560,7 +560,7 @@ adminfinAccountRouter.patch("/status/:fId", adminJwtMiddleWare, finAccount.delet
 adminfinAccountRouter.get("/category", adminJwtMiddleWare, finAccount.getFinAccountCategory);
 
 //특정 회계 항목 조회
-//api 7.8 특정 회계항목 조회
+//api 7.10 특정 회계항목 조회
 /**
  *
  * @swagger
@@ -607,5 +607,42 @@ adminfinAccountRouter.get("/category", adminJwtMiddleWare, finAccount.getFinAcco
  *            description: 이미 삭제된 회계항목입니다.
  */
 adminfinAccountRouter.get("/:fId", adminJwtMiddleWare, finAccount.getFinAccountByIdx);
+
+//api 7.11 특정 동아리 회계 날짜 전체 조회
+/**
+ *
+ * @swagger
+ * paths:
+ *  /admin/finAccount/dates/{aId}:
+ *   get:
+ *     tags: [admin 회계 관리]
+ *     summary: 특정 동아리 회계 날짜 전체 조회
+ *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: jwt 토큰
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
+ *           required: true
+ *           type: string
+ *         - in: path
+ *           name: aId
+ *           schema:
+ *              type: integer
+ *           default: 12
+ *           required: true
+ *           description: admin 인덱스
+ *     responses:
+ *          "1000":
+ *            description: 특정 동아리 회계 날짜 전체 조회 api 성공
+ *          "5001":
+ *            description: admin 인덱스를 입력해주세요.
+ *          "3005":
+ *            description: 비활성화 된 계정입니다. 고객센터에 문의해주세요.
+ *          "3006":
+ *            description: 탈퇴 된 계정입니다. 고객센터에 문의해주세요.
+ *          "6000":
+ *            description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
+ */
+adminfinAccountRouter.get("/dates/:aId", adminJwtMiddleWare, finAccount.getFinAccountDates);
 
 export default adminfinAccountRouter;
