@@ -21,7 +21,7 @@ exports.getAttendance = async function (req, res) {
   } else if (adminIdx <= 0) {
     return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
   } else if (adminIdx != adminIdxFromJWT) {
-    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
   }
 
   // admin validation
@@ -69,7 +69,7 @@ exports.getAbsence = async function (req, res) {
   } else if (adminIdx <= 0) {
     return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_LENGTH));
   } else if (adminIdx != adminIdxFromJWT) {
-    return res.send(errResponse(baseResponse.ADMIN_ADMINIDX_NOT_MATCH));
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
   }
 
   // validation

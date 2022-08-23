@@ -15,7 +15,7 @@ exports.retrieveAttendList = async function (scheduleIdx, groupIdx, adminIdx, cu
     const connection = await pool.getConnection(async (conn) => conn);
 
     // Validation Check's groupIdx Status (middle)
-    const groupIdxStatusParams = [adminIdx, groupIdx];
+    const groupIdxStatusParams = [groupIdx, adminIdx];
     const groupIdxStatus = await groupDao.selectGroupIdxStatus(connection, groupIdxStatusParams);
     if (groupIdxStatus[groupIdxStatus.length - 1]?.status != "ACTIVE"){
       return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
@@ -59,7 +59,7 @@ exports.retrieveAbsenceList = async function (scheduleIdx, groupIdx, adminIdx, c
     const connection = await pool.getConnection(async (conn) => conn);
     
     // Validation Check's groupIdx Status (middle)
-    const groupIdxStatusParams = [adminIdx, groupIdx];
+    const groupIdxStatusParams = [groupIdx, adminIdx];
     const groupIdxStatus = await groupDao.selectGroupIdxStatus(connection, groupIdxStatusParams);
     if (groupIdxStatus[groupIdxStatus.length - 1]?.status != "ACTIVE"){
       return errResponse(baseResponseStatus.ADMIN_GROUPIDX_STATUS);
