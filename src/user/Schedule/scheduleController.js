@@ -10,6 +10,7 @@ const scheduleProvider = require("./scheduleProvider");
 exports.getSchedule = async function (req, res) {
   // query parameters
   const { groupIdx, userIdx, curPage } = req.query;
+  const pageSize = parseInt(req.query.pageSize);
 
   // jwt: adminId
   const userIdxFromJWT = req.verifiedToken.adminId;
@@ -33,12 +34,16 @@ exports.getSchedule = async function (req, res) {
   if (curPage <= 0) {
     curPage = 1;
   }
+  if (!pageSize){
+    return res.send(baseResponse.PAGING_PARAMS_EMPTY);
+  }
 
   // Response
   const scheduleListResponse = await scheduleProvider.retrieveScheduleList(
     groupIdx,
     userIdx,
-    curPage
+    curPage,
+    pageSize
   );
   return res.send(scheduleListResponse);
 };

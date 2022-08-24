@@ -108,7 +108,7 @@ scheduleRouter.post("/", jwtMiddleware, schedule.postSchedule);
 /**
  * @swagger
  * paths:
- *  /admin/schedule/list?adminIdx=#&groupIdx=#&curPage=#:
+ *  /admin/schedule/list?adminIdx=#&groupIdx=#&curPage=#&pageSize=#:
  *   get:
  *     tags: [ADMIN 스케줄]
  *     summary: 스케줄 리스트 조회 API
@@ -137,6 +137,13 @@ scheduleRouter.post("/", jwtMiddleware, schedule.postSchedule);
  *           name: curPage
  *           default: 1
  *           description: 현재 페이지
+ *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: pageSize
+ *           default: 100
+ *           description: 한 페이지에 조회할 데이터 수
  *           required: true
  *           schema:
  *              type: integer

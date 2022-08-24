@@ -6,11 +6,12 @@ const attendanceService = require("./attendanceService");
 /**
  * API No. 6.1
  * API Name : 출석한 회원 리스트 조회 API
- * [GET] admin/attendance?scheduleIdx=#&adminIdx=#&curPage=#
+ * [GET] admin/attendance?scheduleIdx=#&adminIdx=#&curPage=#&pageSize=#
  */
 exports.getAttendance = async function (req, res) {
   // Query Params : scheduleIdx, adminIdx, curPage
   const { scheduleIdx, groupIdx, adminIdx, curPage } = req.query;
+  const pageSize = parseInt(req.query.pageSize);
 
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
@@ -41,12 +42,16 @@ exports.getAttendance = async function (req, res) {
   if (curPage <= 0) {
     curPage = 1;
   }
+  if (!pageSize){
+    return res.send(baseResponse.PAGING_PARAMS_EMPTY);
+  }
 
   const attendListResult = await attendanceProvider.retrieveAttendList(
     scheduleIdx,
     groupIdx,
     adminIdx,
-    curPage
+    curPage,
+    pageSize
   );
   return res.send(attendListResult);
 };
@@ -62,6 +67,8 @@ exports.getAbsence = async function (req, res) {
 
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
+  const pageSize = parseInt(req.query.pageSize);
+
 
   // adminIdx validation
   if (!adminIdx) {
@@ -89,12 +96,17 @@ exports.getAbsence = async function (req, res) {
   if (curPage <= 0) {
     curPage = 1;
   }
+  if (!pageSize){
+    return res.send(baseResponse.PAGING_PARAMS_EMPTY);
+  }
+
 
   const absenceListResult = await attendanceProvider.retrieveAbsenceList(
     scheduleIdx,
     groupIdx,
     adminIdx,
-    curPage
+    curPage,
+    pageSize
   );
   return res.send(absenceListResult);
 };
