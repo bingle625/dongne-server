@@ -7,7 +7,7 @@ const { logger } = require("../../../config/winston");
 const scheduleDao = require("./scheduleDao");
 
 // paging 추가 ✅
-exports.retrieveScheduleList = async function (groupIdx, curPage) {
+exports.retrieveScheduleList = async function (groupIdx, curPage, pageSize) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
 
@@ -15,18 +15,17 @@ exports.retrieveScheduleList = async function (groupIdx, curPage) {
       connection,
       groupIdx
     );
-
-    const page_size = 12; // 페이지당 스케줄 수
+    
     const totalSchedule = countScheduleResult[0].count; // 전체 스케줄 개수
     // validation
     if (totalSchedule < 0) {
       totalSchedule = 0;
     }
-    const totalPage = Math.ceil(totalSchedule / page_size); // 전체 페이지 수
-    const offset = (curPage - 1) * page_size; // 시작 번호
+    const totalPage = Math.ceil(totalSchedule / pageSize); // 전체 페이지 수
+    const offset = (curPage - 1) * pageSize; // 시작 번호
 
     // query param
-    const selectScheduleParmams = [groupIdx, offset, page_size];
+    const selectScheduleParmams = [groupIdx, offset, pageSize];
     // select schedule
     const scheduleListResult = await scheduleDao.selectSchedule(
       connection,

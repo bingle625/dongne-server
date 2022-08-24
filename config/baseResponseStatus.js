@@ -715,6 +715,12 @@ module.exports = {
     message: "groupCategory를 30자 이내로 입력해주세요."
   },
 
+  GROUP_USERIDX_EXIST: {
+    isSuccess: false,
+    code: 4011,
+    message: "유효하지 않은 userIdx입니다."
+  },
+
   //finAccount's Request Error
   FINACCOUNT_ADMINIDX_EMPTY: {
     isSuccess: false,

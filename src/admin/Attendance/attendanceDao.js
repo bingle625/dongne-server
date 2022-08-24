@@ -14,12 +14,16 @@ async function insertAttendance(connection, insertAttendanceParams) {
 // 출석한 회원 수 조회
 async function countAttendList(connection, scheduleIdx) {
   const countAttendListQuery = `
-    SELECT COUNT(*) as count
-    FROM User u
-      right join (SELECT userIdx
-                 FROM Attendance
-                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=1) p on p.userIdx = u.userIdx
-    WHERE u.status = 'ACTIVE';
+  SELECT COUNT(*) as count
+  FROM User u
+    right join (SELECT userIdx
+               FROM Attendance
+               WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=1) p on p.userIdx = u.userIdx
+    right join GroupMembers on GroupMembers.userIdx = p.userIdx
+    right join ClubMembers on ClubMembers.userIdx = GroupMembers.userIdx
+  WHERE GroupMembers.groupIdx = ? and ClubMembers.adminIdx = ? and u.status = 'ACTIVE' and GroupMembers.status = "ACTIVE" and ClubMembers.status = "ACTIVE";
+
+
   `;
 
   const [countAttendRows] = await connection.query(
@@ -57,12 +61,14 @@ async function selectAttendList(connection, selectAttendParams) {
 // 결석한 회원수 조회
 async function countAbsenceList(connection, scheduleIdx) {
   const countAbsenceListQuery = `
-    SELECT COUNT(*) as count
-    FROM User u
-      right join (SELECT userIdx
-                 FROM Attendance
-                 WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=0) p on p.userIdx = u.userIdx
-    WHERE u.status = 'ACTIVE';
+  SELECT COUNT(*) as count
+  FROM User u
+    right join (SELECT userIdx
+               FROM Attendance
+               WHERE scheduleIdx =? and status = 'ACTIVE' and attendanceStatus=0) p on p.userIdx = u.userIdx
+    right join GroupMembers on GroupMembers.userIdx = p.userIdx
+    right join ClubMembers on ClubMembers.userIdx = GroupMembers.userIdx
+  WHERE GroupMembers.groupIdx = ? and ClubMembers.adminIdx = ? and u.status = 'ACTIVE' and GroupMembers.status = "ACTIVE" and ClubMembers.status = "ACTIVE";
   `;
 
   const [countAbsenceRows] = await connection.query(
