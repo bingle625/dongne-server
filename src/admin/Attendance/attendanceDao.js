@@ -2,12 +2,9 @@
 async function insertAttendance(connection, insertAttendanceParams) {
   const insertAttendanceQuery = `
   INSERT INTO Attendance(userIdx, scheduleIdx, attendanceStatus, createdAt, updatedAt, status)
-  VALUES (?,?, 2, DEFAULT, DEFAULT, DEFAULT);
+  VALUES (?,?, 0, DEFAULT, DEFAULT, DEFAULT);
   `;
-  const [insertAttendRows] = await connection.query(
-    insertAttendanceQuery,
-    insertAttendanceParams
-  );
+  const [insertAttendRows] = await connection.query(insertAttendanceQuery, insertAttendanceParams);
   return insertAttendRows;
 }
 
@@ -26,10 +23,7 @@ async function countAttendList(connection, scheduleIdx) {
 
   `;
 
-  const [countAttendRows] = await connection.query(
-    countAttendListQuery,
-    scheduleIdx
-  );
+  const [countAttendRows] = await connection.query(countAttendListQuery, scheduleIdx);
   return countAttendRows;
 }
 
@@ -51,10 +45,7 @@ async function selectAttendList(connection, selectAttendParams) {
     LIMIT ?, ?;
     `;
 
-  const [attendRows] = await connection.query(
-    selectAttendListQuery,
-    selectAttendParams
-  );
+  const [attendRows] = await connection.query(selectAttendListQuery, selectAttendParams);
   return attendRows;
 }
 
@@ -71,10 +62,7 @@ async function countAbsenceList(connection, scheduleIdx) {
   WHERE GroupMembers.groupIdx = ? and ClubMembers.adminIdx = ? and u.status = 'ACTIVE' and GroupMembers.status = "ACTIVE" and ClubMembers.status = "ACTIVE";
   `;
 
-  const [countAbsenceRows] = await connection.query(
-    countAbsenceListQuery,
-    scheduleIdx
-  );
+  const [countAbsenceRows] = await connection.query(countAbsenceListQuery, scheduleIdx);
   return countAbsenceRows;
 }
 
@@ -96,10 +84,7 @@ async function selectAbsenceList(connection, selectAbsenceParmas) {
     LIMIT ?, ?;
     `;
 
-  const [absenceRows] = await connection.query(
-    selectAbsenceListQuery,
-    selectAbsenceParmas
-  );
+  const [absenceRows] = await connection.query(selectAbsenceListQuery, selectAbsenceParmas);
   return absenceRows;
 }
 
@@ -111,10 +96,7 @@ async function selectAttendCode(connection, scheduleIdx) {
     WHERE scheduleIdx = ?;
     `;
 
-  const [attendCode] = await connection.query(
-    selectAttendCodeQuery,
-    scheduleIdx
-  );
+  const [attendCode] = await connection.query(selectAttendCodeQuery, scheduleIdx);
 
   return attendCode;
 }
@@ -127,10 +109,7 @@ async function updateAttendance(connection, attendParams) {
   WHERE scheduleIdx =? and userIdx = ?;  
   `;
 
-  const [updateAttendRows] = await connection.query(
-    updateAttendanceQuery,
-    attendParams
-  );
+  const [updateAttendRows] = await connection.query(updateAttendanceQuery, attendParams);
   return updateAttendRows;
 }
 
@@ -142,10 +121,7 @@ async function updateAbsence(connection, absenceParams) {
   WHERE scheduleIdx =? and userIdx = ?;
   `;
 
-  const [updateAbsenceRows] = await connection.query(
-    updateAbsenceQuery,
-    absenceParams
-  );
+  const [updateAbsenceRows] = await connection.query(updateAbsenceQuery, absenceParams);
   return updateAbsenceRows;
 }
 
@@ -157,5 +133,5 @@ module.exports = {
   countAbsenceList,
   selectAttendCode,
   updateAttendance,
-  updateAbsence,
+  updateAbsence
 };
