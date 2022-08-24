@@ -63,6 +63,26 @@ const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) =
   return getFinAccountQueryResult;
 };
 
+const retrieveFinAccountCategoryByMonth = async (connection, adminIdxNum, year, month) => {
+  const getFinAccountCategoryQuery = `
+          SELECT c.finAccountCategoryIdx, c.categoryName, f.countedItem, f.adminIdx
+          from FinAccountCategory as c,
+               (SELECT finAccountIdx,
+                       finAccountDate,
+                       finAccountCategoryIdx,
+                       count(finAccountCategoryIdx) as countedItem,
+                       status,
+                       adminIdx
+                FROM FinancialAccount
+                WHERE (adminIdx = ? AND status = "ACTIVE")
+                  AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?))
+                group by finAccountCategoryIdx) f
+          where c.finAccountCategoryIdx = f.finAccountCategoryIdx;
+  `;
+  const getFinAccountCategoryResult = await connection.query(getFinAccountCategoryQuery, [adminIdxNum, month, year]);
+  return getFinAccountCategoryResult;
+};
+
 const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day) => {
   const retrieveFinAccountByDayQuery = `
           SELECT c.categoryName,f.finAccountIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc,f.status
@@ -165,5 +185,6 @@ module.exports = {
   selectAdminAccountByIdx,
   retrieveCategory,
   getFinAccountByIdx,
-  retrieveAccountDates
+  retrieveAccountDates,
+  retrieveFinAccountCategoryByMonth
 };
