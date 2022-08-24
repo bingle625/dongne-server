@@ -305,3 +305,34 @@ export const getFinAccountDates = async (req, res) => {
   const getFinAccountDatesResult = await accountProvider.getFinAccountDates(adminIdxNum);
   return res.send(getFinAccountDatesResult);
 };
+
+/**
+ * API No. 7.12
+ * API Name : 월별 회계 카테고리 조회 api
+ * [GET] admin/finAccount/category/month
+ */
+
+export const getFACategoryMonthly = async (req, res) => {
+  /*
+    query string: 
+      - year
+      - month
+  */
+  const adminIdx = req.get("adminIdx");
+
+  const year = req.query.year;
+  const month = req.query.month;
+
+  if (!adminIdx) return res.send(errResponse(baseResponse.FINACCOUNT_ADMINIDX_EMPTY));
+  if (!year) return res.send(errResponse(baseResponse.FINACCOUNT_YEAR_EMPTY));
+  if (!month) return res.send(errResponse(baseResponse.FINACCOUNT_MONTH_EMPTY));
+  const JWT_Token_adminIdx = req.verifiedToken.adminId;
+  if (parseInt(adminIdx) !== JWT_Token_adminIdx) {
+    console.log(adminIdx, JWT_Token_adminIdx);
+    return res.send(errResponse(baseResponse.JWT_TOKEN_DIFFERENT));
+  }
+
+  const adminIdxNum = Number(adminIdx);
+  const getFinAccountResult = await accountProvider.getFinAccountCategoryByMonth(adminIdxNum, year, month);
+  return res.send(getFinAccountResult);
+};

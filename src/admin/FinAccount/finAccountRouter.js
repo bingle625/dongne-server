@@ -645,4 +645,53 @@ adminfinAccountRouter.get("/:fId", adminJwtMiddleWare, finAccount.getFinAccountB
  */
 adminfinAccountRouter.get("/dates/:aId", adminJwtMiddleWare, finAccount.getFinAccountDates);
 
+//api 7.12 특정 동아리의 월별 회계 카테고리 조회 api
+/**
+ * @swagger
+ * paths:
+ *  /admin/finAccount/category/month?year={year}&month={month}:
+ *   get:
+ *     tags: [admin 회계 관리]
+ *     summary: 월별 회계 카테고리 조회 api
+ *     parameters:
+ *         - name: x-access-token
+ *           in: header
+ *           description: jwt 토큰
+ *           default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxMiwiaWF0IjoxNjYwODM2ODIzLCJleHAiOjE2OTIzNzI4MjMsInN1YiI6IkFkbWluIn0.6zylPZUFFS7_CN4138mkHfh69ISQ_pqguc0dVGg7bf4
+ *           required: true
+ *           type: string
+ *         - in: header
+ *           name: adminIdx
+ *           description: 클럽 어드민 인덱스
+ *           default: 12
+ *           required: true
+ *           type: integer
+ *         - in: query
+ *           name: year
+ *           schema:
+ *            type: integer
+ *           description: 조회 년도
+ *           default: 2022
+ *         - in: query
+ *           name: month
+ *           schema:
+ *            type: integer
+ *           description: 조회 월
+ *           default: 8
+ *     responses:
+ *       "1000":
+ *         description: 월별 회계 카테고리 조회 api 성공
+ *       "5001":
+ *         description: admin Idx 비어있음.
+ *       "5014":
+ *         description: 날짜의 year 비어있음.
+ *       "5015":
+ *         description: 날짜의 month 비어있음.
+ *       "6000":
+ *         description: 접근할 수 없는 동아리입니다. 본인 동아리에 대해서만 접근하세요.
+ *
+ *
+ */
+adminfinAccountRouter.get("/category/month", adminJwtMiddleWare, finAccount.getFACategoryMonthly);
+
 export default adminfinAccountRouter;
