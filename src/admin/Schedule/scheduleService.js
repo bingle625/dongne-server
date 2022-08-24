@@ -16,28 +16,16 @@ exports.postSchedule = async function (postScheduleParams) {
     await connection.beginTransaction();
 
     // 1. select user
-    const selectUserResult = await scheduleDao.selectUser(
-      connection,
-      postScheduleParams[0]
-    );
-    console.log(selectUserResult[0].userIdx);
-    console.log(selectUserResult.length);
+    const selectUserResult = await scheduleDao.selectUser(connection, postScheduleParams[0]);
 
     // 2. post schedule
-    const insertScheduleResult = await scheduleDao.insertSchedule(
-      connection,
-      postScheduleParams
-    );
-    console.log(insertScheduleResult.insertId);
+    const insertScheduleResult = await scheduleDao.insertSchedule(connection, postScheduleParams);
 
     // 3. attendance schedule
     const scheduleIdx = insertScheduleResult.insertId;
     for (var i = 0; i < selectUserResult.length; i++) {
       const postAttendParams = [selectUserResult[i].userIdx, scheduleIdx];
-      const insertAttendResult = await attendanceDao.insertAttendance(
-        connection,
-        postAttendParams
-      );
+      const insertAttendResult = await attendanceDao.insertAttendance(connection, postAttendParams);
     }
 
     // transaction commit
@@ -58,9 +46,7 @@ exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
     // 1. check active
-    const scheduleStatusResult = await scheduleProvider.checkScheduleStatus(
-      scheduleIdx
-    );
+    const scheduleStatusResult = await scheduleProvider.checkScheduleStatus(scheduleIdx);
     if (scheduleStatusResult != "ACTIVE") {
       return errResponse(baseResponse.SCHEDULE_STATUS_INACTIVE);
     }
@@ -71,19 +57,12 @@ exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
     // 2. edit date
     if (editScheduleParams.scheduleDate !== undefined) {
       const editDateParams = [editScheduleParams.scheduleDate, scheduleIdx];
-      const updateScheduleDateResult = await scheduleDao.updateScheduleDate(
-        connection,
-        editDateParams
-      );
-      console.log(updateScheduleDateResult);
+      const updateScheduleDateResult = await scheduleDao.updateScheduleDate(connection, editDateParams);
     }
     // 3. edit init_time
     if (editScheduleParams.init_time !== undefined) {
       const editInitTimeParams = [editScheduleParams.init_time, scheduleIdx];
-      const updateInitTimeResult = await scheduleDao.updateScheduleInitTime(
-        connection,
-        editInitTimeParams
-      );
+      const updateInitTimeResult = await scheduleDao.updateScheduleInitTime(connection, editInitTimeParams);
     }
     // 4. edit end_time
     if (editScheduleParams.end_time !== undefined) {
@@ -93,10 +72,7 @@ exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
     // 5. edit introduction
     if (editScheduleParams.introduction !== undefined) {
       const editIntroParams = [editScheduleParams.introduction, scheduleIdx];
-      const updateIntroResult = await scheduleDao.updateScheduleIntro(
-        connection,
-        editIntroParams
-      );
+      const updateIntroResult = await scheduleDao.updateScheduleIntro(connection, editIntroParams);
     }
     // 6. edit place
     if (editScheduleParams.place !== undefined) {
@@ -134,19 +110,14 @@ exports.editSchedule = async function (scheduleIdx, editScheduleParams) {
 exports.editScheduleStatus = async function (scheduleIdx) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
-    const scheduleStatusResult = await scheduleProvider.checkScheduleStatus(
-      scheduleIdx
-    );
+    const scheduleStatusResult = await scheduleProvider.checkScheduleStatus(scheduleIdx);
 
     if (scheduleStatusResult != "ACTIVE") {
       connection.release();
       return errResponse(baseResponse.SCHEDULE_STATUS_INACTIVE);
     }
 
-    const editScheduleStatusResult = await scheduleDao.updateScheduleStatus(
-      connection,
-      scheduleIdx
-    );
+    const editScheduleStatusResult = await scheduleDao.updateScheduleStatus(connection, scheduleIdx);
     connection.release();
 
     return response(baseResponse.SUCCESS);
