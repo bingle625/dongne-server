@@ -41,17 +41,12 @@ exports.postSchedule = async function (req, res) {
   }
 
   // init_time valid
-  if (
-    init_time &&
-    !moment(init_time, "YYYY/MM/DD HH:mm:ss", true).isValid() &&
-    !moment(init_time, "YYYY-MM-DD HH:mm:ss", true).isValid() &&
-    !moment(init_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()
-  ) {
+  if (init_time && !moment(init_time, "YYYY/MM/DD HH:mm:ss", true).isValid() && !moment(init_time, "YYYY-MM-DD HH:mm:ss", true).isValid() && !moment(init_time, "YYYY-MM-DDTHH:mm", true).isValid()) {
     return res.send(errResponse(baseResponse.SCHEDULE_INITTIME_VALID));
   }
 
   // end_time valid
-  if (end_time && !moment(end_time, "YYYY/MM/DD HH:mm:ss", true).isValid() && !moment(end_time, "YYYY-MM-DD HH:mm:ss", true).isValid() && !moment(end_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()) {
+  if (end_time && !moment(end_time, "YYYY/MM/DD HH:mm:ss", true).isValid() && !moment(end_time, "YYYY-MM-DD HH:mm:ss", true).isValid() && !moment(end_time, "YYYY-MM-DDTHH:mm", true).isValid()) {
     return res.send(errResponse(baseResponse.SCHEDULE_ENDTIME_VALID));
   }
 
@@ -192,7 +187,7 @@ exports.patchSchedule = async function (req, res) {
     editScheduleParams.init_time &&
     !moment(editScheduleParams.init_time, "YYYY/MM/DD HH:mm:ss", true).isValid() &&
     !moment(editScheduleParams.init_time, "YYYY-MM-DD HH:mm:ss", true).isValid() &&
-    !moment(editScheduleParams.init_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()
+    !moment(editScheduleParams.init_time, "YYYY-MM-DDTHH:mm", true).isValid()
   ) {
     return res.send(errResponse(baseResponse.SCHEDULE_INITTIME_VALID));
   }
@@ -202,7 +197,7 @@ exports.patchSchedule = async function (req, res) {
     editScheduleParams.end_time &&
     !moment(editScheduleParams.end_time, "YYYY/MM/DD HH:mm:ss", true).isValid() &&
     !moment(editScheduleParams.end_time, "YYYY-MM-DD HH:mm:ss", true).isValid() &&
-    !moment(editScheduleParams.end_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()
+    !moment(editScheduleParams.end_time, "YYYY-MM-DDTHH:mm", true).isValid()
   ) {
     return res.send(errResponse(baseResponse.SCHEDULE_ENDTIME_VALID));
   }
