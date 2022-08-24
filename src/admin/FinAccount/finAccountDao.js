@@ -38,15 +38,16 @@ const modifyFinAccount = async (connection, finAccCategoryParams) => {
 
 const retrieveFinAccount = async (connection, adminIdx) => {
   const getFinAccountQuery = `
-        SELECT c.categoryName,f.finAccountIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost
-        FROM FinAccountCategory as c, (
-            SELECT finAccountIdx, finAccountDate, isProfit, finAccountCategoryIdx, finAccountItem, finAccountCost
-        FROM FinancialAccount
-        WHERE adminIdx = ?
-        ORDER BY finAccountDate DESC
-        LIMIT 4
-            ) f
-        WHERE (c.finAccountCategoryIdx = f.finAccountCategoryIdx) and c.status = "ACTIVE"
+  SELECT c.categoryName,f.finAccountIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.status
+
+  FROM FinAccountCategory as c, (
+      SELECT finAccountIdx, finAccountDate, isProfit, finAccountCategoryIdx, finAccountItem, finAccountCost,status
+  FROM FinancialAccount
+  WHERE adminIdx = ?
+  ORDER BY finAccountDate DESC
+  LIMIT 4
+      ) f
+  WHERE (c.finAccountCategoryIdx = f.finAccountCategoryIdx) and (c.status = "ACTIVE" and f.status="ACTIVE")
   `;
   const getFinAccountQueryResult = await connection.query(getFinAccountQuery, adminIdx);
   return getFinAccountQueryResult;
@@ -54,9 +55,9 @@ const retrieveFinAccount = async (connection, adminIdx) => {
 
 const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) => {
   const getFinAccountQuery = `
-      SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, DATE_FORMAT(finAccountDate, '%Y-%m-%d') as finAccountDate
-      FROM FinancialAccount
-      WHERE adminIdx = ? and (MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?)
+          SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, DATE_FORMAT(finAccountDate, '%Y-%m-%d') as finAccountDate,finAccountCategoryIdx, status
+          FROM FinancialAccount
+          WHERE (adminIdx = ? and status="ACTIVE") and (MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?)
   `;
   const getFinAccountQueryResult = await connection.query(getFinAccountQuery, [adminIdxNum, month, year]);
   return getFinAccountQueryResult;
@@ -64,13 +65,13 @@ const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) =
 
 const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day) => {
   const retrieveFinAccountByDayQuery = `
-        SELECT c.categoryName,f.finAccountIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc
-        FROM FinAccountCategory as c, (
-              SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc
-              FROM FinancialAccount
-              WHERE adminIdx = ? AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?) AND DAY(finAccountDate) = ?)
-            ) f
-        WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx
+          SELECT c.categoryName,f.finAccountIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc,f.status
+          FROM FinAccountCategory as c, (
+                SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc,status
+                FROM FinancialAccount
+                WHERE adminIdx = ? AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?) AND DAY(finAccountDate) = ?)
+              ) f
+          WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx AND f.status="ACTIVE"
   `;
   const retrieveFinAccountByDayQueryResult = await connection.query(retrieveFinAccountByDayQuery, [adminIdxNum, month, year, day]);
   return retrieveFinAccountByDayQueryResult;
@@ -107,9 +108,9 @@ const selectCategoryByName = async (connection, adminIdx, categoryName) => {
 };
 const deleteFinAccount = async (connection, finAccountInfo) => {
   const FinAccountDeleteQuery = `
-  UPDATE FinancialAccount
-  SET status = "DELETED"
-  WHERE finAccountIdx = ?;
+        UPDATE FinancialAccount
+        SET status = "DELETED"
+        WHERE finAccountIdx = ?;
   `;
   const FinAccountDeleteResult = await connection.query(FinAccountDeleteQuery, finAccountInfo);
   return FinAccountDeleteResult;
@@ -117,13 +118,14 @@ const deleteFinAccount = async (connection, finAccountInfo) => {
 
 const getFinAccountByIdx = async (connection, finAccountInfo) => {
   const FinAccountDeleteQuery = `
-          SELECT c.categoryName,f.finAccountCategoryIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc
+          SELECT c.categoryName,f.finAccountCategoryIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc,f.status
           FROM FinAccountCategory as c, (
-                SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc
+                SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, finAccountDate, finAccountCategoryIdx, etc,status
                 FROM FinancialAccount
                 WHERE finAccountIdx = ?
+
               ) f
-          WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx
+          WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx AND f.status="ACTIVE"
   `;
   const FinAccountDeleteResult = await connection.query(FinAccountDeleteQuery, finAccountInfo);
   return FinAccountDeleteResult;
@@ -133,7 +135,7 @@ const selectAdminAccountByIdx = async (connection, accountIdx) => {
   const categoryInfoQuery = `
         SELECT finAccountIdx, adminIdx, status
         FROM FinancialAccount
-        WHERE finAccountIdx = ?; 
+        WHERE finAccountIdx = ? AND status = "ACTIVE";
   `;
   const categoryInfoResult = await connection.query(categoryInfoQuery, [accountIdx]);
   return categoryInfoResult;
@@ -141,9 +143,9 @@ const selectAdminAccountByIdx = async (connection, accountIdx) => {
 
 const retrieveAccountDates = async (connection, adminIdx) => {
   const retrieveAccountDatesQuery = `
-          SELECT distinct DATE_FORMAT(finAccountDate, '%Y-%m-%d') as finAccountDate
+          SELECT distinct DATE_FORMAT(finAccountDate, '%Y-%m-%d') as finAccountDate, status
           from FinancialAccount
-          where adminIdx = ?;
+          where adminIdx = ? AND status = "ACTIVE";;
 `;
   const retrieveAccountDatesResult = await connection.query(retrieveAccountDatesQuery, [adminIdx]);
   return retrieveAccountDatesResult;
