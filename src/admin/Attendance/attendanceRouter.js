@@ -8,7 +8,7 @@ const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
 /**
  * @swagger
  * paths:
- *  /admin/attendance?scheduleIdx=#&adminIdx=#&groupIdx=#&curPage=#:
+ *  /admin/attendance?scheduleIdx=#&adminIdx=#&groupIdx=#&curPage=#&pageSize=#:
  *   get:
  *     tags: [ADMIN 출석]
  *     summary: 출석한 회원 리스트 조회 API
@@ -47,6 +47,13 @@ const jwtMiddleware = require("../../../config/adminJwtMiddleWare");
  *           required: true
  *           schema:
  *              type: integer
+ *         - in: query
+ *           name: pageSize
+ *           default: 100
+ *           description: 한 페이지에 조회할 데이터 수
+ *           required: true
+ *           schema:
+ *              type: integer
  *     responses:
  *       "1000":
  *         description: 출석한 회원 리스트 조회 API 성공
@@ -71,7 +78,7 @@ attendanceRouter.get("/", jwtMiddleware, attendance.getAttendance);
 /**
  * @swagger
  * paths:
- *  /admin/attendance/absence?scheduleIdx=#&adminIdx=#&groupIdx=#&curPage=#:
+ *  /admin/attendance/absence?scheduleIdx=#&adminIdx=#&groupIdx=#&curPage=#&pageSize=#:
  *   get:
  *     tags: [ADMIN 출석]
  *     summary: 결석한 회원 리스트 조회 API
@@ -107,6 +114,13 @@ attendanceRouter.get("/", jwtMiddleware, attendance.getAttendance);
  *           name: curPage
  *           default: 1
  *           description: 현재 페이지
+ *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: pageSize
+ *           default: 100
+ *           description: 한 페이지에 조회할 데이터 수
  *           required: true
  *           schema:
  *              type: integer

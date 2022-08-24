@@ -8,7 +8,7 @@ const jwtMiddleware = require("../../../config/userJwtMiddleWare");
 /**
  * @swagger
  * paths:
- *  /user/schedule/list?groupIdx=#&userIdx=#&curPage=#:
+ *  /user/schedule/list?groupIdx=#&userIdx=#&curPage=#&pageSize=#:
  *   get:
  *     tags: [USER 스케줄]
  *     summary: 스케줄 리스트 조회 API
@@ -37,6 +37,13 @@ const jwtMiddleware = require("../../../config/userJwtMiddleWare");
  *           name: curPage
  *           default: 1
  *           description: 현재 페이지
+ *           required: true
+ *           schema:
+ *              type: integer
+ *         - in: query
+ *           name: pageSize
+ *           default: 100
+ *           description: 한 페이지에 조회할 데이터 수
  *           required: true
  *           schema:
  *              type: integer

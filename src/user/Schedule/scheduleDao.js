@@ -44,11 +44,11 @@ async function selectSchedule(connection, scheduleListParmas) {
 // 그룹 userIdx가 있는지 확인
 async function selectExistUser(connection, selectExistUserParams) {
   const selectExistUserQuery = `    
-    SELECT EXISTS(
-        SELECT groupMemIdx
-        FROM GroupMembers
-        WHERE groupIdx =? and userIdx = ?
-           ) as success;
+  SELECT EXISTS(
+    SELECT groupMemIdx
+    FROM GroupMembers
+    WHERE groupIdx = ? and userIdx = ? and status = "ACTIVE"
+       ) as success;
     `;
   const [userExistRow] = await connection.query(
     selectExistUserQuery,
