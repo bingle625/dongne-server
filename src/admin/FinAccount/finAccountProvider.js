@@ -9,7 +9,10 @@ const accountDao = require("./finAccountDao");
 export const getRecentFinAccount = async (adminIdxNum) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const getRecentFinAccountResult = await accountDao.retrieveFinAccount(connection, adminIdxNum);
+    const getRecentFinAccountResult = await accountDao.retrieveFinAccount(
+      connection,
+      adminIdxNum
+    );
     return response(baseResponse.SUCCESS, getRecentFinAccountResult[0]);
   } catch (error) {
     logger.error(`Admin - getRecentFinAccount Provider error: ${err.message}`);
@@ -22,7 +25,13 @@ export const getRecentFinAccount = async (adminIdxNum) => {
 export const getFinAccountByMonth = async (adminIdxNum, year, month) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const getMonthlyFinAccountResult = await accountDao.retrieveFinAccountByMonth(connection, adminIdxNum, year, month);
+    const getMonthlyFinAccountResult =
+      await accountDao.retrieveFinAccountByMonth(
+        connection,
+        adminIdxNum,
+        year,
+        month
+      );
     connection.release();
     return response(baseResponse.SUCCESS, getMonthlyFinAccountResult[0]);
   } catch (err) {
@@ -34,7 +43,13 @@ export const getFinAccountByMonth = async (adminIdxNum, year, month) => {
 export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const getDailyFinAccountResult = await accountDao.retrieveFinAccountByDay(connection, adminIdxNum, year, month, day);
+    const getDailyFinAccountResult = await accountDao.retrieveFinAccountByDay(
+      connection,
+      adminIdxNum,
+      year,
+      month,
+      day
+    );
     connection.release();
     return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
   } catch (err) {
@@ -46,7 +61,10 @@ export const getFinAccountByDay = async (adminIdxNum, year, month, day) => {
 export const getCategory = async (adminIdxNum) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const getDailyFinAccountResult = await accountDao.retrieveCategory(connection, adminIdxNum);
+    const getDailyFinAccountResult = await accountDao.retrieveCategory(
+      connection,
+      adminIdxNum
+    );
     connection.release();
     return response(baseResponse.SUCCESS, getDailyFinAccountResult[0]);
   } catch (err) {
@@ -64,7 +82,11 @@ export const categoryStatusCheck = async (idx) => {
 
 export const categoryDupCheck = async (adminIdx, categoryName) => {
   const connection = await pool.getConnection(async (conn) => conn);
-  const categoryResult = await accountDao.selectCategoryByName(connection, adminIdx, categoryName);
+  const categoryResult = await accountDao.selectCategoryByName(
+    connection,
+    adminIdx,
+    categoryName
+  );
   connection.release();
   console.log(categoryResult[0]);
   return categoryResult[0];
@@ -72,7 +94,10 @@ export const categoryDupCheck = async (adminIdx, categoryName) => {
 
 export const accountStatusCheck = async (accountIdx) => {
   const connection = await pool.getConnection(async (conn) => conn);
-  const userAcountResult = await accountDao.selectAdminAccountByIdx(connection, accountIdx);
+  const userAcountResult = await accountDao.selectAdminAccountByIdx(
+    connection,
+    accountIdx
+  );
   connection.release();
   return userAcountResult[0];
 };
@@ -85,17 +110,47 @@ export const getFinAccountDates = async (adminIdx) => {
     return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
   }
   const connection = await pool.getConnection(async (conn) => conn);
-  const getFinAccountDatesResult = await accountDao.retrieveAccountDates(connection, adminIdx);
+  const getFinAccountDatesResult = await accountDao.retrieveAccountDates(
+    connection,
+    adminIdx
+  );
   connection.release();
   return getFinAccountDatesResult[0];
 };
 
-export const getFinAccountCategoryByMonth = async (adminIdxNum, year, month) => {
+export const getFinAccountCategoryByMonth = async (
+  adminIdxNum,
+  year,
+  month
+) => {
   const connection = await pool.getConnection(async (conn) => conn);
   try {
-    const getMonthlyFinAccountResult = await accountDao.retrieveFinAccountCategoryByMonth(connection, adminIdxNum, year, month);
+    // const getMonthlyFinAccountResult = await accountDao.retrievePosMonth(
+    //   connection,
+    //   adminIdxNum,
+    //   year,
+    //   month
+    // );
+    const getMonthlyPosResult = await accountDao.retrievePosMonth(
+      connection,
+      adminIdxNum,
+      year,
+      month
+    );
+
+    const getMonthlyNegResult = await accountDao.retrieveNegMonth(
+      connection,
+      adminIdxNum,
+      year,
+      month
+    );
     connection.release();
-    return response(baseResponse.SUCCESS, getMonthlyFinAccountResult[0]);
+
+    const result = {
+      pos: getMonthlyPosResult[0],
+      neg: getMonthlyNegResult[0],
+    };
+    return response(baseResponse.SUCCESS, result);
   } catch (err) {
     logger.error(`Admin - getFinAccountByMonth Provider error: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);

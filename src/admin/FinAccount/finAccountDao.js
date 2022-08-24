@@ -3,7 +3,10 @@ const insertFinAccount = async (connection, finAccountInfoParams) => {
         INSERT INTO FinancialAccount(adminIdx, finAccountCategoryIdx, isProfit,finAccountItem, finAccountCost, finAccountDate, etc)
         VALUES (?, ?, ?, ?, ?, ?, ?);
   `;
-  const createFinAccResult = await connection.query(insertFinAccountQuery, finAccountInfoParams);
+  const createFinAccResult = await connection.query(
+    insertFinAccountQuery,
+    finAccountInfoParams
+  );
   return createFinAccResult;
 };
 
@@ -12,7 +15,10 @@ const insertFinAccCategory = async (connection, finAccCategoryParams) => {
         INSERT INTO FinAccountCategory(categoryName, adminIdx)
         VALUES (?, ?);
   `;
-  const createFinAccResult = await connection.query(insertFinAccCategoryQuery, finAccCategoryParams);
+  const createFinAccResult = await connection.query(
+    insertFinAccCategoryQuery,
+    finAccCategoryParams
+  );
   return createFinAccResult;
 };
 
@@ -22,7 +28,10 @@ const modifyFinAccCategory = async (connection, finAccCategoryParams) => {
         SET categoryName = ?
         WHERE finAccountCategoryIdx = ?;
   `;
-  const modifyFinAccResult = await connection.query(modifyFinAccCategoryQuery, finAccCategoryParams);
+  const modifyFinAccResult = await connection.query(
+    modifyFinAccCategoryQuery,
+    finAccCategoryParams
+  );
   return modifyFinAccResult;
 };
 
@@ -32,7 +41,10 @@ const modifyFinAccount = async (connection, finAccCategoryParams) => {
         SET finAccountCategoryIdx = ? , finAccountItem = ?, isProfit = ? , finAccountCost = ? , finAccountDate = ? , etc = ?
         WHERE finAccountIdx = ?;
   `;
-  const modifyFinAccResult = await connection.query(modifyFinAccCategoryQuery, finAccCategoryParams);
+  const modifyFinAccResult = await connection.query(
+    modifyFinAccCategoryQuery,
+    finAccCategoryParams
+  );
   return modifyFinAccResult;
 };
 
@@ -49,21 +61,38 @@ const retrieveFinAccount = async (connection, adminIdx) => {
       ) f
   WHERE (c.finAccountCategoryIdx = f.finAccountCategoryIdx) and (c.status = "ACTIVE" and f.status="ACTIVE")
   `;
-  const getFinAccountQueryResult = await connection.query(getFinAccountQuery, adminIdx);
+  const getFinAccountQueryResult = await connection.query(
+    getFinAccountQuery,
+    adminIdx
+  );
   return getFinAccountQueryResult;
 };
 
-const retrieveFinAccountByMonth = async (connection, adminIdxNum, year, month) => {
+const retrieveFinAccountByMonth = async (
+  connection,
+  adminIdxNum,
+  year,
+  month
+) => {
   const getFinAccountQuery = `
           SELECT finAccountIdx, finAccountItem, isProfit, finAccountCost, DATE_FORMAT(finAccountDate, '%Y-%m-%d') as finAccountDate,finAccountCategoryIdx, status
           FROM FinancialAccount
           WHERE (adminIdx = ? and status="ACTIVE") and (MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?)
   `;
-  const getFinAccountQueryResult = await connection.query(getFinAccountQuery, [adminIdxNum, month, year]);
+  const getFinAccountQueryResult = await connection.query(getFinAccountQuery, [
+    adminIdxNum,
+    month,
+    year,
+  ]);
   return getFinAccountQueryResult;
 };
 
-const retrieveFinAccountCategoryByMonth = async (connection, adminIdxNum, year, month) => {
+const retrieveFinAccountCategoryByMonth = async (
+  connection,
+  adminIdxNum,
+  year,
+  month
+) => {
   const getFinAccountCategoryQuery = `
           SELECT c.finAccountCategoryIdx, c.categoryName, f.countedItem, f.adminIdx
           from FinAccountCategory as c,
@@ -79,11 +108,20 @@ const retrieveFinAccountCategoryByMonth = async (connection, adminIdxNum, year, 
                 group by finAccountCategoryIdx) f
           where c.finAccountCategoryIdx = f.finAccountCategoryIdx;
   `;
-  const getFinAccountCategoryResult = await connection.query(getFinAccountCategoryQuery, [adminIdxNum, month, year]);
+  const getFinAccountCategoryResult = await connection.query(
+    getFinAccountCategoryQuery,
+    [adminIdxNum, month, year]
+  );
   return getFinAccountCategoryResult;
 };
 
-const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day) => {
+const retrieveFinAccountByDay = async (
+  connection,
+  adminIdxNum,
+  year,
+  month,
+  day
+) => {
   const retrieveFinAccountByDayQuery = `
           SELECT c.categoryName,f.finAccountIdx,DATE_FORMAT(f.finAccountDate, '%Y-%m-%d') as finAccountDate,f.isProfit,f.finAccountItem,f.finAccountCost,f.etc,f.status
           FROM FinAccountCategory as c, (
@@ -93,7 +131,10 @@ const retrieveFinAccountByDay = async (connection, adminIdxNum, year, month, day
               ) f
           WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx AND f.status="ACTIVE"
   `;
-  const retrieveFinAccountByDayQueryResult = await connection.query(retrieveFinAccountByDayQuery, [adminIdxNum, month, year, day]);
+  const retrieveFinAccountByDayQueryResult = await connection.query(
+    retrieveFinAccountByDayQuery,
+    [adminIdxNum, month, year, day]
+  );
   return retrieveFinAccountByDayQueryResult;
 };
 
@@ -103,7 +144,9 @@ const retrieveCategory = async (connection, adminIdxNum) => {
           FROM FinAccountCategory
           WHERE adminIdx = ?
   `;
-  const retrieveCategoryResult = await connection.query(retrieveCategoryQuery, [adminIdxNum]);
+  const retrieveCategoryResult = await connection.query(retrieveCategoryQuery, [
+    adminIdxNum,
+  ]);
   return retrieveCategoryResult;
 };
 
@@ -123,7 +166,10 @@ const selectCategoryByName = async (connection, adminIdx, categoryName) => {
         FROM FinAccountCategory
         WHERE (adminIdx = ? and categoryName=?) and status = "ACTIVE"; 
   `;
-  const categoryInfoResult = await connection.query(categoryInfoQuery, [adminIdx, categoryName]);
+  const categoryInfoResult = await connection.query(categoryInfoQuery, [
+    adminIdx,
+    categoryName,
+  ]);
   return categoryInfoResult;
 };
 const deleteFinAccount = async (connection, finAccountInfo) => {
@@ -132,7 +178,10 @@ const deleteFinAccount = async (connection, finAccountInfo) => {
         SET status = "DELETED"
         WHERE finAccountIdx = ?;
   `;
-  const FinAccountDeleteResult = await connection.query(FinAccountDeleteQuery, finAccountInfo);
+  const FinAccountDeleteResult = await connection.query(
+    FinAccountDeleteQuery,
+    finAccountInfo
+  );
   return FinAccountDeleteResult;
 };
 
@@ -147,7 +196,10 @@ const getFinAccountByIdx = async (connection, finAccountInfo) => {
               ) f
           WHERE c.finAccountCategoryIdx = f.finAccountCategoryIdx AND f.status="ACTIVE"
   `;
-  const FinAccountDeleteResult = await connection.query(FinAccountDeleteQuery, finAccountInfo);
+  const FinAccountDeleteResult = await connection.query(
+    FinAccountDeleteQuery,
+    finAccountInfo
+  );
   return FinAccountDeleteResult;
 };
 
@@ -157,7 +209,9 @@ const selectAdminAccountByIdx = async (connection, accountIdx) => {
         FROM FinancialAccount
         WHERE finAccountIdx = ? AND status = "ACTIVE";
   `;
-  const categoryInfoResult = await connection.query(categoryInfoQuery, [accountIdx]);
+  const categoryInfoResult = await connection.query(categoryInfoQuery, [
+    accountIdx,
+  ]);
   return categoryInfoResult;
 };
 
@@ -167,8 +221,59 @@ const retrieveAccountDates = async (connection, adminIdx) => {
           from FinancialAccount
           where adminIdx = ? AND status = "ACTIVE";;
 `;
-  const retrieveAccountDatesResult = await connection.query(retrieveAccountDatesQuery, [adminIdx]);
+  const retrieveAccountDatesResult = await connection.query(
+    retrieveAccountDatesQuery,
+    [adminIdx]
+  );
   return retrieveAccountDatesResult;
+};
+
+const retrievePosMonth = async (connection, adminIdxNum, year, month) => {
+  const getFinAccountCategoryQuery = `
+          SELECT c.finAccountCategoryIdx, c.categoryName, f.countedItem, f.adminIdx, f.posCost
+          from FinAccountCategory as c,
+               (SELECT finAccountIdx,
+                       finAccountDate,
+                       finAccountCategoryIdx,
+                       count(finAccountCategoryIdx) as countedItem,
+                       sum(finAccountCost) as posCost, 
+                       status,
+                       adminIdx
+                FROM FinancialAccount
+                WHERE (adminIdx = ? AND status = "ACTIVE")
+                  AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?)) AND (isProfit=1)
+                group by finAccountCategoryIdx) f
+          where c.finAccountCategoryIdx = f.finAccountCategoryIdx;
+  `;
+  const getFinAccountCategoryResult = await connection.query(
+    getFinAccountCategoryQuery,
+    [adminIdxNum, month, year]
+  );
+  return getFinAccountCategoryResult;
+};
+
+const retrieveNegMonth = async (connection, adminIdxNum, year, month) => {
+  const getFinAccountCategoryQuery = `
+          SELECT c.finAccountCategoryIdx, c.categoryName, f.countedItem, f.adminIdx, f.posCost
+          from FinAccountCategory as c,
+               (SELECT finAccountIdx,
+                       finAccountDate,
+                       finAccountCategoryIdx,
+                       count(finAccountCategoryIdx) as countedItem,
+                       sum(finAccountCost) as posCost, 
+                       status,
+                       adminIdx
+                FROM FinancialAccount
+                WHERE (adminIdx = ? AND status = "ACTIVE")
+                  AND ((MONTH(finAccountDate) = ? AND YEAR(finAccountDate) = ?)) AND (isProfit=0)
+                group by finAccountCategoryIdx) f
+          where c.finAccountCategoryIdx = f.finAccountCategoryIdx;
+  `;
+  const getFinAccountCategoryResult = await connection.query(
+    getFinAccountCategoryQuery,
+    [adminIdxNum, month, year]
+  );
+  return getFinAccountCategoryResult;
 };
 
 module.exports = {
@@ -186,5 +291,7 @@ module.exports = {
   retrieveCategory,
   getFinAccountByIdx,
   retrieveAccountDates,
-  retrieveFinAccountCategoryByMonth
+  retrieveFinAccountCategoryByMonth,
+  retrievePosMonth,
+  retrieveNegMonth,
 };
