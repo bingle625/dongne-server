@@ -11,27 +11,9 @@ const moment = require("moment");
  */
 exports.postSchedule = async function (req, res) {
   // body : groupIdx, date, init_time, end_time, introduction, place, scheduleName, adminIdx
-  const {
-    groupIdx,
-    scheduleDate,
-    init_time,
-    end_time,
-    introduction,
-    place,
-    scheduleName,
-    adminIdx,
-  } = req.body;
+  const { groupIdx, scheduleDate, init_time, end_time, introduction, place, scheduleName, adminIdx } = req.body;
 
-  if (
-    !groupIdx ||
-    !scheduleDate ||
-    !init_time ||
-    !end_time ||
-    !introduction ||
-    !place ||
-    !scheduleName ||
-    !adminIdx
-  ) {
+  if (!groupIdx || !scheduleDate || !init_time || !end_time || !introduction || !place || !scheduleName || !adminIdx) {
     return res.send(response(baseResponse.SCHEDULE_POST_PARAMS_EMPTY));
   }
   // jwt : adminId
@@ -54,11 +36,7 @@ exports.postSchedule = async function (req, res) {
   }
 
   // scheduleDate valid
-  if (
-    scheduleDate &&
-    !moment(scheduleDate, "YYYY/MM/DD", true).isValid() &&
-    !moment(scheduleDate, "YYYY-MM-DD", true).isValid()
-  ) {
+  if (scheduleDate && !moment(scheduleDate, "YYYY/MM/DD", true).isValid() && !moment(scheduleDate, "YYYY-MM-DD", true).isValid()) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEDATE_VALID));
   }
 
@@ -66,17 +44,14 @@ exports.postSchedule = async function (req, res) {
   if (
     init_time &&
     !moment(init_time, "YYYY/MM/DD HH:mm:ss", true).isValid() &&
-    !moment(init_time, "YYYY-MM-DD HH:mm:ss", true).isValid()
+    !moment(init_time, "YYYY-MM-DD HH:mm:ss", true).isValid() &&
+    !moment(init_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()
   ) {
     return res.send(errResponse(baseResponse.SCHEDULE_INITTIME_VALID));
   }
 
   // end_time valid
-  if (
-    end_time &&
-    !moment(end_time, "YYYY/MM/DD HH:mm:ss", true).isValid() &&
-    !moment(end_time, "YYYY-MM-DD HH:mm:ss", true).isValid()
-  ) {
+  if (end_time && !moment(end_time, "YYYY/MM/DD HH:mm:ss", true).isValid() && !moment(end_time, "YYYY-MM-DD HH:mm:ss", true).isValid() && !moment(end_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()) {
     return res.send(errResponse(baseResponse.SCHEDULE_ENDTIME_VALID));
   }
 
@@ -96,20 +71,9 @@ exports.postSchedule = async function (req, res) {
   }
 
   const attendanceCode = (Math.random() + 1).toString(36).substring(5);
-  const postScheduleParams = [
-    groupIdx,
-    scheduleDate,
-    attendanceCode,
-    init_time,
-    end_time,
-    introduction,
-    place,
-    scheduleName,
-  ];
+  const postScheduleParams = [groupIdx, scheduleDate, attendanceCode, init_time, end_time, introduction, place, scheduleName];
 
-  const postScheduleResult = await scheduleService.postSchedule(
-    postScheduleParams
-  );
+  const postScheduleResult = await scheduleService.postSchedule(postScheduleParams);
 
   return res.send(postScheduleResult);
 };
@@ -117,11 +81,12 @@ exports.postSchedule = async function (req, res) {
 /**
  * API No. 5.2
  * API Name : 스케줄 리스트 조회 API
- * [GET] admin/schedule/list?adminIdx=#&groupIdx=#&curPage=#
+ * [GET] admin/schedule/list?adminIdx=#&groupIdx=#&curPage=#&pageSize=#
  */
 exports.getSchedule = async function (req, res) {
   // query parameters
   const { adminIdx, groupIdx, curPage } = req.query;
+  const pageSize = parseInt(req.query.pageSize);
 
   // jwt : adminId
   const adminIdxFromJWT = req.verifiedToken.adminId;
@@ -145,11 +110,11 @@ exports.getSchedule = async function (req, res) {
   if (curPage <= 0) {
     curPage = 1;
   }
+  if (!pageSize) {
+    return res.send(baseResponse.PAGING_PARAMS_EMPTY);
+  }
 
-  const scheduleListResponse = await scheduleProvider.retrieveScheduleList(
-    groupIdx,
-    curPage
-  );
+  const scheduleListResponse = await scheduleProvider.retrieveScheduleList(groupIdx, curPage, pageSize);
   return res.send(scheduleListResponse);
 };
 
@@ -182,9 +147,7 @@ exports.getScheduleInfo = async function (req, res) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
-  const scheduleInfoResponse = await scheduleProvider.retrieveScheduleInfo(
-    scheduleIdx
-  );
+  const scheduleInfoResponse = await scheduleProvider.retrieveScheduleInfo(scheduleIdx);
 
   return res.send(scheduleInfoResponse);
 };
@@ -220,23 +183,16 @@ exports.patchSchedule = async function (req, res) {
   }
 
   // scheduleDate valid
-  if (
-    editScheduleParams.scheduleDate &&
-    !moment(editScheduleParams.scheduleDate, "YYYY/MM/DD", true).isValid() &&
-    !moment(editScheduleParams.scheduleDate, "YYYY-MM-DD", true).isValid()
-  ) {
+  if (editScheduleParams.scheduleDate && !moment(editScheduleParams.scheduleDate, "YYYY/MM/DD", true).isValid() && !moment(editScheduleParams.scheduleDate, "YYYY-MM-DD", true).isValid()) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEDATE_VALID));
   }
 
   // init_time valid
   if (
     editScheduleParams.init_time &&
-    !moment(
-      editScheduleParams.init_time,
-      "YYYY/MM/DD HH:mm:ss",
-      true
-    ).isValid() &&
-    !moment(editScheduleParams.init_time, "YYYY-MM-DD HH:mm:ss", true).isValid()
+    !moment(editScheduleParams.init_time, "YYYY/MM/DD HH:mm:ss", true).isValid() &&
+    !moment(editScheduleParams.init_time, "YYYY-MM-DD HH:mm:ss", true).isValid() &&
+    !moment(editScheduleParams.init_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()
   ) {
     return res.send(errResponse(baseResponse.SCHEDULE_INITTIME_VALID));
   }
@@ -244,21 +200,15 @@ exports.patchSchedule = async function (req, res) {
   // end_time valid
   if (
     editScheduleParams.end_time &&
-    !moment(
-      editScheduleParams.end_time,
-      "YYYY/MM/DD HH:mm:ss",
-      true
-    ).isValid() &&
-    !moment(editScheduleParams.end_time, "YYYY-MM-DD HH:mm:ss", true).isValid()
+    !moment(editScheduleParams.end_time, "YYYY/MM/DD HH:mm:ss", true).isValid() &&
+    !moment(editScheduleParams.end_time, "YYYY-MM-DD HH:mm:ss", true).isValid() &&
+    !moment(editScheduleParams.end_time, "YYYY-MM-DDTHH:mm:ss", true).isValid()
   ) {
     return res.send(errResponse(baseResponse.SCHEDULE_ENDTIME_VALID));
   }
 
   // introduction valid
-  if (
-    editScheduleParams.introduction &&
-    editScheduleParams.introduction.length > 150
-  ) {
+  if (editScheduleParams.introduction && editScheduleParams.introduction.length > 150) {
     return res.send(errResponse(baseResponse.SCHEDULE_INTRODUCTION_LENGTH));
   }
 
@@ -268,10 +218,7 @@ exports.patchSchedule = async function (req, res) {
   }
 
   //scheduleName valid
-  if (
-    editScheduleParams.scheduleName &&
-    editScheduleParams.scheduleName.length > 100
-  ) {
+  if (editScheduleParams.scheduleName && editScheduleParams.scheduleName.length > 100) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULENAME_LENGTH));
   }
 
@@ -281,10 +228,7 @@ exports.patchSchedule = async function (req, res) {
   }
 
   // edit
-  const editScheduleResponse = await scheduleService.editSchedule(
-    scheduleIdx,
-    editScheduleParams
-  );
+  const editScheduleResponse = await scheduleService.editSchedule(scheduleIdx, editScheduleParams);
 
   return res.send(editScheduleResponse);
 };
@@ -318,8 +262,6 @@ exports.patchScheduleStatus = async function (req, res) {
     return res.send(errResponse(baseResponse.SCHEDULE_SCHEDULEIDX_LENGTH));
   }
 
-  const editScheduleStatusResponse = await scheduleService.editScheduleStatus(
-    scheduleIdx
-  );
+  const editScheduleStatusResponse = await scheduleService.editScheduleStatus(scheduleIdx);
   return res.send(editScheduleStatusResponse);
 };
