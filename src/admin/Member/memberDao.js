@@ -222,14 +222,21 @@ const selectAdminMainhome = async (connection, adminMainpageParams) => {
     SELECT
     a.ClubName,
       (SELECT
-      count(userIdx) as clubMemberCount
+      count(ClubMembers.userIdx) as clubMemberCount
       FROM ClubMembers
-      WHERE adminIdx = ? and status = "ACTIVE" ) as clubMemberCount,
+      JOIN User
+      on ClubMembers.userIdx = User.userIdx
+      WHERE adminIdx = ? and ClubMembers.status = "ACTIVE" and User.status = "ACTIVE" ) as clubMemberCount,
     a.establishmentYear,
     a.clubRegion,
-    a.clubWebLink
+    a.clubWebLink,
+    a.clubIntroduction,
+    a.clubCode,
+    c.categoryName
     FROM Admin as a
-    WHERE a.adminIdx = ? and status = "ACTIVE";
+    JOIN ClubCategory as c
+    ON c.clubCategoryIdx = a.clubCategoryIdx
+    WHERE a.adminIdx = ? and a.status = "ACTIVE";
       `;
 
   const [AdminMainhomeRows] = await connection.query(selectAdminMainhomeQuery, adminMainpageParams);

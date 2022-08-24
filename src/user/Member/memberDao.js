@@ -196,18 +196,24 @@ const selectMemberMainhome = async (connection, memberMainpageParams) => {
     introduction,
     a.ClubName,
       (SELECT
-      count(userIdx) as clubMemberCount
+      count(ClubMembers.userIdx) as clubMemberCount
       FROM ClubMembers
-      WHERE adminIdx = ? and status = "ACTIVE" ) as clubMemberCount,
+    JOIN User
+    on ClubMembers.userIdx = User.userIdx
+    WHERE adminIdx = ? and ClubMembers.status = "ACTIVE" and User.status = "ACTIVE" ) as clubMemberCount,
     a.establishmentYear,
     a.clubRegion,
-    a.clubWebLink
+    a.clubWebLink,
+    a.clubIntroduction,
+    c.categoryName
     FROM User
     JOIN ClubMembers
     ON ClubMembers.userIdx = User.userIdx
     JOIN Admin as a
     ON a.adminIdx = ClubMembers.adminIdx
-    WHERE ClubMembers.userIdx = ? and ClubMembers.adminIdx = ? and ClubMembers.status = "ACTIVE";
+    JOIN ClubCategory as c
+    ON c.clubCategoryIdx = a.clubCategoryIdx
+    WHERE ClubMembers.userIdx = ? and ClubMembers.adminIdx = ? and ClubMembers.status = "ACTIVE" and User.status = "ACTIVE";
       `;
 
   const [memberMainhomeRows] = await connection.query(selectMainhomeQuery, memberMainpageParams);
